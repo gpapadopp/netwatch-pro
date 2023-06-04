@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+
+import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsHandler;
+import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsManager;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -15,7 +17,9 @@ public class MainActivity extends AppCompatActivity {
         Connectivity deviceConnectivity = new Connectivity(getApplicationContext());
         deviceConnectivity.initialize();
         String token = deviceConnectivity.getDeviceID();
-        Log.d("george", token);
+
+        InstalledAppsHandler installedAppsManager = new InstalledAppsHandler(getApplicationContext());
+        installedAppsManager.initializeInstalledApps();
 
 
 //        if (!this.hasAcceptTerms()){
