@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         deviceConnectivity.initialize();
         String token = deviceConnectivity.getDeviceID();
 
-        InstalledAppsHandler installedAppsManager = new InstalledAppsHandler(getApplicationContext());
+        InstalledAppsHandler installedAppsManager = new InstalledAppsHandler(getApplicationContext(), token);
         installedAppsManager.initializeInstalledApps();
 
 

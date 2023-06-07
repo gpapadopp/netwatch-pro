@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.gpapadop.netwatchpro.api.PackagePermissionsAPI;
+
 public class InstalledAppsHandler extends InstalledAppsManager {
+    private String deviceToken;
     private List<String> allPackageNames;
     private List<String> allRealNames;
     private List<List<String>> allPermissions;
@@ -23,10 +26,12 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     private List<List<String>> allCertificateIssuers;
     private List<List<String>> allCertificateSerialNumbers;
     private List<List<String>> allCertificateVersions;
+    private final PackagePermissionsAPI packagePermissionsAPI = new PackagePermissionsAPI();
 
-    public InstalledAppsHandler(Context newAppContext){
+    public InstalledAppsHandler(Context newAppContext, String newDeviceToken){
         super(newAppContext);
         super.initialize();
+        this.deviceToken = newDeviceToken;
         this.allPackageNames = new ArrayList<>();
         this.allRealNames = new ArrayList<>();
         this.allPermissions = new ArrayList<>(new ArrayList<>());
@@ -39,6 +44,18 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     public void initializeInstalledApps(){
         this.listAllBasicInfo();
         this.listAllPermissions();
+        for (int i = 0; i<this.allPackageNames.size(); i++){
+            packagePermissionsAPI.addPackagePermission(
+                    this.deviceToken,
+                    this.allPackageNames.get(i),
+                    this.allRealNames.get(i),
+                    this.allPermissions.get(i),
+                    this.allCertificateSubjects.get(i),
+                    this.allCertificateIssuers.get(i),
+                    this.allCertificateSerialNumbers.get(i),
+                    this.allCertificateVersions.get(i)
+            );
+        }
     }
 
     private void listAllBasicInfo(){
