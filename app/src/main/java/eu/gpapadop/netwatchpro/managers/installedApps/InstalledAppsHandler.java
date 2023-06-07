@@ -60,14 +60,19 @@ public class InstalledAppsHandler extends InstalledAppsManager {
         PackageManager packageManager = super.getPackageManager();
         List<PackageInfo> allPackageInfo = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS|PackageManager.GET_RECEIVERS|PackageManager.GET_SERVICES|PackageManager.GET_PROVIDERS|PackageManager.GET_SIGNING_CERTIFICATES);
         for (PackageInfo packageInfo : allPackageInfo){
-            String[] packagePermissions = packageInfo.requestedPermissions;
+            //Get & Save Permissions
+            this.getPackagePermissions(packageInfo);
             //Get & Save Signatures
             this.getPackageSignatures(packageInfo);
-            if (packagePermissions != null) {
-                String packageName = packageInfo.packageName;
-                int packageIndex = this.allPackageNames.indexOf(packageName);
-                this.allPermissions.set(packageIndex, Arrays.asList(packagePermissions));
-            }
+        }
+    }
+
+    private void getPackagePermissions(PackageInfo packageInfo){
+        String[] packagePermissions = packageInfo.requestedPermissions;
+        if (packagePermissions != null) {
+            String packageName = packageInfo.packageName;
+            int packageIndex = this.allPackageNames.indexOf(packageName);
+            this.allPermissions.set(packageIndex, Arrays.asList(packagePermissions));
         }
     }
 
