@@ -10,7 +10,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class PackagePermissionsAPI {
-    private final String apiURL = "http://127.0.0.1/package-permissions/";
+    private final String apiURL = "http://127.0.0.1/api/v1/package-permissions/";
 
     public void addPackagePermission(
             String deviceToken,
