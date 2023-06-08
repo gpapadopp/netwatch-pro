@@ -39,10 +39,14 @@
         <activity
             android:name=".InitialTermsScreen"
             android:exported="true" />
-
+        <receiver android:name=".managers.installedApps.InstalledAppsAlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="eu.gpapadop.netwatchpro.managers.installedApps" />
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>

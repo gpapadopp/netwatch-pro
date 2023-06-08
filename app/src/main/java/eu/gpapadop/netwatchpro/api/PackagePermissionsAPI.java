@@ -113,6 +113,7 @@ public class PackagePermissionsAPI {
         } else {
             jsonString += "\"certificate_versions\":" + "[]";
         }
+        jsonString += "}";
         return jsonString;
     }
 }

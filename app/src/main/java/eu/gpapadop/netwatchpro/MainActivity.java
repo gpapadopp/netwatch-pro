@@ -3,6 +3,8 @@ package eu.gpapadop.netwatchpro;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
@@ -10,9 +12,14 @@ import android.os.PowerManager;
 import android.net.Uri;
 import android.provider.Settings;
 
+import java.util.Calendar;
+
+import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsAlarmReceiver;
 import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsHandler;
 
 public class MainActivity extends AppCompatActivity {
+    private AlarmManager installedAppsAlarmManager;
+    private static final int INSTALLED_APPS_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +27,16 @@ public class MainActivity extends AppCompatActivity {
         //Setup App to Always Run in Background
         alwaysRunAppInBackground();
 
+        //Get Phone Token ID
         Connectivity deviceConnectivity = new Connectivity(getApplicationContext());
         deviceConnectivity.initialize();
         String token = deviceConnectivity.getDeviceID();
 
+        //Get Installed Phone Apps
         InstalledAppsHandler installedAppsManager = new InstalledAppsHandler(getApplicationContext(), token);
         installedAppsManager.initializeInstalledApps();
+        //Setup Repeater for Installed Apps Manager - Every 24 Hours
+        registerInstalledAppsAlarmReceiver();
 
 
 //        if (!this.hasAcceptTerms()){
@@ -52,5 +63,18 @@ public class MainActivity extends AppCompatActivity {
             intent.setData(Uri.parse("package: " + packageName));
             startActivity(intent);
         }
+    }
+
+    private void registerInstalledAppsAlarmReceiver(){
+        this.installedAppsAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        // Set the alarm to start at approximately 24 hours from now
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        // Create an Intent for the AlarmReceiver class
+        Intent intent = new Intent(this, InstalledAppsAlarmReceiver.class);
+        // Create a PendingIntent to be triggered when the alarm goes off
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, INSTALLED_APPS_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        // Set the alarm to repeat every 24 hours
+        this.installedAppsAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }
