@@ -6,7 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.pm.SigningInfo;
+import android.os.Environment;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -18,6 +20,7 @@ import java.util.List;
 import eu.gpapadop.netwatchpro.api.PackagePermissionsAPI;
 
 public class InstalledAppsHandler extends InstalledAppsManager {
+    private Context appContext;
     private String deviceToken;
     private List<String> allPackageNames;
     private List<String> allRealNames;
@@ -26,11 +29,13 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     private List<List<String>> allCertificateIssuers;
     private List<List<String>> allCertificateSerialNumbers;
     private List<List<String>> allCertificateVersions;
+    private List<String> allPackageSourceDirs;
     private final PackagePermissionsAPI packagePermissionsAPI = new PackagePermissionsAPI();
 
     public InstalledAppsHandler(Context newAppContext, String newDeviceToken){
         super(newAppContext);
         super.initialize();
+        this.appContext = newAppContext;
         this.deviceToken = newDeviceToken;
         this.allPackageNames = new ArrayList<>();
         this.allRealNames = new ArrayList<>();
@@ -39,6 +44,7 @@ public class InstalledAppsHandler extends InstalledAppsManager {
         this.allCertificateIssuers = new ArrayList<>(new ArrayList<>());
         this.allCertificateSerialNumbers = new ArrayList<>(new ArrayList<>());
         this.allCertificateVersions = new ArrayList<>(new ArrayList<>());
+        this.allPackageSourceDirs = new ArrayList<>();
     }
 
     public void initializeInstalledApps(){
@@ -70,6 +76,7 @@ public class InstalledAppsHandler extends InstalledAppsManager {
             this.allCertificateIssuers.add(new ArrayList<>());
             this.allCertificateSerialNumbers.add(new ArrayList<>());
             this.allCertificateVersions.add(new ArrayList<>());
+            this.allPackageSourceDirs.add("");
         }
     }
 
@@ -82,6 +89,8 @@ public class InstalledAppsHandler extends InstalledAppsManager {
             //Get & Save Signatures
             this.getPackageSignatures(packageInfo);
         }
+        //Get & Save All APKs
+        this.getPackageAPKName(packageManager);
     }
 
     private void getPackagePermissions(PackageInfo packageInfo){
@@ -120,5 +129,21 @@ public class InstalledAppsHandler extends InstalledAppsManager {
         this.allCertificateIssuers.set(packageIndex, certificateIssuers);
         this.allCertificateSerialNumbers.set(packageIndex, certificateSerialNumber);
         this.allCertificateVersions.set(packageIndex, certificateVersions);
+    }
+
+    private void getPackageAPKName(PackageManager packageManager){
+        String apkDir = this.appContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/InstalledAppsAPKs/";
+        File directory = new File(apkDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        for (int i = 0; i<this.allRealNames.size(); i++){
+            try {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(this.allPackageNames.get(i), 0);
+                this.allPackageSourceDirs.set(i, String.valueOf(applicationInfo.sourceDir));
+            } catch (PackageManager.NameNotFoundException e) {
+                continue;
+            }
+        }
     }
 }
