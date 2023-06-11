@@ -6,20 +6,27 @@ import android.os.ParcelFileDescriptor;
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.util.MacAddress;
+
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Formatter;
 import eu.gpapadop.netwatchpro.R;
+import eu.gpapadop.netwatchpro.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.api.InternetPackagesAPI;
 
 public class PackageCaptureWifi extends VpnService {
     private Thread packetCaptureThread;
     private InternetPackagesAPI internetPackagesAPI = new InternetPackagesAPI();
+    private SharedPreferencesHandler sharedPreferencesHandler;
+    private String uniqueDeviceToken;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startPacketCapture();
+        this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        this.uniqueDeviceToken = this.sharedPreferencesHandler.getDeviceID();
         return START_STICKY;
     }
 
@@ -96,6 +103,10 @@ public class PackageCaptureWifi extends VpnService {
 
             String decodedSourceAddress = this.decodeIpAddress(sourceAddress);
             String decodedDestinationAddress = this.decodeIpAddress(destinationAddress);
+
+            MacAddress sourceMacAddress = ethernetHeader.getSrcAddr();
+            MacAddress destinationMacAddress = ethernetHeader.getDstAddr();
+
             String headerType = ethernetHeader.getType().valueAsString();
             String headerHexString = this.getHeaderRawData(ethernetHeader.getRawData());
 
@@ -107,6 +118,16 @@ public class PackageCaptureWifi extends VpnService {
                 if (!decodedSourceAddress.equals("83.212.59.30") && !decodedDestinationAddress.equals("83.212.59.30")){
                     //Exclude Server IP Address
                     //Save Packet to API
+                    internetPackagesAPI.addInternetPackage(
+                            this.uniqueDeviceToken,
+                            decodedSourceAddress,
+                            decodedDestinationAddress,
+                            sourceMacAddress.toString(),
+                            destinationMacAddress.toString(),
+                            headerType,
+                            headerHexString,
+                            decodedPayloadData
+                    );
                 }
             }
 

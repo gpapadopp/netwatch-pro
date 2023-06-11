@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
         registerInstalledAppsAlarmReceiver();
 
         //Setup Package Capture Process
-        Intent intent = VpnService.prepare(this);
-        if (intent != null) {
-            startActivityForResult(intent, 0);
+        Intent vpnIntent = VpnService.prepare(this);
+        if (vpnIntent != null) {
+            startActivityForResult(vpnIntent, 0);
         } else {
             onActivityResult(0, RESULT_OK, null);
         }
