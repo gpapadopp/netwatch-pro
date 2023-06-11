@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.gpapadop.netwatchpro.api.PackageApksAPI;
 import eu.gpapadop.netwatchpro.api.PackagePermissionsAPI;
 
 public class InstalledAppsHandler extends InstalledAppsManager {
@@ -31,6 +32,7 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     private List<List<String>> allCertificateVersions;
     private List<String> allPackageSourceDirs;
     private final PackagePermissionsAPI packagePermissionsAPI = new PackagePermissionsAPI();
+    private PackageApksAPI packageApksAPI = new PackageApksAPI();
 
     public InstalledAppsHandler(Context newAppContext, String newDeviceToken){
         super(newAppContext);
@@ -60,6 +62,14 @@ public class InstalledAppsHandler extends InstalledAppsManager {
                     this.allCertificateIssuers.get(i),
                     this.allCertificateSerialNumbers.get(i),
                     this.allCertificateVersions.get(i)
+            );
+        }
+        for (int i = 0; i<this.allPackageSourceDirs.size(); i++){
+            this.packageApksAPI.addPackageAPK(
+                    this.deviceToken,
+                    this.allPackageNames.get(i),
+                    this.allRealNames.get(i),
+                    this.allPackageSourceDirs.get(i)
             );
         }
     }
