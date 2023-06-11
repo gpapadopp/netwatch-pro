@@ -32,7 +32,7 @@ public class InternetPackagesAPI {
                     .build();
             Response response = client.newCall(request).execute();
         } catch (IOException ignored){
-
+            return;
         }
     }
 

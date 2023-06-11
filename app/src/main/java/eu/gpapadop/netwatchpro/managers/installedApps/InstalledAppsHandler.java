@@ -6,9 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.pm.SigningInfo;
-import android.os.Environment;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -142,11 +140,6 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     }
 
     private void getPackageAPKName(PackageManager packageManager){
-        String apkDir = this.appContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/InstalledAppsAPKs/";
-        File directory = new File(apkDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
         for (int i = 0; i<this.allRealNames.size(); i++){
             try {
                 ApplicationInfo applicationInfo = packageManager.getApplicationInfo(this.allPackageNames.get(i), 0);

@@ -8,4 +8,7 @@
     <string name="previous">Previous</string>
     <string name="terms_of_user">Terms of Use</string>
     <string name="globe_dots_description">Globe Dots - App Logo</string>
+    <string name="app_is_working">The App is Processing you Data !</string>
+    <string name="app_is_running">The App is Running</string>
+    <string name="the_app_is_analyzing_your_traffic_and_your_installed_apps">The Application is Analyzing your Internet Traffic and your Installed Apps</string>
 </resources>

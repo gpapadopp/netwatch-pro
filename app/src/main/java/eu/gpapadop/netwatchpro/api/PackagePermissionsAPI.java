@@ -31,8 +31,8 @@ public class PackagePermissionsAPI {
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .build();
             Response response = client.newCall(request).execute();
-        } catch (IOException ignored){
-
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 

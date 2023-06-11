@@ -38,7 +38,7 @@ public class PackageApksAPI {
                     .build();
             Response response = client.newCall(request).execute();
         } catch (IOException ignored){
-
+            return;
         }
     }
 }

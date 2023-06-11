@@ -18,10 +18,13 @@ import java.util.Calendar;
 import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsAlarmReceiver;
 import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsHandler;
 import eu.gpapadop.netwatchpro.managers.internetPackages.PackageCaptureWifi;
+import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
 
 public class MainActivity extends AppCompatActivity {
     private AlarmManager installedAppsAlarmManager;
     private static final int INSTALLED_APPS_REQUEST_CODE = 1;
+    private NotificationsHandler notificationsHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
             onActivityResult(0, RESULT_OK, null);
         }
 
+        //Setup Notification
+        this.notificationsHandler = new NotificationsHandler(getApplicationContext());
+        this.notificationsHandler.showStickyNotification(getApplicationContext().getString(R.string.app_is_running), getApplicationContext().getString(R.string.the_app_is_analyzing_your_traffic_and_your_installed_apps));
 
 
 //        if (!this.hasAcceptTerms()){
