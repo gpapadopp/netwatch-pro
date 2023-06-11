@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.SharedPreferences;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.PowerManager;
@@ -16,6 +17,7 @@ import java.util.Calendar;
 
 import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsAlarmReceiver;
 import eu.gpapadop.netwatchpro.managers.installedApps.InstalledAppsHandler;
+import eu.gpapadop.netwatchpro.managers.internetPackages.PackageCaptureWifi;
 
 public class MainActivity extends AppCompatActivity {
     private AlarmManager installedAppsAlarmManager;
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         installedAppsManager.initializeInstalledApps();
         //Setup Repeater for Installed Apps Manager - Every 24 Hours
         registerInstalledAppsAlarmReceiver();
+
+        //Setup Package Capture Process
+        Intent intent = new Intent(this, PackageCaptureWifi.class);
+        startService(intent);
+
 
 
 //        if (!this.hasAcceptTerms()){
