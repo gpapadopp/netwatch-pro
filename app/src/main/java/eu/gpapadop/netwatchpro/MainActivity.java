@@ -41,8 +41,12 @@ public class MainActivity extends AppCompatActivity {
         registerInstalledAppsAlarmReceiver();
 
         //Setup Package Capture Process
-        Intent intent = new Intent(this, PackageCaptureWifi.class);
-        startService(intent);
+        Intent intent = VpnService.prepare(this);
+        if (intent != null) {
+            startActivityForResult(intent, 0);
+        } else {
+            onActivityResult(0, RESULT_OK, null);
+        }
 
 
 
@@ -83,5 +87,14 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, INSTALLED_APPS_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         // Set the alarm to repeat every 24 hours
         this.installedAppsAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Intent vpnIntent = new Intent(this, PackageCaptureWifi.class);
+            startService(vpnIntent);
+        }
     }
 }

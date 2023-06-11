@@ -3,21 +3,19 @@ package eu.gpapadop.netwatchpro.managers.internetPackages;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
-import org.pcap4j.packet.IpV4Packet;
-
+import org.pcap4j.packet.Packet;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.Inet4Address;
-
+import java.util.Formatter;
 import eu.gpapadop.netwatchpro.R;
+import eu.gpapadop.netwatchpro.api.InternetPackagesAPI;
 
 public class PackageCaptureWifi extends VpnService {
     private Thread packetCaptureThread;
+    private InternetPackagesAPI internetPackagesAPI = new InternetPackagesAPI();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -88,40 +86,33 @@ public class PackageCaptureWifi extends VpnService {
 
 
     private void processPacket(byte[] packetData, int packetLength) {
-        // Parse the Ethernet frame
         try {
+            // Parse the Ethernet frame
             EthernetPacket ethernetPacket = EthernetPacket.newPacket(packetData, 0, packetLength);
-            Log.d("george", String.valueOf(ethernetPacket.getHeader()));
-            Log.d("george", "======");
+            // Parse the Ethernet Header
+            EthernetPacket.EthernetHeader ethernetHeader = ethernetPacket.getHeader();
+            byte[] sourceAddress = ethernetHeader.getSrcAddr().getAddress();
+            byte[] destinationAddress = ethernetHeader.getDstAddr().getAddress();
+
+            String decodedSourceAddress = this.decodeIpAddress(sourceAddress);
+            String decodedDestinationAddress = this.decodeIpAddress(destinationAddress);
+            String headerType = ethernetHeader.getType().valueAsString();
+            String headerHexString = this.getHeaderRawData(ethernetHeader.getRawData());
+
+            Packet ethernetPayload = ethernetPacket.getPayload();
+            String decodedPayloadData;
+
+            if (ethernetPayload != null) {
+                decodedPayloadData = this.getHeaderRawData(ethernetPayload.getRawData());
+                if (!decodedSourceAddress.equals("83.212.59.30") && !decodedDestinationAddress.equals("83.212.59.30")){
+                    //Exclude Server IP Address
+                    //Save Packet to API
+                }
+            }
+
         } catch (IllegalRawDataException e){
             return;
         }
-
-//        if (ethernetPacket instanceof IpV4Packet) {
-//            // Extract information from IPv4 packet
-//            IpV4Packet ipV4Packet = (IpV4Packet) ethernetPacket;
-//            Inet4Address sourceIp = ipV4Packet.getHeader().getSrcAddr();
-//            Inet4Address destinationIp = ipV4Packet.getHeader().getDstAddr();
-//
-//            // ... Extract other information from the IPv4 packet
-//
-//        } else if (ethernetPacket instanceof IpV6Packet) {
-//            // Extract information from IPv6 packet
-//            IpV6Packet ipV6Packet = (IpV6Packet) ethernetPacket;
-//            Inet6Address sourceIp = ipV6Packet.getHeader().getSrcAddr();
-//            Inet6Address destinationIp = ipV6Packet.getHeader().getDstAddr();
-//
-//            // ... Extract other information from the IPv6 packet
-//
-//        } else if (ethernetPacket instanceof ArpPacket) {
-//            // Extract information from ARP packet
-//            ArpPacket arpPacket = (ArpPacket) ethernetPacket;
-//
-//            // ... Extract ARP information
-//
-//        } else {
-//            // Other packet types can be handled here
-//        }
     }
 
 
@@ -135,5 +126,27 @@ public class PackageCaptureWifi extends VpnService {
         if (packetCaptureThread != null) {
             packetCaptureThread.interrupt();
         }
+    }
+
+    private String decodeIpAddress(byte[] address){
+        String addressStr = "";
+        for (int i = 0; i < 4; ++i)
+        {
+            int t = 0xFF & address[i];
+            addressStr += "." + t;
+        }
+        addressStr = addressStr.substring(1);
+        return addressStr;
+    }
+
+    private String getHeaderRawData(byte[] headerRaw){
+        StringBuilder sb = new StringBuilder();
+        Formatter formatter = new Formatter(sb);
+
+        for (byte b : headerRaw) {
+            formatter.format("%02x", b);
+        }
+
+        return sb.toString();
     }
 }
