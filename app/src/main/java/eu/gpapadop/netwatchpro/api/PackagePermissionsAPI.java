@@ -1,5 +1,7 @@
 package eu.gpapadop.netwatchpro.api;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.List;
 import okhttp3.FormBody;
@@ -25,14 +27,15 @@ public class PackagePermissionsAPI {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
+            RequestBody requestBody = this.generateBody(deviceToken, packageName, appName, permissions, certificateSubjects, certificateIssuers, certificateSerialNumbers, certificateVersions);
             Request request = new Request.Builder()
                     .url(addApiURL)
-                    .method("POST", this.generateBody(deviceToken, packageName, appName, permissions, certificateSubjects, certificateIssuers, certificateSerialNumbers, certificateVersions))
+                    .method("POST", requestBody)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .build();
             Response response = client.newCall(request).execute();
-        } catch (IOException e){
-            e.printStackTrace();
+        } catch (IOException | IllegalStateException ignored){
+            return;
         }
     }
 

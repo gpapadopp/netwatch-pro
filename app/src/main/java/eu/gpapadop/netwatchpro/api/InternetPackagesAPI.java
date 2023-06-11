@@ -24,14 +24,14 @@ public class InternetPackagesAPI {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
+            RequestBody requestBody = this.generateBody(deviceToken, sourceIP, destinationIP, sourceMacAddress, destinationMacAddress, headerType, rawHeader, rawPayload);
             Request request = new Request.Builder()
                     .url(addURL)
-                    .method("POST", this.generateBody(
-                            deviceToken, sourceIP, destinationIP, sourceMacAddress, destinationMacAddress, headerType, rawHeader, rawPayload))
+                    .method("POST", requestBody)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .build();
             Response response = client.newCall(request).execute();
-        } catch (IOException ignored){
+        } catch (IOException | IllegalStateException ignored){
             return;
         }
     }

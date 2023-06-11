@@ -23,7 +23,6 @@ public class PackageApksAPI {
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
-            MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("device_token", deviceToken)
                     .addFormDataPart("package_name", packageName)
@@ -37,7 +36,7 @@ public class PackageApksAPI {
                     .method("POST", body)
                     .build();
             Response response = client.newCall(request).execute();
-        } catch (IOException ignored){
+        } catch (IOException | IllegalStateException ignored){
             return;
         }
     }
