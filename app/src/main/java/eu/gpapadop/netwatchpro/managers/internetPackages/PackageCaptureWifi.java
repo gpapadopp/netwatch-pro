@@ -3,6 +3,8 @@ package eu.gpapadop.netwatchpro.managers.internetPackages;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.Packet;
@@ -56,21 +58,26 @@ public class PackageCaptureWifi extends VpnService {
                     // Start capturing packets
                     while (!Thread.interrupted()) {
                         try {
-                            int bytesRead = vpnInputStream.read(packetBuffer);
-                            if (bytesRead > 0) {
-                                // Process the captured packet
-                                processPacket(packetBuffer, bytesRead);
+                            Thread.sleep(500);
+                            try {
+                                int bytesRead = vpnInputStream.read(packetBuffer);
+                                if (bytesRead > 0) {
+                                    // Process the captured packet
+                                    processPacket(packetBuffer, bytesRead);
+                                }
+                            } catch (IOException e) {
+                                // Handle the IOException here
+                                if (e.getMessage().equals("EBADF (Bad file descriptor)")) {
+                                    // Handle the specific error
+                                    // For example, restart the packet capture process or stop the capture
+                                    break;
+                                } else {
+                                    // Handle other IOExceptions
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (IOException e) {
-                            // Handle the IOException here
-                            if (e.getMessage().equals("EBADF (Bad file descriptor)")) {
-                                // Handle the specific error
-                                // For example, restart the packet capture process or stop the capture
-                                break;
-                            } else {
-                                // Handle other IOExceptions
-                                e.printStackTrace();
-                            }
+                        } catch (InterruptedException e) {
+                            continue;
                         }
                     }
                 } catch (Exception e) {
@@ -118,16 +125,17 @@ public class PackageCaptureWifi extends VpnService {
                 if (!decodedSourceAddress.equals("83.212.59.30") && !decodedDestinationAddress.equals("83.212.59.30")){
                     //Exclude Server IP Address
                     //Save Packet to API
-//                    internetPackagesAPI.addInternetPackage(
-//                            this.uniqueDeviceToken,
-//                            decodedSourceAddress,
-//                            decodedDestinationAddress,
-//                            sourceMacAddress.toString(),
-//                            destinationMacAddress.toString(),
-//                            headerType,
-//                            headerHexString,
-//                            decodedPayloadData
-//                    );
+                    this.internetPackagesAPI.addInternetPackage(
+                            this.uniqueDeviceToken,
+                            decodedSourceAddress,
+                            decodedDestinationAddress,
+                            sourceMacAddress.toString(),
+                            destinationMacAddress.toString(),
+                            headerType,
+                            headerHexString,
+                            decodedPayloadData,
+                            this.getApplicationContext()
+                    );
                 }
             }
 

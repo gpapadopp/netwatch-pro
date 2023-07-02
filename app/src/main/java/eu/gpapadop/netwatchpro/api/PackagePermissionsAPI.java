@@ -19,9 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
-
 public class PackagePermissionsAPI {
     private final String apiURL = "https://arctouros.ict.ihu.gr/api/v1/package-permissions/";
 
@@ -98,29 +95,6 @@ public class PackagePermissionsAPI {
             }
         };
         Volley.newRequestQueue(appContext).add(stringRequest);
-    }
-
-    private RequestBody generateBody(
-            String deviceToken,
-            String packageName,
-            String appName,
-            List<String> allPermissions,
-            List<String> allCertificateSubjects,
-            List<String> allCertificateIssuers,
-            List<String> allCertificateSerialNumbers,
-            List<String> allCertificateVersions
-    ){
-        RequestBody formBody = new FormBody.Builder()
-                .add("device_token", deviceToken)
-                .add("package_name", packageName)
-                .add("app_name", appName)
-                .add("permissions", this.generateStringFromList(allPermissions))
-                .add("certificate_subjects", this.generateStringFromList(allCertificateSubjects))
-                .add("certificate_issuers", this.generateStringFromList(allCertificateIssuers))
-                .add("certificate_serial_numbers", this.generateStringFromList(allCertificateSerialNumbers))
-                .add("certificate_versions", this.generateStringFromList(allCertificateVersions))
-                .build();
-        return formBody;
     }
 
     private String generateStringFromList(List<String> listToConvert){
