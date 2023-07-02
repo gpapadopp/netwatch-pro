@@ -118,16 +118,16 @@ public class PackageCaptureWifi extends VpnService {
                 if (!decodedSourceAddress.equals("83.212.59.30") && !decodedDestinationAddress.equals("83.212.59.30")){
                     //Exclude Server IP Address
                     //Save Packet to API
-                    internetPackagesAPI.addInternetPackage(
-                            this.uniqueDeviceToken,
-                            decodedSourceAddress,
-                            decodedDestinationAddress,
-                            sourceMacAddress.toString(),
-                            destinationMacAddress.toString(),
-                            headerType,
-                            headerHexString,
-                            decodedPayloadData
-                    );
+//                    internetPackagesAPI.addInternetPackage(
+//                            this.uniqueDeviceToken,
+//                            decodedSourceAddress,
+//                            decodedDestinationAddress,
+//                            sourceMacAddress.toString(),
+//                            destinationMacAddress.toString(),
+//                            headerType,
+//                            headerHexString,
+//                            decodedPayloadData
+//                    );
                 }
             }
 

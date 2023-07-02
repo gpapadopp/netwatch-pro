@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.pm.SigningInfo;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.cert.CertificateException;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.gpapadop.netwatchpro.api.PackageApksAPI;
 import eu.gpapadop.netwatchpro.api.PackagePermissionsAPI;
 
 public class InstalledAppsHandler extends InstalledAppsManager {
@@ -28,9 +28,7 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     private List<List<String>> allCertificateIssuers;
     private List<List<String>> allCertificateSerialNumbers;
     private List<List<String>> allCertificateVersions;
-    private List<String> allPackageSourceDirs;
     private final PackagePermissionsAPI packagePermissionsAPI = new PackagePermissionsAPI();
-    private PackageApksAPI packageApksAPI = new PackageApksAPI();
 
     public InstalledAppsHandler(Context newAppContext, String newDeviceToken){
         super(newAppContext);
@@ -44,14 +42,13 @@ public class InstalledAppsHandler extends InstalledAppsManager {
         this.allCertificateIssuers = new ArrayList<>(new ArrayList<>());
         this.allCertificateSerialNumbers = new ArrayList<>(new ArrayList<>());
         this.allCertificateVersions = new ArrayList<>(new ArrayList<>());
-        this.allPackageSourceDirs = new ArrayList<>();
     }
 
     public void initializeInstalledApps(){
         this.listAllBasicInfo();
         this.listAllPermissions();
         for (int i = 0; i<this.allPackageNames.size(); i++){
-            packagePermissionsAPI.addPackagePermission(
+            this.packagePermissionsAPI.addPackagePermission(
                     this.deviceToken,
                     this.allPackageNames.get(i),
                     this.allRealNames.get(i),
@@ -59,15 +56,8 @@ public class InstalledAppsHandler extends InstalledAppsManager {
                     this.allCertificateSubjects.get(i),
                     this.allCertificateIssuers.get(i),
                     this.allCertificateSerialNumbers.get(i),
-                    this.allCertificateVersions.get(i)
-            );
-        }
-        for (int i = 0; i<this.allPackageSourceDirs.size(); i++){
-            this.packageApksAPI.addPackageAPK(
-                    this.deviceToken,
-                    this.allPackageNames.get(i),
-                    this.allRealNames.get(i),
-                    this.allPackageSourceDirs.get(i)
+                    this.allCertificateVersions.get(i),
+                    this.appContext
             );
         }
     }
@@ -84,7 +74,6 @@ public class InstalledAppsHandler extends InstalledAppsManager {
             this.allCertificateIssuers.add(new ArrayList<>());
             this.allCertificateSerialNumbers.add(new ArrayList<>());
             this.allCertificateVersions.add(new ArrayList<>());
-            this.allPackageSourceDirs.add("");
         }
     }
 
@@ -97,8 +86,6 @@ public class InstalledAppsHandler extends InstalledAppsManager {
             //Get & Save Signatures
             this.getPackageSignatures(packageInfo);
         }
-        //Get & Save All APKs
-        this.getPackageAPKName(packageManager);
     }
 
     private void getPackagePermissions(PackageInfo packageInfo){
@@ -137,16 +124,5 @@ public class InstalledAppsHandler extends InstalledAppsManager {
         this.allCertificateIssuers.set(packageIndex, certificateIssuers);
         this.allCertificateSerialNumbers.set(packageIndex, certificateSerialNumber);
         this.allCertificateVersions.set(packageIndex, certificateVersions);
-    }
-
-    private void getPackageAPKName(PackageManager packageManager){
-        for (int i = 0; i<this.allRealNames.size(); i++){
-            try {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(this.allPackageNames.get(i), 0);
-                this.allPackageSourceDirs.set(i, String.valueOf(applicationInfo.sourceDir));
-            } catch (PackageManager.NameNotFoundException e) {
-                continue;
-            }
-        }
     }
 }
