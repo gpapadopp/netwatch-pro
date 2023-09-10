@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/terms_of_use"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        >
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_first_main_text"
+                android:fontFamily="@font/poppins"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_acceptance_of_terms"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_acceptance_of_terms_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_app_description"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_app_description_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_user_responsibilities"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_user_responsibilities_main_text_section_a"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_user_responsibilities_main_text_section_b"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_user_responsibilities_main_text_section_c"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_use_restrictions"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_use_restrictions_subtext"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_use_restrictions_main_text_section_a"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_use_restrictions_main_text_section_b"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_use_restrictions_main_text_section_c"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_intellectual_property"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_intellectual_property_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_disclaimer_of_warranty"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_disclaimer_of_warranty_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_limitation_of_liability"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_limitation_of_liability_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_changes_to_terms"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_changes_to_terms_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_governing_law"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_governing_law_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_contact_information"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_contact_information_main_text"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_terms_of_use_final_line"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="50dp"
+                android:textSize="16dp" />
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

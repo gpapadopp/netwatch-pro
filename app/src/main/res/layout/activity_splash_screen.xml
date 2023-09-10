@@ -24,7 +24,7 @@
         android:textSize="28sp"
         android:layout_below="@+id/globe_dots_imageView"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/hammersmith_one"
+        android:fontFamily="@font/poppins_bold"
         android:text="@string/app_name"
         android:textColor="@color/white" />
 
