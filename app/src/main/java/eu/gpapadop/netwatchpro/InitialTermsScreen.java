@@ -71,8 +71,8 @@ public class InitialTermsScreen extends AppCompatActivity {
             public void onClick(View widget) {
                 // Prevent CheckBox state from being toggled when link is clicked
                 widget.cancelPendingInputEvents();
-                ModalSheetTermsOfUse bottomSheetFragment = new ModalSheetTermsOfUse();
-                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                ModalSheetTermsOfUse modalSheetTermsOfUse = new ModalSheetTermsOfUse();
+                modalSheetTermsOfUse.show(getSupportFragmentManager(), modalSheetTermsOfUse.getTag());
             }
             @Override
             public void updateDrawState(TextPaint ds) {
