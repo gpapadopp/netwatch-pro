@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import eu.gpapadop.netwatchpro.modal_sheets.ModalSheetPrivacyPolicy;
 import eu.gpapadop.netwatchpro.modal_sheets.ModalSheetTermsOfUse;
 
 public class InitialTermsScreen extends AppCompatActivity {
@@ -93,7 +94,8 @@ public class InitialTermsScreen extends AppCompatActivity {
             public void onClick(View widget) {
                 // Prevent CheckBox state from being toggled when link is clicked
                 widget.cancelPendingInputEvents();
-                // Do action for link text...
+                ModalSheetPrivacyPolicy modalSheetPrivacyPolicy = new ModalSheetPrivacyPolicy();
+                modalSheetPrivacyPolicy.show(getSupportFragmentManager(), modalSheetPrivacyPolicy.getTag());
             }
             @Override
             public void updateDrawState(TextPaint ds) {

@@ -45,4 +45,32 @@
     <string name="modal_sheet_terms_of_use_contact_information">10. Contact Information</string>
     <string name="modal_sheet_terms_of_use_contact_information_main_text">If you have any questions or concerns about these Terms or the App, please contact us at info@ict.ihu.gr.</string>
     <string name="modal_sheet_terms_of_use_final_line">By using the "NetWatch Pro" App, you acknowledge that you have read, understood, and agreed to these Terms of Use. If you do not agree with any part of these Terms, please do not use the App.</string>
+    <!--  Strings used for Privacy Policy Modal Sheet  -->
+    <string name="modal_sheet_privacy_policy_first_main_text">This Privacy Policy ("Policy") explains how "NetWatch Pro" collects, uses, and safeguards your personal information when you use the "NetWatch Pro" mobile application ("App"). By installing, accessing, or using the App, you consent to the practices described in this Policy.</string>
+    <string name="modal_sheet_privacy_policy_information_we_collect">1. Information We Collect</string>
+    <string name="modal_sheet_privacy_policy_personal_information">a. Personal Information</string>
+    <string name="modal_sheet_privacy_policy_collecting_types">We may collect the following types of personal information:</string>
+    <string name="modal_sheet_privacy_policy_device_information">Device Information: We may collect information about your mobile device, including device model, operating system, and unique device identifiers.</string>
+    <string name="modal_sheet_privacy_policy_usage_data">Usage Data: We may collect data on how you use the App, including app features and functions you access, as well as your interactions with the App.</string>
+    <string name="modal_sheet_privacy_policy_data_collected_for_app_functionality">b. Data Collected for App Functionality</string>
+    <string name="modal_sheet_privacy_policy_request_access">The App may request access to the following device permissions and data to provide its functionality:</string>
+    <string name="modal_sheet_privacy_policy_internet_access">Internet Access: The App may require internet access to analyze internet traffic and detect suspicious IP packages.</string>
+    <string name="modal_sheet_privacy_policy_app_permissions">App Permissions: The App may request access to certain device permissions, such as storage access, to perform malware scanning.</string>
+    <string name="modal_sheet_privacy_policy_how_we_use_your_information">2. How We Use Your Information</string>
+    <string name="modal_sheet_privacy_policy_use_information_purposes">We may use your information for the following purposes:</string>
+    <string name="modal_sheet_privacy_policy_provide_and_maintain_app">To provide and maintain the App\'s functionality.</string>
+    <string name="modal_sheet_privacy_policy_detect_and_report_malware">To detect and report on potential malware in installed applications on your device.</string>
+    <string name="modal_sheet_privacy_policy_analyze_internet_access">To analyze internet traffic and identify suspicious IP packages.</string>
+    <string name="modal_sheet_privacy_policy_improve_and_enhance_performance">To improve and enhance the performance and features of the App.</string>
+    <string name="modal_sheet_privacy_policy_data_security">3. Data Security</string>
+    <string name="modal_sheet_privacy_policy_data_security_main_text">We take reasonable measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, please be aware that no method of transmitting data over the internet or storing data is completely secure, and we cannot guarantee the absolute security of your data.</string>
+    <string name="modal_sheet_privacy_policy_third_party_services">4. Third-Party Services</string>
+    <string name="modal_sheet_privacy_policy_third_party_services_main_text">The App may include links to third-party websites, services, or content. We do not control these third-party services and are not responsible for their privacy practices. We encourage you to review the privacy policies of these third-party services before interacting with them.</string>
+    <string name="modal_sheet_privacy_policy_children_privacy">5. Children\'s Privacy</string>
+    <string name="modal_sheet_privacy_policy_children_privacy_main_text">The App is not intended for use by children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe that we have unintentionally collected personal information from a child under 13, please contact us immediately.</string>
+    <string name="modal_sheet_privacy_policy_changes_to_this_privacy_policy">6. Changes to this Privacy Policy</string>
+    <string name="modal_sheet_privacy_policy_changes_to_this_privacy_policy_main_text">We may update this Privacy Policy to reflect changes to our data practices. We will notify you of any changes by posting the updated Policy in the App. Your continued use of the App after such modifications will constitute your acknowledgment of the revised Privacy Policy.</string>
+    <string name="modal_sheet_privacy_policy_contact_information">7. Contact Information</string>
+    <string name="modal_sheet_privacy_policy_contact_information_main_text">If you have questions or concerns about this Privacy Policy or the App\'s data practices, please contact us at info@ict.ihu.gr.</string>
+    <string name="modal_sheet_privacy_policy_contact_information_secondary_text">By using the "NetWatch Pro" App, you consent to the collection and use of your personal information as described in this Privacy Policy.</string>
 </resources>
