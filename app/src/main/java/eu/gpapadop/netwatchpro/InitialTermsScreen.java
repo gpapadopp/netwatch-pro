@@ -2,6 +2,7 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -10,7 +11,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,6 +26,7 @@ public class InitialTermsScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_terms_screen);
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
 
         this.canClickButton = false;
 
@@ -61,6 +62,18 @@ public class InitialTermsScreen extends AppCompatActivity {
                     ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.light_gray));
                     nextButton.setBackgroundTintList(colorStateList);
                     canClickButton = false;
+                }
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (canClickButton){
+                    sharedPreferencesHandler.saveHasAcceptTerms();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });

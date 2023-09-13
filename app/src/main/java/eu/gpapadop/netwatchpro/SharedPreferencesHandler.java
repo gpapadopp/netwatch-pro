@@ -23,4 +23,16 @@ public class SharedPreferencesHandler {
         sharedPrefsEditor.putString("device_unique_token", newToken);
         sharedPrefsEditor.apply();
     }
+
+    public boolean getHasAcceptTerms(){
+        SharedPreferences sharedPrefs = this.appContext.getSharedPreferences("NetWatchProSharedPrefs", MODE_PRIVATE);
+        return sharedPrefs.getBoolean("user_has_accept_terms", false);
+    }
+
+    public void saveHasAcceptTerms(){
+        SharedPreferences sharedPrefs = this.appContext.getSharedPreferences("NetWatchProSharedPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+        sharedPrefsEditor.putBoolean("user_has_accept_terms", true);
+        sharedPrefsEditor.apply();
+    }
 }
