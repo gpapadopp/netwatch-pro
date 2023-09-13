@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/custom_toolbar_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/custom_toolbar_notification_icon"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/app_name"
+                android:layout_marginRight="90dp"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:id="@+id/custom_toolbar_notification_icon"
+                android:layout_width="41dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/notifications_icon"
+                android:layout_marginRight="5dp"
+                android:contentDescription="Notifications Icon" />
+
+            <TextView
+                android:id="@+id/custom_toolbar_notifications_badge"
+                android:visibility="invisible"
+                android:layout_width="44dp"
+                android:layout_height="24dp"
+                android:layout_alignTop="@id/custom_toolbar_notification_icon"
+                android:layout_toEndOf="@id/custom_toolbar_notification_icon"
+                android:layout_marginStart="-26dp"
+                android:background="@drawable/circle_background"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+</LinearLayout>
