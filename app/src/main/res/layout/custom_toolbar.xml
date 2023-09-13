@@ -11,19 +11,19 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:textAlignment="center">
 
             <TextView
                 android:id="@+id/custom_toolbar_app_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/custom_toolbar_notification_icon"
                 android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:paddingLeft="30dp"
                 android:text="@string/app_name"
-                android:layout_marginRight="90dp"
                 android:textSize="18dp" />
 
             <ImageView
