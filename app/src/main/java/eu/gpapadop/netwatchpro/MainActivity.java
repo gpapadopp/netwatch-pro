@@ -2,8 +2,11 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,10 +22,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.handleNotifications();
+        this.handleGetNotifications();
+        this.handleNotificationsClick();
     }
 
-    private void handleNotifications(){
+    private void handleGetNotifications(){
         RequestsHandler notificationsAPI = new RequestsHandler();
         notificationsAPI.makeOkHttpRequest(this.baseNotificationURL, new OkHttpRequestCallback() {
             @Override
@@ -45,6 +49,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Exception e) {
+            }
+        });
+    }
+
+    private void handleNotificationsClick(){
+        ImageView notificationIcon = (ImageView) findViewById(R.id.custom_toolbar_notification_icon);
+        notificationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notificationsIntent = new Intent(getApplicationContext(), NotificationsListView.class);
+                startActivity(notificationsIntent);
             }
         });
     }

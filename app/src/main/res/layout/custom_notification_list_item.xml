@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/custom_notification_list_item_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="16dp"
+        android:backgroundTint="@color/light_blue">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/custom_notification_list_item_title_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:textFontWeight="700"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:lines="2"
+                android:text="Title"
+                android:textSize="17dp" />
+
+            <ImageView
+                android:id="@+id/custom_notification_list_item_banner_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="125dp"
+                android:layout_below="@+id/custom_notification_list_item_title_text_view"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="Notification Banner"
+                android:foregroundGravity="center"
+                android:src="@drawable/notifications_icon" />
+            <TextView
+                android:id="@+id/custom_notification_list_item_context_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins"
+                android:textFontWeight="500"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:lines="5"
+                android:text="Main Context"
+                android:textSize="15dp"
+                android:layout_below="@+id/custom_notification_list_item_banner_image_view"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
