@@ -3,7 +3,6 @@ package eu.gpapadop.netwatchpro.managers.internetPackages;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
 
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -16,11 +15,10 @@ import java.io.IOException;
 import java.util.Formatter;
 import eu.gpapadop.netwatchpro.R;
 import eu.gpapadop.netwatchpro.SharedPreferencesHandler;
-import eu.gpapadop.netwatchpro.api.InternetPackagesAPI;
 
 public class PackageCaptureWifi extends VpnService {
     private Thread packetCaptureThread;
-    private InternetPackagesAPI internetPackagesAPI = new InternetPackagesAPI();
+//    private InternetPackagesAPI internetPackagesAPI = new InternetPackagesAPI();
     private SharedPreferencesHandler sharedPreferencesHandler;
     private String uniqueDeviceToken;
 
@@ -125,17 +123,17 @@ public class PackageCaptureWifi extends VpnService {
                 if (!decodedSourceAddress.equals("83.212.59.30") && !decodedDestinationAddress.equals("83.212.59.30")){
                     //Exclude Server IP Address
                     //Save Packet to API
-                    this.internetPackagesAPI.addInternetPackage(
-                            this.uniqueDeviceToken,
-                            decodedSourceAddress,
-                            decodedDestinationAddress,
-                            sourceMacAddress.toString(),
-                            destinationMacAddress.toString(),
-                            headerType,
-                            headerHexString,
-                            decodedPayloadData,
-                            this.getApplicationContext()
-                    );
+//                    this.internetPackagesAPI.addInternetPackage(
+//                            this.uniqueDeviceToken,
+//                            decodedSourceAddress,
+//                            decodedDestinationAddress,
+//                            sourceMacAddress.toString(),
+//                            destinationMacAddress.toString(),
+//                            headerType,
+//                            headerHexString,
+//                            decodedPayloadData,
+//                            this.getApplicationContext()
+//                    );
                 }
             }
 
