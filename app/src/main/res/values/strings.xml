@@ -2,6 +2,10 @@
     <string name="app_name">NetWatch Pro</string>
     <string name="title_activity_initial_screen">InitialScreen</string>
     <string name="notifications">Notifications</string>
+    <string name="seconds_ago">second(s) ago</string>
+    <string name="minutes_ago">minute(s) ago</string>
+    <string name="hours_ago">hour(s) ago</string>
+    <string name="days_ago">day(s) ago</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

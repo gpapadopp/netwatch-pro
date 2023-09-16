@@ -5,17 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NotificationsListView">
-    <TextView
-        android:id="@+id/notifications_activity_title_text_view"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/notifications_activity_toolbar"
+        android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notifications"
-        android:gravity="center"
-        android:fontFamily="@font/poppins_bold"
-        android:textSize="18dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_height="55dp"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/white">
+
+        <ImageButton
+            android:id="@+id/notifications_activity_toolbar_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_arrow"
+            android:contentDescription="Back"
+            android:background="?attr/selectableItemBackground"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_gravity="start" />
+
+        <TextView
+            android:id="@+id/notifications_activity_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/notifications"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+    </androidx.appcompat.widget.Toolbar>
     <ProgressBar
         android:id="@+id/notifications_activity_progress_bar"
         style="@android:style/Widget.ProgressBar.Small"
@@ -23,10 +44,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="visible" />
-    <ListView
-        android:id="@+id/notifications_activity_list_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/notifications_activity_swipe_to_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/notifications_activity_title_text_view"
-        android:visibility="visible"/>
+        android:layout_below="@+id/notifications_activity_toolbar">
+        <ListView
+            android:id="@+id/notifications_activity_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

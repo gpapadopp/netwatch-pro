@@ -42,6 +42,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetWatchPro">
         <activity
+            android:name=".SingleNotificationView"
+            android:exported="false" />
+        <activity
             android:name=".NotificationsListView"
             android:exported="false" />
         <activity
