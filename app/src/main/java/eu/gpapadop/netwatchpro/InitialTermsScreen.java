@@ -16,8 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import eu.gpapadop.netwatchpro.modal_sheets.ModalSheetPrivacyPolicy;
-import eu.gpapadop.netwatchpro.modal_sheets.ModalSheetTermsOfUse;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class InitialTermsScreen extends AppCompatActivity {
     private boolean canClickButton;
@@ -69,7 +68,7 @@ public class InitialTermsScreen extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (canClickButton){
+                if (canClickButton) {
                     sharedPreferencesHandler.saveHasAcceptTerms();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -85,8 +84,9 @@ public class InitialTermsScreen extends AppCompatActivity {
             public void onClick(View widget) {
                 // Prevent CheckBox state from being toggled when link is clicked
                 widget.cancelPendingInputEvents();
-                ModalSheetTermsOfUse modalSheetTermsOfUse = new ModalSheetTermsOfUse();
-                modalSheetTermsOfUse.show(getSupportFragmentManager(), modalSheetTermsOfUse.getTag());
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(InitialTermsScreen.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_terms_of_use);
+                bottomSheet.show();
             }
             @Override
             public void updateDrawState(TextPaint ds) {
@@ -107,8 +107,9 @@ public class InitialTermsScreen extends AppCompatActivity {
             public void onClick(View widget) {
                 // Prevent CheckBox state from being toggled when link is clicked
                 widget.cancelPendingInputEvents();
-                ModalSheetPrivacyPolicy modalSheetPrivacyPolicy = new ModalSheetPrivacyPolicy();
-                modalSheetPrivacyPolicy.show(getSupportFragmentManager(), modalSheetPrivacyPolicy.getTag());
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(InitialTermsScreen.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_privacy_policy);
+                bottomSheet.show();
             }
             @Override
             public void updateDrawState(TextPaint ds) {
