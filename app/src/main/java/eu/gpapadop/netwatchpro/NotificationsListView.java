@@ -40,6 +40,7 @@ public class NotificationsListView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(0, R.anim.intent_transitions_slide_left_to_right);
     }
 
     private void handleGetNotifications(){

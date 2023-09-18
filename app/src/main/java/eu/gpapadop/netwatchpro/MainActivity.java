@@ -59,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent notificationsIntent = new Intent(getApplicationContext(), NotificationsListView.class);
+                notificationsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notificationsIntent);
+                overridePendingTransition(R.anim.intent_transitions_slide_right_to_left, 0);
             }
         });
     }
