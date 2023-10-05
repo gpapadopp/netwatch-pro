@@ -6,6 +6,8 @@
     <string name="minutes_ago">minute(s) ago</string>
     <string name="hours_ago">hour(s) ago</string>
     <string name="days_ago">day(s) ago</string>
+    <string name="you_are_protected">You are protected</string>
+    <string name="last_check">Last Check:</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

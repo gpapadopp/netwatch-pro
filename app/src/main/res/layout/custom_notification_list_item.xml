@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -40,37 +41,41 @@
                 android:layout_alignParentEnd="true"
                 android:contentDescription="Notification Banner"
                 android:foregroundGravity="center" />
+
             <TextView
                 android:id="@+id/custom_notification_list_item_context_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
+                android:layout_below="@+id/custom_notification_list_item_banner_image_view"
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins"
-                android:textFontWeight="500"
-                android:textColor="@color/black"
                 android:gravity="center"
                 android:lines="5"
                 android:text="Main Context"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
                 android:textSize="15dp"
-                android:layout_below="@+id/custom_notification_list_item_banner_image_view"/>
+                tools:ignore="TextSizeCheck" />
+
             <TextView
                 android:id="@+id/custom_notification_list_item_time_ago_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:layout_below="@+id/custom_notification_list_item_context_text_view"
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:fontFamily="@font/poppins"
-                android:textFontWeight="500"
-                android:textColor="@color/black"
-                android:gravity="center"
                 android:layout_marginBottom="5dp"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
                 android:text="2 hours ago"
+                android:textColor="@color/black"
+                android:textFontWeight="500"
                 android:textSize="12dp"
-                android:layout_below="@+id/custom_notification_list_item_context_text_view"/>
+                tools:ignore="TextSizeCheck" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
