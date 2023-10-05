@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:titleTextColor="@android:color/white"

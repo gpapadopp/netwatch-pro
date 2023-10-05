@@ -7,7 +7,7 @@
     tools:context=".SingleNotificationView">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/single_notification_view_toolbar"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:titleTextColor="@android:color/white"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/back_arrow"
             android:contentDescription="Back"
-            android:background="?attr/selectableItemBackground"
+            android:background="@color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingTop="16dp"
@@ -46,6 +46,8 @@
         android:id="@+id/single_notification_view_banner_image_view"
         android:layout_width="wrap_content"
         android:layout_height="125dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:layout_below="@+id/single_notification_view_title_text_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"

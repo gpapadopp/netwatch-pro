@@ -8,7 +8,7 @@
     tools:context=".NotificationsListView">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/notifications_activity_toolbar"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:titleTextColor="@android:color/white"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/back_arrow"
             android:contentDescription="Back"
-            android:background="?attr/selectableItemBackground"
+            android:background="@color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingTop="16dp"
