@@ -2,7 +2,6 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +14,7 @@ import org.json.JSONObject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         this.handleGetNotifications();
         this.handleNotificationsClick();
         this.handleLastCheckTextView();
+        this.handleCheckIconImageView();
     }
 
     private void handleGetNotifications(){
@@ -81,6 +82,24 @@ public class MainActivity extends AppCompatActivity {
         } else {
             LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
             lastCheckTimeTextView.setText(this.formatDateTime(lastCheckTime));
+        }
+    }
+
+    private void handleCheckIconImageView(){
+        ImageView checkIconImageView = (ImageView) findViewById(R.id.activity_main_shield_check_imageview);
+        TextView youAreProtectedTextView = (TextView) findViewById(R.id.activity_main_you_are_protected_textview);
+        long lastCheckTimestamp = this.sharedPreferencesHandler.getLastCheckDateTime();
+        if (lastCheckTimestamp == 0){
+            checkIconImageView.setImageResource(R.drawable.shield_close);
+            youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
+        } else {
+            LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
+            LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
+            long daysDifference = ChronoUnit.DAYS.between(lastCheckTime, currentTime);
+            if (daysDifference > 7){
+                checkIconImageView.setImageResource(R.drawable.shield_close);
+                youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
+            }
         }
     }
 
