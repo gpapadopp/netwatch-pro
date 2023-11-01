@@ -12,18 +12,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 
 public class MainActivity extends AppCompatActivity {
     final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    private SharedPreferencesHandler sharedPreferencesHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.handleGetNotifications();
         this.handleNotificationsClick();
+        this.handleLastCheckTextView();
     }
 
     private void handleGetNotifications(){
@@ -64,5 +71,47 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.intent_transitions_slide_right_to_left, 0);
             }
         });
+    }
+
+    private void handleLastCheckTextView(){
+        long lastCheckTimestamp = this.sharedPreferencesHandler.getLastCheckDateTime();
+        TextView lastCheckTimeTextView = (TextView) findViewById(R.id.activity_main_last_check_date_textview);
+        if (lastCheckTimestamp == 0){
+            lastCheckTimeTextView.setText("-");
+        } else {
+            LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
+            lastCheckTimeTextView.setText(this.formatDateTime(lastCheckTime));
+        }
+    }
+
+    private String formatDateTime(LocalDateTime dateTimeToFormat){
+        String returnString = "";
+        if (dateTimeToFormat.getDayOfMonth() < 10){
+            returnString += "0" + String.valueOf(dateTimeToFormat.getDayOfMonth());
+        } else {
+            returnString += String.valueOf(dateTimeToFormat.getDayOfMonth());
+        }
+        if (dateTimeToFormat.getMonthValue() < 10){
+            returnString += "/0" + String.valueOf(dateTimeToFormat.getMonthValue());
+        } else {
+            returnString += "/" + String.valueOf(dateTimeToFormat.getMonthValue());
+        }
+        returnString += "/" + String.valueOf(dateTimeToFormat.getYear());
+        if (dateTimeToFormat.getHour() < 10){
+            returnString += " 0" + String.valueOf(dateTimeToFormat.getHour());
+        } else {
+            returnString += " " + String.valueOf(dateTimeToFormat.getHour());
+        }
+        if (dateTimeToFormat.getMinute() < 10){
+            returnString += ":0" + String.valueOf(dateTimeToFormat.getMinute());
+        } else {
+            returnString += ":" + String.valueOf(dateTimeToFormat.getMinute());
+        }
+        if (dateTimeToFormat.getSecond() < 10){
+            returnString += ":0" + String.valueOf(dateTimeToFormat.getSecond());
+        } else {
+            returnString += ":" + String.valueOf(dateTimeToFormat.getSecond());
+        }
+        return returnString;
     }
 }

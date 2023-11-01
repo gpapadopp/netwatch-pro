@@ -105,6 +105,17 @@
                 android:gravity="center"
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="16dp"/>
+            <TextView
+                android:id="@+id/activity_main_last_check_date_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/activity_main_last_check_textview"
+                android:text="-"
+                android:gravity="center"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14dp"/>
         </RelativeLayout>
     </FrameLayout>
 
