@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -27,6 +28,7 @@ import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 public class MainActivity extends AppCompatActivity {
     final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
     private SharedPreferencesHandler sharedPreferencesHandler;
+    private boolean isHeartbeat = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         long lastCheckTimestamp = this.sharedPreferencesHandler.getLastCheckDateTime();
         if (lastCheckTimestamp == 0){
             checkIconImageView.setImageResource(R.drawable.shield_close);
+            //Start ImageView Animation
+            heartBeatAnimation();
             youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
             //Change Status Bar Color
             Window window = this.getWindow();
@@ -118,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
             long daysDifference = ChronoUnit.DAYS.between(lastCheckTime, currentTime);
             if (daysDifference > 7){
                 checkIconImageView.setImageResource(R.drawable.shield_close);
+                //Start ImageView Animation
+                heartBeatAnimation();
                 youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
                 //Change Status Bar Color
                 Window window = this.getWindow();
@@ -159,5 +165,43 @@ public class MainActivity extends AppCompatActivity {
             returnString += ":" + String.valueOf(dateTimeToFormat.getSecond());
         }
         return returnString;
+    }
+
+    private void heartBeatAnimation(){
+        Handler handler = new Handler();
+        ImageView checkIconImageView = (ImageView) findViewById(R.id.activity_main_shield_check_imageview);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isHeartbeat) {
+                    checkIconImageView.animate().scaleX(1.1f).scaleY(1.1f).setDuration(300).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkIconImageView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isHeartbeat = false;
+                                    heartBeatAnimation(); // Repeat the animation
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    isHeartbeat = true;
+                    checkIconImageView.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkIconImageView.animate().scaleX(1.1f).scaleY(1.1f).setDuration(300).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isHeartbeat = true;
+                                    heartBeatAnimation(); // Repeat the animation
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }, 300);
     }
 }
