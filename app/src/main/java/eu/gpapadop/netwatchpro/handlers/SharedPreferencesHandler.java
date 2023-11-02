@@ -1,4 +1,4 @@
-package eu.gpapadop.netwatchpro;
+package eu.gpapadop.netwatchpro.handlers;
 
 import static android.content.Context.MODE_PRIVATE;
 

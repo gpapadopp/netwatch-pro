@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+
 @SuppressLint("CustomSplashScreen")
 public class SplashScreen extends AppCompatActivity {
     @Override

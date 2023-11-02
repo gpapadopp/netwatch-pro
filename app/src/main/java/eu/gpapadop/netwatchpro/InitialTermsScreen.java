@@ -18,6 +18,8 @@ import android.widget.CompoundButton;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+
 public class InitialTermsScreen extends AppCompatActivity {
     private boolean canClickButton;
 

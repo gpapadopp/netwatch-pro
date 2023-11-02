@@ -17,6 +17,7 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
+import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 
 public class MainActivity extends AppCompatActivity {

@@ -3,6 +3,8 @@ package eu.gpapadop.netwatchpro;
 import android.content.Context;
 import java.util.UUID;
 
+import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+
 public class Connectivity {
     private Context appContext;
     private boolean hasError;
