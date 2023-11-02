@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/modal_sheets_rounded_top_corners"
-    >
+    android:background="@drawable/modal_sheets_rounded_top_corners">
 
     <TextView
         android:layout_width="match_parent"

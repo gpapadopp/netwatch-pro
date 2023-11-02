@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@color/super_light_gray"
     tools:context=".NotificationsListView">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/notifications_activity_toolbar"
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:titleTextColor="@android:color/white"
-        android:background="@color/white">
+        android:background="@color/super_light_gray">
 
         <ImageButton
             android:id="@+id/notifications_activity_toolbar_back_button"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/back_arrow"
             android:contentDescription="Back"
-            android:background="@color/white"
+            android:background="@color/super_light_gray"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingTop="16dp"
