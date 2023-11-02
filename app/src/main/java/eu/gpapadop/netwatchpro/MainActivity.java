@@ -3,10 +3,14 @@ package eu.gpapadop.netwatchpro;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,10 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        this.handleStatusBarColor();
         this.handleGetNotifications();
         this.handleNotificationsClick();
         this.handleLastCheckTextView();
         this.handleCheckIconImageView();
+    }
+
+    private void handleStatusBarColor(){
+        Window window = this.getWindow();
+        window.setStatusBarColor(this.getResources().getColor(R.color.main_blue));
     }
 
     private void handleGetNotifications(){
@@ -89,10 +99,19 @@ public class MainActivity extends AppCompatActivity {
     private void handleCheckIconImageView(){
         ImageView checkIconImageView = (ImageView) findViewById(R.id.activity_main_shield_check_imageview);
         TextView youAreProtectedTextView = (TextView) findViewById(R.id.activity_main_you_are_protected_textview);
+        FrameLayout protectedFrameLayout = (FrameLayout) findViewById(R.id.activity_main_protection_row);
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
         long lastCheckTimestamp = this.sharedPreferencesHandler.getLastCheckDateTime();
         if (lastCheckTimestamp == 0){
             checkIconImageView.setImageResource(R.drawable.shield_close);
             youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
+            //Change Status Bar Color
+            Window window = this.getWindow();
+            window.setStatusBarColor(this.getResources().getColor(R.color.red));
+            //Change Protected Gradient
+            protectedFrameLayout.setBackground(getDrawable(R.drawable.main_activity_vertical_gradient_red));
+            //Change Toolbar Color
+            mainToolbar.setBackgroundColor(getResources().getColor(R.color.red));
         } else {
             LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
             LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
@@ -100,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
             if (daysDifference > 7){
                 checkIconImageView.setImageResource(R.drawable.shield_close);
                 youAreProtectedTextView.setText(getString(R.string.you_are_not_protected));
+                //Change Status Bar Color
+                Window window = this.getWindow();
+                window.setStatusBarColor(this.getResources().getColor(R.color.red));
+                //Change Protected Gradient
+                protectedFrameLayout.setBackground(getDrawable(R.drawable.main_activity_vertical_gradient_red));
+                //Change Toolbar Color
+                mainToolbar.setBackgroundColor(getResources().getColor(R.color.red));
             }
         }
     }

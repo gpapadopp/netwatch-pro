@@ -6,8 +6,8 @@
     <string name="minutes_ago">minute(s) ago</string>
     <string name="hours_ago">hour(s) ago</string>
     <string name="days_ago">day(s) ago</string>
-    <string name="you_are_protected">You are protected</string>
-    <string name="you_are_not_protected">You are NOT protected</string>
+    <string name="you_are_protected">Protected</string>
+    <string name="you_are_not_protected">Exposed</string>
     <string name="last_check">Last Check:</string>
     <string name="scan_your_apps">Scan your Apps</string>
     <string name="full_scan_your_apps">Full Scan your Apps</string>
