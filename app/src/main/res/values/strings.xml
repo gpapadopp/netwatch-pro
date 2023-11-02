@@ -9,6 +9,13 @@
     <string name="you_are_protected">You are protected</string>
     <string name="you_are_not_protected">You are NOT protected</string>
     <string name="last_check">Last Check:</string>
+    <string name="scan_your_apps">Scan your Apps</string>
+    <string name="full_scan_your_apps">Full Scan your Apps</string>
+    <string name="scan_your_apps_subtext">Do a quick check of your apps</string>
+    <string name="full_scan_your_apps_subtext">Do a full audit of your applications</string>
+    <string name="vpn">VPN</string>
+    <string name="vpn_subtext">Stay protected in real-time by enabling the VPN feature now built into the app, and let us manage your risk for you</string>
+    <string name="our_server_status">Our Server Status</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
