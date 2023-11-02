@@ -112,12 +112,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
                     android:layout_below="@+id/activity_main_shield_check_imageview"
                     android:text="@string/you_are_protected"
                     android:gravity="center"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/white"
-                    android:textSize="16dp"/>
+                    android:textSize="20dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
