@@ -392,6 +392,7 @@
             android:layout_below="@+id/vpn_container_row"
             android:layout_marginTop="20dp">
             <RelativeLayout
+                android:id="@+id/last_scans_container_relative_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="275dp"
                 android:layout_weight="5"

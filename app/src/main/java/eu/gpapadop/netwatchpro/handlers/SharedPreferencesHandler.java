@@ -5,7 +5,8 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SharedPreferencesHandler {
     private Context appContext;
@@ -66,6 +67,16 @@ public class SharedPreferencesHandler {
         //4 = Every 4 Weeks
         SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
         sharedPrefsEditor.putInt("recursive_scan_frequency", newRecursiveScanFrequency);
+        sharedPrefsEditor.apply();
+    }
+
+    public Set<String> getLatestScans(){
+        return this.sharedPrefs.getStringSet("latest_scans_set", new HashSet<>());
+    }
+
+    public void setLatestScans(Set<String> newLatestScans){
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putStringSet("latest_scans_set", newLatestScans);
         sharedPrefsEditor.apply();
     }
 }

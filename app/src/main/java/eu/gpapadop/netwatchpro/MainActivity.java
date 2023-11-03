@@ -8,11 +8,15 @@ import androidx.appcompat.widget.Toolbar;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,7 +31,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Set;
 
+import eu.gpapadop.netwatchpro.adapters.SingleLastScanEmptyAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         //VPN
         this.handleVpnSwitchTap();
         this.handleOurServerStatusRowClick();
+        //Last Scans
+        this.handleLastScansListView();
     }
 
     @Override
@@ -370,5 +379,21 @@ public class MainActivity extends AppCompatActivity {
                 bottomSheet.show();
             }
         });
+    }
+
+    private void handleLastScansListView(){
+        ListView lastScansListView = (ListView) findViewById(R.id.last_scans_container_card_view_last_scans_list_view);
+
+        RelativeLayout lastScansContainer = (RelativeLayout) findViewById(R.id.last_scans_container_relative_layout);
+        ViewGroup.LayoutParams layoutParams = lastScansContainer.getLayoutParams();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
+        Set<String> lastScans = this.sharedPreferencesHandler.getLatestScans();
+        if (lastScans.isEmpty()){
+            lastScansListView.setAdapter(new SingleLastScanEmptyAdapter(getApplicationContext()));
+            int newHeightInDp = 130;
+            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+            lastScansContainer.setLayoutParams(layoutParams);
+        }
     }
 }
