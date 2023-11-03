@@ -25,6 +25,14 @@
     <string name="export_data">Export data</string>
     <string name="about_us">About Us</string>
     <string name="developed_by">Developed by International Hellenic University</string>
+    <string name="inactive">Inactive</string>
+    <string name="every_week">Every Week</string>
+    <string name="every_two_weeks">Every 2 Weeks</string>
+    <string name="every_four_weeks">Every 4 Weeks</string>
+    <string name="disable">Disable</string>
+    <string name="choose_recursive_future_scans_frequency">Choose Recursive/Future Scans Frequency</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

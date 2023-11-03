@@ -103,7 +103,7 @@
                             android:id="@+id/activity_settings_recursive_future_scans_subtitle_text_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Inactive"
+                            android:text="@string/inactive"
                             android:layout_below="@+id/activity_settings_recursive_future_scans_title_text_view"
                             android:fontFamily="@font/poppins"
                             android:paddingLeft="40dp"

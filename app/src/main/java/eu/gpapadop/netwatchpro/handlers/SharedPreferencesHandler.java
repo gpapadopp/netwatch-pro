@@ -45,4 +45,27 @@ public class SharedPreferencesHandler {
         sharedPrefsEditor.putLong("last_check_timestamp_unix", newTimestamp);
         sharedPrefsEditor.apply();
     }
+
+    public boolean getRecursiveEnabled(){
+        return this.sharedPrefs.getBoolean("recursive_scan_enabled", false);
+    }
+
+    public void setRecursiveEnabled(boolean newRecursiveEnabled){
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putBoolean("recursive_scan_enabled", newRecursiveEnabled);
+        sharedPrefsEditor.apply();
+    }
+
+    public int getRecursiveFrequency(){
+        return this.sharedPrefs.getInt("recursive_scan_frequency", 0);
+    }
+
+    public void setRecursiveFrequency(int newRecursiveScanFrequency){
+        //1 = Every Week
+        //2 = Every 2 Weeks
+        //4 = Every 4 Weeks
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putInt("recursive_scan_frequency", newRecursiveScanFrequency);
+        sharedPrefsEditor.apply();
+    }
 }
