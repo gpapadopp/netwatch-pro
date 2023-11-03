@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 
@@ -24,6 +28,15 @@ public class SettingsActivity extends AppCompatActivity {
         //Recursive Future Scan Section
         this.handleRecursiveFutureScanText();
         this.handleRecursiveFutureScanRowTap();
+
+        //Terms of Use Section
+        this.handleTermsOfUseRowTap();
+        //Privacy Policy Section
+        this.handlePrivacyPolicyRowTap();
+        //About Us Section
+        this.handleAboutUsRowTap();
+        //Version Number Section
+        this.handleVersionNumberText();
     }
 
     private void handleBackIconTap(){
@@ -94,5 +107,52 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    private void handleTermsOfUseRowTap(){
+        FrameLayout termsOfUseFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_terms_of_use_container);
+        termsOfUseFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(SettingsActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_terms_of_use);
+                bottomSheet.show();
+            }
+        });
+    }
+
+    private void handlePrivacyPolicyRowTap(){
+        FrameLayout privacyPolicyFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_privacy_policy_container);
+        privacyPolicyFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(SettingsActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_privacy_policy);
+                bottomSheet.show();
+            }
+        });
+    }
+
+    private void handleAboutUsRowTap(){
+        FrameLayout aboutUsFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_about_us_container);
+        aboutUsFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(SettingsActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_about_us);
+                bottomSheet.show();
+            }
+        });
+    }
+
+    private void handleVersionNumberText(){
+        TextView versionNumberTextView = (TextView) findViewById(R.id.activity_settings_version_number_textview);
+
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String versionName = packageInfo.versionName;
+
+            versionNumberTextView.setText("v." + versionName);
+        } catch (PackageManager.NameNotFoundException ignored){}
     }
 }

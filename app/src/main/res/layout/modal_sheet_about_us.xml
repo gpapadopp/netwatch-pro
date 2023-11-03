@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/modal_sheets_rounded_top_corners">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_us"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        >
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_welcome_paragraph"
+                android:fontFamily="@font/poppins"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_at_netwatch_pro_paragraph"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_our_team_paragraph"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_as_we_move_forward"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_thank_you"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_sincerely"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="15dp"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/modal_sheet_about_us_the_team"
+                android:fontFamily="@font/poppins"
+                android:layout_marginBottom="50dp"
+                android:textSize="16dp" />
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

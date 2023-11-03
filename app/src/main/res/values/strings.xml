@@ -72,7 +72,7 @@
     <string name="modal_sheet_terms_of_use_changes_to_terms">8. Changes to Terms</string>
     <string name="modal_sheet_terms_of_use_changes_to_terms_main_text">The University reserves the right to modify or update these Terms at any time. It is your responsibility to review these Terms periodically. Your continued use of the App after changes to the Terms are made constitutes acceptance of the updated Terms.</string>
     <string name="modal_sheet_terms_of_use_governing_law">9. Governing Law</string>
-    <string name="modal_sheet_terms_of_use_governing_law_main_text">These Terms are governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.</string>
+    <string name="modal_sheet_terms_of_use_governing_law_main_text">These Terms are governed by and construed in accordance with the laws of GNU, without regard to its conflict of law principles.</string>
     <string name="modal_sheet_terms_of_use_contact_information">10. Contact Information</string>
     <string name="modal_sheet_terms_of_use_contact_information_main_text">If you have any questions or concerns about these Terms or the App, please contact us at info@ict.ihu.gr.</string>
     <string name="modal_sheet_terms_of_use_final_line">By using the "NetWatch Pro" App, you acknowledge that you have read, understood, and agreed to these Terms of Use. If you do not agree with any part of these Terms, please do not use the App.</string>
@@ -104,4 +104,12 @@
     <string name="modal_sheet_privacy_policy_contact_information">7. Contact Information</string>
     <string name="modal_sheet_privacy_policy_contact_information_main_text">If you have questions or concerns about this Privacy Policy or the App\'s data practices, please contact us at info@ict.ihu.gr.</string>
     <string name="modal_sheet_privacy_policy_contact_information_secondary_text">By using the "NetWatch Pro" App, you consent to the collection and use of your personal information as described in this Privacy Policy.</string>
+    <!--  Strings used for About Us Modal Sheet  -->
+    <string name="modal_sheet_about_us_welcome_paragraph">Welcome to NetWatch Pro, the result of extensive research and development by a dedicated team of scholars at the International Hellenic University. Our mission is to enhance mobile security and protect users from the ever-evolving threat of malicious applications.</string>
+    <string name="modal_sheet_about_us_at_netwatch_pro_paragraph">At NetWatch Pro, we are committed to the pursuit of knowledge and innovation, and we believe that safeguarding your digital life is paramount. Our journey began as a thesis project, and it has evolved into a full-fledged application powered by cutting-edge Machine Learning models. We are proud to have worked tirelessly to create a tool that empowers users to scan and identify potentially harmful apps on their Android devices.</string>
+    <string name="modal_sheet_about_us_our_team_paragraph">Our team comprises experts in the fields of cybersecurity and machine learning, and we have harnessed the power of these technologies to provide you with a reliable and user-friendly solution. We understand the importance of preserving your privacy and data security, which is why we have designed NetWatch Pro with the highest standards in mind.</string>
+    <string name="modal_sheet_about_us_as_we_move_forward">As we move forward, our commitment to staying ahead of emerging threats remains unwavering. We will continue to refine and expand our application to ensure that you can trust your Android device to be free from malicious software.</string>
+    <string name="modal_sheet_about_us_thank_you">Thank you for choosing NetWatch Pro to protect your digital world. We are excited to have you on this journey with us, and we look forward to helping you maintain a secure and enjoyable mobile experience.</string>
+    <string name="modal_sheet_about_us_sincerely">Sincerely</string>
+    <string name="modal_sheet_about_us_the_team">The NetWatch Pro Team</string>
 </resources>
