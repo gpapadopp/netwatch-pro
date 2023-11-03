@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         this.handleNotificationsClick();
         this.handleLastCheckTextView();
         this.handleCheckIconImageView();
+        this.handleSettingsTap();
     }
 
     private void handleStatusBarColor(){
@@ -134,6 +135,18 @@ public class MainActivity extends AppCompatActivity {
                 mainToolbar.setBackgroundColor(getResources().getColor(R.color.red));
             }
         }
+    }
+
+    private void handleSettingsTap(){
+        ImageView settingsIcon = (ImageView) findViewById(R.id.custom_toolbar_settings_icon);
+        settingsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
+                finish();
+            }
+        });
     }
 
     private String formatDateTime(LocalDateTime dateTimeToFormat){
