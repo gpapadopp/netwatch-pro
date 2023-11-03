@@ -465,6 +465,92 @@
             </RelativeLayout>
         </FrameLayout>
 
+        <!-- Installed Apps Row -->
+        <FrameLayout
+            android:id="@+id/installed_apps_container_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/last_scans_container_row"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="275dp"
+                android:layout_weight="5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/installed_apps_container_card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/installed_apps_container_card_view_installed_apps_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="start"
+                            android:paddingTop="10dp"
+                            android:paddingStart="15dp"
+                            android:text="@string/installed_apps"
+                            android:fontFamily="@font/poppins_bold"
+                            android:textSize="18dp"/>
+                        <ListView
+                            android:id="@+id/installed_apps_container_card_view_installed_list_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/installed_apps_container_card_view_installed_apps_textview"/>
+                        <View
+                            android:id="@+id/installed_apps_container_card_view_installed_apps_divider"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/installed_apps_container_card_view_installed_list_view"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:background="@color/light_gray" />
+                        <TextView
+                            android:id="@+id/installed_apps_container_card_view_last_scans_see_all_installed_apps_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/installed_apps_container_card_view_installed_apps_divider"
+                            android:text="@string/see_all_scans"
+                            android:fontFamily="@font/poppins_medium"
+                            android:paddingStart="15dp"
+                            android:paddingTop="10dp"/>
+                        <ImageView
+                            android:id="@+id/installed_apps_container_card_view_last_scans_see_all_installed_apps_arrow_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:src="@drawable/next_arrow"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/installed_apps_container_card_view_installed_apps_divider"
+                            android:layout_toEndOf="@+id/installed_apps_container_card_view_last_scans_see_all_installed_apps_text_view"
+                            android:paddingEnd="15dp"
+                            android:paddingTop="10dp"
+                            android:scaleType="fitEnd"/>
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </FrameLayout>
+
     </RelativeLayout>
 
 </ScrollView>

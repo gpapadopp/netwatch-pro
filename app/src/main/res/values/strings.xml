@@ -18,6 +18,7 @@
     <string name="our_server_status">Our Server Status</string>
     <string name="last_scans">Last Scans</string>
     <string name="see_all_scans">See all scans</string>
+    <string name="installed_apps">Installed Apps</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/installed_apps_single_list_item_app_icon"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_weight="2"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/device_search_cloud" />
+    <TextView
+        android:id="@+id/installed_apps_single_list_item_app_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="7dp"
+        android:text="App Name"
+        android:fontFamily="@font/poppins"/>
+    <ImageView
+        android:id="@+id/installed_apps_single_list_item_more_arrow"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_weight="1"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/next_arrow" />
+</LinearLayout>
