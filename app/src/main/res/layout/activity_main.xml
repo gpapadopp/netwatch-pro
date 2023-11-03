@@ -164,6 +164,7 @@
                 android:layout_height="match_parent">
                 <!-- Scan Apps Container -->
                 <RelativeLayout
+                    android:id="@+id/scan_device_scan_your_apps_container"
                     android:layout_width="wrap_content"
                     android:layout_height="150dp"
                     android:layout_weight="5"
@@ -221,6 +222,7 @@
                 </RelativeLayout>
                 <!-- Full Scan Apps Container -->
                 <RelativeLayout
+                    android:id="@+id/scan_device_full_scan_your_apps_container"
                     android:layout_width="wrap_content"
                     android:layout_height="150dp"
                     android:layout_weight="5"

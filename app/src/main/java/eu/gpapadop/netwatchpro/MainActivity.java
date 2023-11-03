@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         this.handleLastCheckTextView();
         this.handleCheckIconImageView();
         this.handleSettingsTap();
+        //Scan Apps
+        this.scanYourAppsRowTap();
+        //Full Scan Apps
+        this.fullScanYourAppsRowTap();
     }
 
     private void handleStatusBarColor(){
@@ -216,5 +221,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, 300);
+    }
+
+    private void scanYourAppsRowTap(){
+        RelativeLayout scanYourAppsRelativeLayout = (RelativeLayout) findViewById(R.id.scan_device_scan_your_apps_container);
+        scanYourAppsRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent scanYourAppsIntent = new Intent(getApplicationContext(), ScanYourAppsActivity.class);
+                startActivity(scanYourAppsIntent);
+                finish();
+            }
+        });
+    }
+
+    private void fullScanYourAppsRowTap(){
+        RelativeLayout fullScanYourAppsRelativeLayout = (RelativeLayout) findViewById(R.id.scan_device_full_scan_your_apps_container);
+        fullScanYourAppsRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fullScanYourAppsIntent = new Intent(getApplicationContext(), FullScanYourAppsActivity.class);
+                startActivity(fullScanYourAppsIntent);
+                finish();
+            }
+        });
     }
 }

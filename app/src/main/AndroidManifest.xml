@@ -42,6 +42,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetWatchPro">
         <activity
+            android:name=".FullScanYourAppsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScanYourAppsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
