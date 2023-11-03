@@ -16,6 +16,8 @@
     <string name="vpn">VPN</string>
     <string name="vpn_subtext">Stay protected in real-time by enabling the VPN feature now built into the app, and let us manage your risk for you</string>
     <string name="our_server_status">Our Server Status</string>
+    <string name="last_scans">Last Scans</string>
+    <string name="see_all_scans">See all scans</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
