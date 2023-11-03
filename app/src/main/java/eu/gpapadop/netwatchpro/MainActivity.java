@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,13 +32,15 @@ import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
-import eu.gpapadop.netwatchpro.vpn_service.ArctourosVpnService;
+import eu.gpapadop.netwatchpro.services.ArctourosVpnService;
 
 public class MainActivity extends AppCompatActivity {
     final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    final String baseServiceStatusURL = "https://arctouros.ict.ihu.gr/api/v1/service-status/vpn-service";
     private SharedPreferencesHandler sharedPreferencesHandler;
     private boolean isHeartbeat = false;
     private NotificationsHandler notificationsHandler;
+    private boolean serresVpnRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.handleStatusBarColor();
+        //Get Server Information
         this.handleGetNotifications();
+        this.checkVpnServerRunning();
+
         this.handleNotificationsClick();
         this.handleLastCheckTextView();
         this.handleCheckIconImageView();
@@ -56,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
         this.fullScanYourAppsRowTap();
         //VPN
         this.handleVpnSwitchTap();
+        this.handleOurServerStatusRowClick();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        this.notificationsHandler.hideNotification();
     }
 
     private void handleStatusBarColor(){
@@ -82,6 +96,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (JSONException ignored){
                 }
+            }
+
+            @Override
+            public void onError(Exception e) {
+            }
+        });
+    }
+
+    private void checkVpnServerRunning(){
+        RequestsHandler serviceStatusAPI = new RequestsHandler();
+        serviceStatusAPI.makeOkHttpRequest(baseServiceStatusURL, new OkHttpRequestCallback() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    String vpnServerStatus = jsonObject.getString("status");
+                    serresVpnRunning = vpnServerStatus.toLowerCase().contains("running");
+                } catch (JSONException ignored){}
             }
 
             @Override
@@ -296,5 +327,48 @@ public class MainActivity extends AppCompatActivity {
         Intent vpnIntent = new Intent(this, ArctourosVpnService.class);
         stopService(vpnIntent);
         this.notificationsHandler.hideNotification();
+    }
+
+    private void handleOurServerStatusRowClick(){
+        TextView ourServerStatusTextView = (TextView) findViewById(R.id.vpn_container_card_view_server_status_text_view);
+        ImageView ourServerStatusArrow = (ImageView) findViewById(R.id.vpn_container_card_view_server_status_arrow_button);
+
+        ourServerStatusTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_our_server_status);
+                TextView serresServerStatusTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_our_server_status_running_stop_text_view);
+
+                if (serresVpnRunning){
+                    serresServerStatusTextView.setText(getString(R.string.running));
+                    serresServerStatusTextView.setTextColor(getColor(R.color.primary_green));
+                } else {
+                    serresServerStatusTextView.setText(getString(R.string.down));
+                    serresServerStatusTextView.setTextColor(getColor(R.color.red));
+                }
+
+                bottomSheet.show();
+            }
+        });
+
+        ourServerStatusArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_our_server_status);
+                TextView serresServerStatusTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_our_server_status_running_stop_text_view);
+
+                if (serresVpnRunning){
+                    serresServerStatusTextView.setText(getString(R.string.running));
+                    serresServerStatusTextView.setTextColor(getColor(R.color.primary_green));
+                } else {
+                    serresServerStatusTextView.setText(getString(R.string.down));
+                    serresServerStatusTextView.setTextColor(getColor(R.color.red));
+                }
+
+                bottomSheet.show();
+            }
+        });
     }
 }

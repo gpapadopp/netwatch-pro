@@ -1,4 +1,4 @@
-package eu.gpapadop.netwatchpro.vpn_service;
+package eu.gpapadop.netwatchpro.services;
 
 import android.content.Intent;
 import android.net.VpnService;

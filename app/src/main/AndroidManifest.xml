@@ -84,7 +84,7 @@
         </receiver>
 
         <service
-            android:name=".vpn_service.ArctourosVpnService"
+            android:name=".services.ArctourosVpnService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_VPN_SERVICE">

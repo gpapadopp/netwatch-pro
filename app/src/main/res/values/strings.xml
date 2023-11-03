@@ -35,6 +35,9 @@
     <string name="cancel">Cancel</string>
     <string name="netwatch_pro_vpn">NetWatch Pro VPN</string>
     <string name="you_are_connected_to_netwatch_pro_vpn">You are connected to NetWatch Pro VPN Service</string>
+    <string name="serres">Serres</string>
+    <string name="running">Running</string>
+    <string name="down">Down</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
