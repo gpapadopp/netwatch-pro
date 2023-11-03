@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
+
+import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,17 +29,21 @@ import java.time.temporal.ChronoUnit;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
+import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
+import eu.gpapadop.netwatchpro.vpn_service.ArctourosVpnService;
 
 public class MainActivity extends AppCompatActivity {
     final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
     private SharedPreferencesHandler sharedPreferencesHandler;
     private boolean isHeartbeat = false;
+    private NotificationsHandler notificationsHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.handleStatusBarColor();
         this.handleGetNotifications();
         this.handleNotificationsClick();
@@ -46,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         this.scanYourAppsRowTap();
         //Full Scan Apps
         this.fullScanYourAppsRowTap();
+        //VPN
+        this.handleVpnSwitchTap();
     }
 
     private void handleStatusBarColor(){
@@ -245,5 +255,46 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void handleVpnSwitchTap(){
+        Switch vpnToggleSwitch = (Switch) findViewById(R.id.vpn_container_card_view_vpn_switch);
+        vpnToggleSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (vpnToggleSwitch.isChecked()){
+                    //Connect to VPN
+                    Intent intent = VpnService.prepare(getApplicationContext());
+                    if (intent != null) {
+                        startActivityForResult(intent, 2002);
+                    } else {
+                        startVpnService();
+                    }
+                } else {
+                    //Disconnect to VPN
+                    stopVpnService();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2002 && resultCode == RESULT_OK) {
+            startVpnService();
+        }
+    }
+
+    private void startVpnService() {
+        Intent vpnIntent = new Intent(this, ArctourosVpnService.class);
+        startService(vpnIntent);
+        this.notificationsHandler.showStickyNotification(getString(R.string.netwatch_pro_vpn), getString(R.string.you_are_connected_to_netwatch_pro_vpn));
+    }
+
+    private void stopVpnService() {
+        Intent vpnIntent = new Intent(this, ArctourosVpnService.class);
+        stopService(vpnIntent);
+        this.notificationsHandler.hideNotification();
     }
 }
