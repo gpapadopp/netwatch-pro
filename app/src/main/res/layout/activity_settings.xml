@@ -63,6 +63,7 @@
             android:layout_alignParentEnd="true"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:layout_marginTop="20dp"
             android:layout_below="@+id/toolbar">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -113,8 +114,8 @@
 
                 <ImageView
                     android:id="@+id/activity_settings_recursive_arrow_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/next_arrow"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
@@ -177,8 +178,8 @@
 
                 <ImageView
                     android:id="@+id/activity_settings_delete_all_arrow_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/next_arrow"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
@@ -241,8 +242,8 @@
 
                 <ImageView
                     android:id="@+id/activity_settings_export_arrow_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/next_arrow"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
@@ -305,13 +306,186 @@
 
                 <ImageView
                     android:id="@+id/activity_settings_terms_of_use_arrow_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/next_arrow"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"/>
 
+            </RelativeLayout>
+        </FrameLayout>
+
+        <!-- Privacy Policy -->
+        <FrameLayout
+            android:id="@+id/activity_settings_privacy_policy_container"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_below="@+id/activity_settings_terms_of_use_container">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/activity_settings_privacy_policy_image_view"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/activity_settings_privacy_policy_icon_container"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_toEndOf="@+id/activity_settings_privacy_policy_image_view"
+                    android:layout_toStartOf="@+id/activity_settings_privacy_policy_arrow_icon">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/activity_settings_privacy_policy_title_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="@string/privacy_policy"
+                            android:fontFamily="@font/poppins_bold"
+                            android:paddingLeft="40dp"
+                            android:textAlignment="viewStart"
+                            android:gravity="center"
+                            android:textSize="16dp"/>
+                    </RelativeLayout>
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/activity_settings_privacy_policy_arrow_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/next_arrow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+        </FrameLayout>
+
+        <!-- About Us -->
+        <FrameLayout
+            android:id="@+id/activity_settings_about_us_container"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_below="@+id/activity_settings_privacy_policy_container">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/activity_settings_about_us_image_view"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/activity_settings_info_icon_container"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"/>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_toEndOf="@+id/activity_settings_about_us_image_view"
+                    android:layout_toStartOf="@+id/activity_settings_about_us_arrow_icon">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/activity_settings_about_us_title_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:text="@string/about_us"
+                            android:fontFamily="@font/poppins_bold"
+                            android:paddingLeft="40dp"
+                            android:textAlignment="viewStart"
+                            android:gravity="center"
+                            android:textSize="16dp"/>
+                    </RelativeLayout>
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/activity_settings_about_us_arrow_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/next_arrow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+        </FrameLayout>
+
+        <!--  Version Number Text Row  -->
+        <FrameLayout
+            android:id="@+id/activity_settings_version_number_row"
+            android:layout_below="@+id/activity_settings_about_us_container"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="30dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/activity_settings_version_number_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/poppins_light"
+                    android:textSize="15dp"/>
+            </RelativeLayout>
+        </FrameLayout>
+
+        <!--  Developed By Text Row  -->
+        <FrameLayout
+            android:id="@+id/activity_settings_developed_by_row"
+            android:layout_below="@+id/activity_settings_version_number_row"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="30dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/activity_settings_developed_by_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/developed_by"
+                    android:fontFamily="@font/poppins_light"
+                    android:textSize="11dp"/>
             </RelativeLayout>
         </FrameLayout>
 
