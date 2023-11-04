@@ -22,6 +22,16 @@ public class Scan {
         this.scannedApps = newScannedApps;
     }
 
+    public UUID getScanID(){
+        return this.scanID;
+    }
+
+    public long getLongScanID(){
+        long mostSigBits = this.scanID.getMostSignificantBits();
+        long leastSigBits = this.scanID.getLeastSignificantBits();
+        return (mostSigBits << 32) | (leastSigBits & 0xFFFFFFFFL);
+    }
+
     public LocalDateTime getScanDateTime(){
         return this.scanDateTime;
     }

@@ -6,9 +6,10 @@
         android:id="@+id/last_scans_single_list_item_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="7dp"
+        android:layout_marginStart="15dp"
         android:layout_weight="8"
         android:text="@string/there_is_no_recently_scans"
+        android:textSize="16dp"
         android:fontFamily="@font/poppins_medium"/>
 </LinearLayout>

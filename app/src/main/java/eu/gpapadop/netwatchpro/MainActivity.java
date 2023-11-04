@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,15 +28,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import eu.gpapadop.netwatchpro.adapters.SingleLastScanAdapter;
 import eu.gpapadop.netwatchpro.adapters.SingleLastScanEmptyAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
+import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
@@ -394,6 +402,35 @@ public class MainActivity extends AppCompatActivity {
             int newHeightInDp = 130;
             layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
             lastScansContainer.setLayoutParams(layoutParams);
+        } else {
+            //Has Last Scans
+            List<Scan> allScans = this.decodeLastScans(lastScans);
+            if (allScans.size() > 5){
+                List<Scan> scansToDisplay = new ArrayList<>();
+                for (int i = 0; i<5; i++){
+                    scansToDisplay.add(allScans.get(i));
+                }
+                lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), scansToDisplay));
+            } else {
+                lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), allScans));
+            }
         }
+    }
+
+    private List<Scan> decodeLastScans(Set<String> allLastScans){
+        List<Scan> allScans = new ArrayList<>();
+        for (String scan : allLastScans){
+            if (scan != null){
+                byte[] serializedBytes = Base64.decode(scan, Base64.DEFAULT);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
+                try {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                    Scan singleScan = (Scan) objectInputStream.readObject();
+                    allScans.add(singleScan);
+                    objectInputStream.close();
+                } catch (IOException | ClassNotFoundException ignored){}
+            }
+        }
+        return allScans;
     }
 }
