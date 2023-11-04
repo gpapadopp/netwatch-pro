@@ -2,8 +2,11 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,7 +19,20 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_your_apps);
 
+        this.handleBackButtonTap();
         this.handleProgressBar();
+    }
+
+    private void handleBackButtonTap(){
+        ImageView backButtonImageView = (ImageView) findViewById(R.id.custom_toolbar_settings_icon);
+        backButtonImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivityIntent);
+                finish();
+            }
+        });
     }
 
     private void handleProgressBar(){
