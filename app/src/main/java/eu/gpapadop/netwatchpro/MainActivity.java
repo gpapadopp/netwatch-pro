@@ -2,6 +2,7 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
 
@@ -15,6 +16,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isHeartbeat = false;
     private NotificationsHandler notificationsHandler;
     private boolean serresVpnRunning = false;
+    private Connectivity connectivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
+        this.connectivity = new Connectivity(getApplicationContext());
         this.handleStatusBarColor();
         //Get Server Information
         this.handleGetNotifications();
@@ -307,6 +311,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleVpnSwitchTap(){
         Switch vpnToggleSwitch = (Switch) findViewById(R.id.vpn_container_card_view_vpn_switch);
+        if (this.connectivity.getConnectionType() == 0){
+            this.displayNoInternetDialog();
+            return;
+        }
         vpnToggleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -324,6 +332,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void displayNoInternetDialog(){
+        Dialog dialog = new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.dialog_no_internet_connection);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        Button okDialogButton = (Button) dialog.findViewById(R.id.dialog_no_internet_connection_job_save_button);
+        okDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivityIntent);
+                finish();
+            }
+        });
+
+        dialog.show();
     }
 
     @Override
