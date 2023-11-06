@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayNoInternetDialog(){
-        Dialog dialog = new Dialog(getApplicationContext());
+        Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_no_internet_connection);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
