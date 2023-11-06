@@ -2,6 +2,7 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     private List<String> allPackageNames;
     private List<List<String>> allPermissions;
     private List<Boolean> isMalware;
+    private Connectivity connectivity;
 
 
     @Override
@@ -35,14 +39,45 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_your_apps);
         this.installedAppsManager = new InstalledAppsManager(getApplicationContext());
+        this.connectivity = new Connectivity(getApplicationContext());
         this.allAppNames = new ArrayList<>();
         this.allPackageNames = new ArrayList<>();
         this.allPermissions = new ArrayList<>();
         this.isMalware = new ArrayList<>();
-        this.initializeAppLists();
+        this.checkInternetConnection();
 
         this.handleBackButtonTap();
         this.handleProgressBar();
+    }
+
+    private void checkInternetConnection(){
+        if (this.connectivity.getConnectionType() != 0){
+            //Is Connected
+            this.initializeAppLists();
+            return;
+        }
+        this.displayNoInternetDialog();
+    }
+
+    private void displayNoInternetDialog(){
+        Dialog dialog = new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.dialog_no_internet_connection);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        Button okDialogButton = (Button) dialog.findViewById(R.id.dialog_no_internet_connection_job_save_button);
+        okDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivityIntent);
+                finish();
+            }
+        });
+
+        dialog.show();
     }
 
     private void initializeAppLists(){
