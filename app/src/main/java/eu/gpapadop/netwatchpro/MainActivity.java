@@ -311,13 +311,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleVpnSwitchTap(){
         Switch vpnToggleSwitch = (Switch) findViewById(R.id.vpn_container_card_view_vpn_switch);
-        if (this.connectivity.getConnectionType() == 0){
-            this.displayNoInternetDialog();
-            return;
-        }
         vpnToggleSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (connectivity.getConnectionType() == 0){
+                    displayNoInternetDialog();
+                    return;
+                }
                 if (vpnToggleSwitch.isChecked()){
                     //Connect to VPN
                     Intent intent = VpnService.prepare(getApplicationContext());
