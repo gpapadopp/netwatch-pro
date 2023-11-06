@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.connectivity = new Connectivity(getApplicationContext());
+        this.connectivity.initialize();
         this.handleStatusBarColor();
         //Get Server Information
         this.handleGetNotifications();
@@ -290,6 +291,10 @@ public class MainActivity extends AppCompatActivity {
         scanYourAppsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (connectivity.getConnectionType() == 0){
+                    displayNoInternetDialog();
+                    return;
+                }
                 Intent scanYourAppsIntent = new Intent(getApplicationContext(), ScanYourAppsActivity.class);
                 startActivity(scanYourAppsIntent);
                 finish();
@@ -302,6 +307,10 @@ public class MainActivity extends AppCompatActivity {
         fullScanYourAppsRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (connectivity.getConnectionType() == 0){
+                    displayNoInternetDialog();
+                    return;
+                }
                 Intent fullScanYourAppsIntent = new Intent(getApplicationContext(), FullScanYourAppsActivity.class);
                 startActivity(fullScanYourAppsIntent);
                 finish();

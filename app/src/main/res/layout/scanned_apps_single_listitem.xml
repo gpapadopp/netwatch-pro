@@ -11,28 +11,24 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/scanned_apps_single_list_item_app_image_view"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="2"
-            app:cardCornerRadius="16dp"
+            android:elevation="10dp"
             android:layout_margin="5dp"
-            android:elevation="10dp">
-            <ImageView
-                android:id="@+id/scanned_apps_single_list_item_app_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/search_white"
-                android:background="@color/black"/>
-        </androidx.cardview.widget.CardView>
+            android:src="@drawable/search_white"
+            android:background="@android:color/transparent" />
 
         <TextView
             android:id="@+id/scanned_apps_single_list_item_application_name_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:text="Application Name"
             android:paddingStart="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/poppins" />
 
         <pl.droidsonroids.gif.GifImageView
@@ -40,7 +36,35 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_weight="1"
+            android:layout_marginTop="5dp"
             android:src="@drawable/spinner_loading" />
+
+        <TextView
+            android:id="@+id/scanned_apps_single_list_item_app_is_save_text_view"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:text="@string/safe"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/primary_green"/>
+
+        <TextView
+            android:id="@+id/scanned_apps_single_list_item_app_warning_text_view"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:text="@string/warning"
+            android:fontFamily="@font/poppins_medium"
+            android:textAllCaps="true"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/main_orange"/>
 
     </LinearLayout>
 
