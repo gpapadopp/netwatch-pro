@@ -13,7 +13,6 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import java.time.ZoneId;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -453,8 +452,16 @@ public class MainActivity extends AppCompatActivity {
                     scansToDisplay.add(allScans.get(i));
                 }
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), scansToDisplay));
+
+                int newHeightInDp = scansToDisplay.size() * 95;
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+                lastScansContainer.setLayoutParams(layoutParams);
             } else {
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), allScans));
+
+                int newHeightInDp = allScans.size() * 95;
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+                lastScansContainer.setLayoutParams(layoutParams);
             }
         }
     }
@@ -474,11 +481,8 @@ public class MainActivity extends AppCompatActivity {
 
                     objectInputStream.close();
                     byteArrayInputStream.close();
-                } catch (ClassNotFoundException e) {
-                    Log.e("decodeLastScans", "Class not found during deserialization", e);
-                } catch (IOException e) {
-                    Log.e("decodeLastScans", "IOException during deserialization", e);
-                }
+                } catch (ClassNotFoundException ignored) {
+                } catch (IOException ignored) {}
             }
         }
 
