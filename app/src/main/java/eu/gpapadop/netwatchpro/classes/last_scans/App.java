@@ -1,16 +1,18 @@
 package eu.gpapadop.netwatchpro.classes.last_scans;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App {
+public class App implements Serializable {
     private String name;
     private String packageName;
     private List<String> allPermissions;
     private boolean isMalware;
-    private Drawable launchIcon = null;
+    private String launchIcon;
 
     public App(){
         this.name = "";
@@ -19,7 +21,7 @@ public class App {
         this.isMalware = false;
     }
 
-    public App(String newName, String newPackageName, List<String> newAllPermissions, boolean newIsMalware, Drawable newLaunchIcon){
+    public App(String newName, String newPackageName, List<String> newAllPermissions, boolean newIsMalware, String newLaunchIcon){
         this.name = newName;
         this.packageName = newPackageName;
         this.allPermissions = newAllPermissions;
@@ -59,11 +61,11 @@ public class App {
         return this.isMalware;
     }
 
-    public void setLaunchIcon(Drawable newLaunchIcon){
-        this.launchIcon = newLaunchIcon;
-    }
-
-    public Drawable getLaunchIcon(){
-        return this.launchIcon;
-    }
+//    public void setLaunchIcon(Bitmap newLaunchIcon){
+//        this.launchIcon = newLaunchIcon;
+//    }
+//
+//    public Bitmap getLaunchIcon(){
+//        return this.launchIcon;
+//    }
 }

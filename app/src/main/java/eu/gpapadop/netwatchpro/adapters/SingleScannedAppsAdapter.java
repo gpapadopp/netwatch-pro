@@ -1,7 +1,11 @@
 package eu.gpapadop.netwatchpro.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +21,11 @@ import pl.droidsonroids.gif.GifImageView;
 public class SingleScannedAppsAdapter extends BaseAdapter {
     private Context context;
     private List<String> appNames;
-    private List<Drawable> allIcons;
+    private List<String> allIcons;
     private List<Boolean> allIsMalware;
     private List<Boolean> allIsChecked;
 
-    public SingleScannedAppsAdapter(Context newContext, List<String> newAppNames, List<Drawable> newAllIcons, List<Boolean> newAllIsMalware, List<Boolean> newAllIsChecked){
+    public SingleScannedAppsAdapter(Context newContext, List<String> newAppNames, List<String> newAllIcons, List<Boolean> newAllIsMalware, List<Boolean> newAllIsChecked){
         this.context = newContext;
         this.appNames = newAppNames;
         this.allIcons = newAllIcons;
@@ -52,7 +56,7 @@ public class SingleScannedAppsAdapter extends BaseAdapter {
         }
 
         ImageView appIconImageView = (ImageView) convertView.findViewById(R.id.scanned_apps_single_list_item_app_image_view);
-        appIconImageView.setImageDrawable(this.allIcons.get(position));
+        appIconImageView.setImageDrawable(this.stringToDrawable(this.allIcons.get(position)));
 
         TextView appNameTextView = (TextView) convertView.findViewById(R.id.scanned_apps_single_list_item_application_name_text_view);
         appNameTextView.setText(this.appNames.get(position));
@@ -80,5 +84,15 @@ public class SingleScannedAppsAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public Drawable stringToDrawable(String drawableString) {
+        if (drawableString == null) {
+            return null;
+        }
+
+        byte[] byteArray = Base64.decode(drawableString, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        return new BitmapDrawable(this.context.getResources(), bitmap);
     }
 }

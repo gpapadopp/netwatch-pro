@@ -2,20 +2,20 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +33,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +57,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     private List<String> allAppNames;
     private List<String> allPackageNames;
     private List<List<String>> allPermissions;
-    private List<Drawable> allAppIcons;
+    private List<String> allAppIcons;
     private List<Boolean> isMalware;
     private List<Boolean> hasChecked;
     private Connectivity connectivity;
@@ -111,11 +109,42 @@ public class ScanYourAppsActivity extends AppCompatActivity {
             //Package Launch Icon
             try {
                 Drawable icon = this.installedAppsManager.getPackageManager().getApplicationIcon(appPackageName);
-                this.allAppIcons.add(icon);
+                this.allAppIcons.add(this.drawableToString(icon));
             } catch (PackageManager.NameNotFoundException ignored){}
         }
         this.handleInstalledAppsListView();
         this.handleProgressBar();
+    }
+
+    public Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    public String drawableToString(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
+        // Convert the Drawable to a Bitmap
+        Bitmap bitmap = drawableToBitmap(drawable);
+
+        // Convert the Bitmap to a base64 string
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
     private void handleBackButtonTap(){
@@ -218,8 +247,8 @@ public class ScanYourAppsActivity extends AppCompatActivity {
 
         allScans.add(newScan);
 
-        Set<String> newLastScans = this.encodeLastScans(allScans);
-        this.sharedPreferencesHandler.setLatestScans(newLastScans);
+        Set<String> encodedScans = this.encodeLastScans(allScans);
+        this.sharedPreferencesHandler.setLatestScans(encodedScans);
 
         LocalDateTime nowDate = LocalDateTime.now();
         ZoneId zoneId = ZoneId.of("UTC");
@@ -228,24 +257,24 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     }
 
     private List<Scan> decodeLastScans(Set<String> allLastScans){
-        List<Scan> allScans = new ArrayList<>();
-        for (String scan : allLastScans){
-            if (scan != null){
-                byte[] serializedBytes = Base64.decode(scan, Base64.DEFAULT);
+        List<Scan> allDecodedLastScans = new ArrayList<>();
+        for (String lastScan : allLastScans){
+            if (lastScan != null){
+                byte[] serializedBytes = Base64.decode(lastScan, Base64.DEFAULT);
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
                 try {
                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                    Scan singleScan = (Scan) objectInputStream.readObject();
-                    allScans.add(singleScan);
+                    Scan singleJob = (Scan) objectInputStream.readObject();
+                    allDecodedLastScans.add(singleJob);
                     objectInputStream.close();
-                } catch (IOException | ClassNotFoundException ignored){}
+                } catch (IOException | ClassNotFoundException ignored) {}
             }
         }
-        return allScans;
+        return allDecodedLastScans;
     }
 
     private Set<String> encodeLastScans(List<Scan> allScans){
-        Set<String> lastScansToSave = new HashSet<>();
+        Set<String> scansToSave = new HashSet<>();
         for (int i = 0; i<allScans.size(); i++){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             try {
@@ -254,9 +283,9 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                 objectOutputStream.close();
             } catch (IOException ignored) {}
             String serializedObject = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-            lastScansToSave.add(serializedObject);
+            scansToSave.add(serializedObject);
         }
-        return lastScansToSave;
+        return scansToSave;
     }
 
     private String getPermissionsString(int position){

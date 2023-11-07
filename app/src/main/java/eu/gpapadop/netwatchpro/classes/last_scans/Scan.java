@@ -1,11 +1,12 @@
 package eu.gpapadop.netwatchpro.classes.last_scans;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Scan {
+public class Scan implements Serializable {
     private UUID scanID;
     private LocalDateTime scanDateTime;
     private List<App> scannedApps;

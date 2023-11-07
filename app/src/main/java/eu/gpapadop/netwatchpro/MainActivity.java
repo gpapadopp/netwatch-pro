@@ -40,7 +40,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -448,8 +447,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Has Last Scans
             List<Scan> allScans = this.decodeLastScans(lastScans);
-            Log.d("george", String.valueOf(lastScans));
-            Log.d("george1", String.valueOf(allScans));
             if (allScans.size() > 5){
                 List<Scan> scansToDisplay = new ArrayList<>();
                 for (int i = 0; i<5; i++){
@@ -462,20 +459,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private List<Scan> decodeLastScans(Set<String> allLastScans){
-        List<Scan> allScans = new ArrayList<>();
-        for (String scan : allLastScans){
-            if (scan != null){
-                byte[] serializedBytes = Base64.decode(scan, Base64.DEFAULT);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
+    private List<Scan> decodeLastScans(Set<String> allLastScans) {
+        List<Scan> allDecodedLastScans = new ArrayList<>();
+
+        for (String lastScan : allLastScans) {
+            if (lastScan != null) {
                 try {
+                    byte[] serializedBytes = Base64.decode(lastScan, Base64.DEFAULT);
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+
                     Scan singleScan = (Scan) objectInputStream.readObject();
-                    allScans.add(singleScan);
+                    allDecodedLastScans.add(singleScan);
+
                     objectInputStream.close();
-                } catch (IOException | ClassNotFoundException ignored) {}
+                    byteArrayInputStream.close();
+                } catch (ClassNotFoundException e) {
+                    Log.e("decodeLastScans", "Class not found during deserialization", e);
+                } catch (IOException e) {
+                    Log.e("decodeLastScans", "IOException during deserialization", e);
+                }
             }
         }
-        return allScans;
+
+        return allDecodedLastScans;
     }
+
 }
