@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,12 +27,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import eu.gpapadop.netwatchpro.adapters.SingleScannedAppsAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
+import eu.gpapadop.netwatchpro.classes.last_scans.App;
+import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
+import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
@@ -49,6 +64,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     private List<Boolean> hasChecked;
     private Connectivity connectivity;
     private NotificationsHandler notificationsHandler;
+    private SharedPreferencesHandler sharedPreferencesHandler;
     private final String baseAPKPermissionsAPIURL = "https://arctouros.ict.ihu.gr/api/v1/package-permissions/predict";
     private final String apiKey = "df76204d-6b39-437b-bfcc-579c36271742";
     private final String secretKey = "75e43c07-7abf-4870-88ba-65547619bbed977cbfc4-646d-4ce5-ac73-59bac56c2ec54962f30a-4de9-40bc-8acd-ba77de8c36eb7a0d5e32-a766-4315-9c18-fe3bbda15992";
@@ -62,6 +78,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         this.connectivity = new Connectivity(getApplicationContext());
         this.connectivity.initialize();
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
+        this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.allAppNames = new ArrayList<>();
         this.allPackageNames = new ArrayList<>();
         this.allPermissions = new ArrayList<>();
@@ -126,7 +143,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (totalCheckedApps <= installedAppsManager.getAllInstalledApps().size()) {
+                if (totalCheckedApps < installedAppsManager.getAllInstalledApps().size()) {
                     progressBarTextView.setText(String.valueOf(totalCheckedApps) + "/" + String.valueOf(installedAppsManager.getAllInstalledApps().size()));
                     double percentage = ((double) totalCheckedApps / installedAppsManager.getAllInstalledApps().size()) * 100.0;
                     progressBar.setProgress((int) percentage);
@@ -134,7 +151,12 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     totalCheckedApps++;
                     handler.postDelayed(this, 1500);
                 } else {
+                    progressBarTextView.setText(String.valueOf(totalCheckedApps) + "/" + String.valueOf(installedAppsManager.getAllInstalledApps().size()));
+                    double percentage = ((double) totalCheckedApps / installedAppsManager.getAllInstalledApps().size()) * 100.0;
+                    progressBar.setProgress((int) percentage);
                     handler.removeCallbacks(this);
+                    saveCompletedScan();
+                    notificationsHandler.hideNotification();
                 }
             }
         }, 1500);
@@ -172,6 +194,69 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                 // Handle the error
             }
         });
+    }
+
+    private void saveCompletedScan(){
+        Scan newScan = new Scan();
+        List<App> scannedApps = new ArrayList<>();
+        for (int i = 0; i<this.allPackageNames.size(); i++){
+            scannedApps.add(new App(
+                    this.allAppNames.get(i),
+                    this.allPackageNames.get(i),
+                    this.allPermissions.get(i),
+                    this.isMalware.get(i),
+                    this.allAppIcons.get(i)
+            ));
+        }
+        newScan.setScannedApps(scannedApps);
+        this.appendScanToSharedPrefs(newScan);
+    }
+
+    private void appendScanToSharedPrefs(Scan newScan){
+        Set<String> lastScans = this.sharedPreferencesHandler.getLatestScans();
+        List<Scan> allScans = this.decodeLastScans(lastScans);
+
+        allScans.add(newScan);
+
+        Set<String> newLastScans = this.encodeLastScans(allScans);
+        this.sharedPreferencesHandler.setLatestScans(newLastScans);
+
+        LocalDateTime nowDate = LocalDateTime.now();
+        ZoneId zoneId = ZoneId.of("UTC");
+        ZonedDateTime utcDateTime = ZonedDateTime.of(nowDate, zoneId);
+        this.sharedPreferencesHandler.saveLastCheckDateTime(utcDateTime.toInstant().toEpochMilli());
+    }
+
+    private List<Scan> decodeLastScans(Set<String> allLastScans){
+        List<Scan> allScans = new ArrayList<>();
+        for (String scan : allLastScans){
+            if (scan != null){
+                byte[] serializedBytes = Base64.decode(scan, Base64.DEFAULT);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
+                try {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                    Scan singleScan = (Scan) objectInputStream.readObject();
+                    allScans.add(singleScan);
+                    objectInputStream.close();
+                } catch (IOException | ClassNotFoundException ignored){}
+            }
+        }
+        return allScans;
+    }
+
+    private Set<String> encodeLastScans(List<Scan> allScans){
+        Set<String> lastScansToSave = new HashSet<>();
+        for (int i = 0; i<allScans.size(); i++){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            try {
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(allScans.get(i));
+                objectOutputStream.close();
+            } catch (IOException ignored) {}
+            String serializedObject = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+            lastScansToSave.add(serializedObject);
+        }
+        return lastScansToSave;
     }
 
     private String getPermissionsString(int position){

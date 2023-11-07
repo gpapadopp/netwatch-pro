@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import java.time.ZoneId;
+
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -162,8 +164,11 @@ public class MainActivity extends AppCompatActivity {
         if (lastCheckTimestamp == 0){
             lastCheckTimeTextView.setText("-");
         } else {
-            LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
-            lastCheckTimeTextView.setText(this.formatDateTime(lastCheckTime));
+            Instant utcEpochInstant = Instant.ofEpochMilli(lastCheckTimestamp);
+            ZoneId zoneId = ZoneId.of("UTC");
+            LocalDateTime localDateTime = utcEpochInstant.atZone(zoneId).toLocalDateTime();
+
+            lastCheckTimeTextView.setText(this.formatDateTime(localDateTime));
         }
     }
 
@@ -443,6 +448,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Has Last Scans
             List<Scan> allScans = this.decodeLastScans(lastScans);
+            Log.d("george", String.valueOf(lastScans));
+            Log.d("george1", String.valueOf(allScans));
             if (allScans.size() > 5){
                 List<Scan> scansToDisplay = new ArrayList<>();
                 for (int i = 0; i<5; i++){
@@ -466,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                     Scan singleScan = (Scan) objectInputStream.readObject();
                     allScans.add(singleScan);
                     objectInputStream.close();
-                } catch (IOException | ClassNotFoundException ignored){}
+                } catch (IOException | ClassNotFoundException ignored) {}
             }
         }
         return allScans;

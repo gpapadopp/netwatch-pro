@@ -39,4 +39,8 @@ public class Scan {
     public List<App> getScannedApps(){
         return this.scannedApps;
     }
+
+    public void setScannedApps(List<App> newScannedApps){
+        this.scannedApps = newScannedApps;
+    }
 }
