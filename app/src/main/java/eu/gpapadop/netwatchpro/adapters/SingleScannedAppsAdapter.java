@@ -65,11 +65,11 @@ public class SingleScannedAppsAdapter extends BaseAdapter {
             try {
                 boolean isMalwareItem = this.allIsMalware.get(position);
                 if (isMalwareItem){
+                    appWarningTextView.setVisibility(View.VISIBLE);
+                    appIsSafeTextView.setVisibility(View.GONE);
+                } else {
                     appIsSafeTextView.setVisibility(View.VISIBLE);
                     appWarningTextView.setVisibility(View.GONE);
-                } else {
-                    appIsSafeTextView.setVisibility(View.GONE);
-                    appWarningTextView.setVisibility(View.VISIBLE);
                 }
                 loadingGifImageView.setVisibility(View.GONE);
             } catch (IndexOutOfBoundsException e){

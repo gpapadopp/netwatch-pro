@@ -37,7 +37,8 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:layout_marginTop="5dp"
-            android:src="@drawable/spinner_loading" />
+            android:src="@drawable/spinner_loading"
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/scanned_apps_single_list_item_app_is_save_text_view"
@@ -45,9 +46,9 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_weight="1"
-            android:layout_marginTop="5dp"
             android:text="@string/safe"
             android:fontFamily="@font/poppins_medium"
+            android:layout_gravity="center"
             android:textSize="16dp"
             android:textAlignment="center"
             android:textColor="@color/primary_green"/>
@@ -58,7 +59,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_weight="1"
-            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
             android:text="@string/warning"
             android:fontFamily="@font/poppins_medium"
             android:textAllCaps="true"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/super_light_gray"
     tools:context=".ScanYourAppsActivity"
+    android:id="@+id/activity_scan_your_apps_main_scroll_view"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -151,6 +152,9 @@
         <ListView
             android:id="@+id/activity_scan_scanning_apps_list_view"
             android:clickable="true"
+            android:descendantFocusability="beforeDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
