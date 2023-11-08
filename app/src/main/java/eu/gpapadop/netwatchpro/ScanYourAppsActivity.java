@@ -125,7 +125,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         this.handleProgressBar();
     }
 
-    public Bitmap drawableToBitmap(Drawable drawable) {
+    private Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         }
@@ -141,7 +141,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public String drawableToString(Drawable drawable) {
+    private String drawableToString(Drawable drawable) {
         if (drawable == null) {
             return null;
         }
@@ -156,7 +156,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    public Drawable stringToDrawable(String drawableString) {
+    private Drawable stringToDrawable(String drawableString) {
         if (drawableString == null) {
             return null;
         }

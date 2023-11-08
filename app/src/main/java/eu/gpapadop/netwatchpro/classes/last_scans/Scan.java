@@ -44,4 +44,44 @@ public class Scan implements Serializable {
     public void setScannedApps(List<App> newScannedApps){
         this.scannedApps = newScannedApps;
     }
+
+    public List<String> getAllAppNames(){
+        List<String> appNames = new ArrayList<>();
+        for (App singleApp : this.scannedApps){
+            appNames.add(singleApp.getName());
+        }
+        return appNames;
+    }
+
+    public List<String> getAllPackageNames(){
+        List<String> packageNames = new ArrayList<>();
+        for (App singleApp : this.scannedApps){
+            packageNames.add(singleApp.getPackageName());
+        }
+        return packageNames;
+    }
+
+    public List<String> getAllAppIcons(){
+        List<String> appIcons = new ArrayList<>();
+        for (App singleApp : this.scannedApps){
+            appIcons.add(singleApp.getLaunchIcon());
+        }
+        return appIcons;
+    }
+
+    public List<Boolean> getAllAppsIsMalware(){
+        List<Boolean> appMalwares = new ArrayList<>();
+        for (App singleApp : this.scannedApps){
+            appMalwares.add(singleApp.getIsMalware());
+        }
+        return appMalwares;
+    }
+
+    public List<Boolean> getAllAppsHasChecked(){
+        List<Boolean> appHasChecked = new ArrayList<>();
+        for (App singleApp : this.scannedApps){
+            appHasChecked.add(true);
+        }
+        return appHasChecked;
+    }
 }

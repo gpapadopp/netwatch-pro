@@ -13,10 +13,12 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import java.time.ZoneId;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -461,16 +463,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), scansToDisplay));
 
-                int newHeightInDp = scansToDisplay.size() * 95;
+                int newHeightInDp = scansToDisplay.size() * 140;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             } else {
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), allScans));
 
-                int newHeightInDp = allScans.size() * 95;
+                int newHeightInDp = allScans.size() * 140;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             }
+            lastScansListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent singleScanViewIntent = new Intent(getApplicationContext(), SingleScanViewActivity.class);
+                    singleScanViewIntent.putExtra("scan_unique_id", String.valueOf(allScans.get(position).getScanID()));
+                    startActivity(singleScanViewIntent);
+                    finish();
+                }
+            });
         }
     }
 

@@ -61,11 +61,11 @@ public class App implements Serializable {
         return this.isMalware;
     }
 
-//    public void setLaunchIcon(Bitmap newLaunchIcon){
-//        this.launchIcon = newLaunchIcon;
-//    }
-//
-//    public Bitmap getLaunchIcon(){
-//        return this.launchIcon;
-//    }
+    public void setLaunchIcon(String newLaunchIcon){
+        this.launchIcon = newLaunchIcon;
+    }
+
+    public String getLaunchIcon(){
+        return this.launchIcon;
+    }
 }

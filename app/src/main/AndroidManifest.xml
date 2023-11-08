@@ -8,7 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.BIND_VPN_SERVICE"
+    <uses-permission
+        android:name="android.permission.BIND_VPN_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
@@ -43,6 +44,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NetWatchPro">
+        <activity
+            android:name=".SingleScanViewActivity"
+            android:exported="false" />
         <activity
             android:name=".FullScanYourAppsActivity"
             android:exported="false" />
