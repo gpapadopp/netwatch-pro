@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -91,6 +92,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         this.isMalware = new ArrayList<>();
         this.hasChecked = new ArrayList<>();
         this.initializeAppLists();
+        this.handleStatusBarColor();
 
         this.handleBackButtonTap();
     }
@@ -174,6 +176,11 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void handleStatusBarColor(){
+        Window window = this.getWindow();
+        window.setStatusBarColor(this.getResources().getColor(R.color.main_blue));
     }
 
     private void handleProgressBar(){
