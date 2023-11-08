@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
         TextView youAreProtectedTextView = (TextView) findViewById(R.id.activity_main_you_are_protected_textview);
         FrameLayout protectedFrameLayout = (FrameLayout) findViewById(R.id.activity_main_protection_row);
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView notificationsBadgeTextView = (TextView) findViewById(R.id.custom_toolbar_notifications_badge);
+
         long lastCheckTimestamp = this.sharedPreferencesHandler.getLastCheckDateTime();
         if (lastCheckTimestamp == 0){
             checkIconImageView.setImageResource(R.drawable.shield_close);
@@ -188,6 +190,9 @@ public class MainActivity extends AppCompatActivity {
             protectedFrameLayout.setBackground(getDrawable(R.drawable.main_activity_vertical_gradient_red));
             //Change Toolbar Color
             mainToolbar.setBackgroundColor(getResources().getColor(R.color.red));
+            //Change Notification Badge Color
+            notificationsBadgeTextView.setTextColor(getColor(R.color.white));
+            notificationsBadgeTextView.setBackground(getDrawable(R.drawable.circle_background_white));
         } else {
             LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
             LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
@@ -204,6 +209,9 @@ public class MainActivity extends AppCompatActivity {
                 protectedFrameLayout.setBackground(getDrawable(R.drawable.main_activity_vertical_gradient_red));
                 //Change Toolbar Color
                 mainToolbar.setBackgroundColor(getResources().getColor(R.color.red));
+                //Change Notification Badge Color
+                notificationsBadgeTextView.setTextColor(getColor(R.color.white));
+                notificationsBadgeTextView.setBackground(getDrawable(R.drawable.circle_background_white));
             }
         }
     }
