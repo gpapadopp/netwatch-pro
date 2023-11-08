@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="25dp"
             android:layout_below="@+id/single_scan_view_activity_toolbar"
             android:text="Scanned Date"
             android:textSize="16dp"

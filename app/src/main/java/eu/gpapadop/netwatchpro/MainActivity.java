@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationsHandler notificationsHandler;
     private boolean serresVpnRunning = false;
     private Connectivity connectivity;
+    private List<Scan> allLastScans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         this.handleOurServerStatusRowClick();
         //Last Scans
         this.handleLastScansListView();
+        this.handleSeeAllLastScansTap();
     }
 
     @Override
@@ -447,15 +449,22 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup.LayoutParams layoutParams = lastScansContainer.getLayoutParams();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
+        TextView seeAllScansTextView = (TextView) findViewById(R.id.last_scans_container_card_view_last_scans_see_all_scans_text_view);
+        ImageView seeAllScansImageView = (ImageView) findViewById(R.id.last_scans_container_card_view_last_scans_see_all_scans_arrow_button);
+
         Set<String> lastScans = this.sharedPreferencesHandler.getLatestScans();
         if (lastScans.isEmpty()){
             lastScansListView.setAdapter(new SingleLastScanEmptyAdapter(getApplicationContext()));
             int newHeightInDp = 130;
             layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
             lastScansContainer.setLayoutParams(layoutParams);
+
+            seeAllScansTextView.setVisibility(View.GONE);
+            seeAllScansImageView.setVisibility(View.GONE);
         } else {
             //Has Last Scans
             List<Scan> allScans = this.decodeLastScans(lastScans);
+            this.allLastScans = allScans;
             if (allScans.size() > 5){
                 List<Scan> scansToDisplay = new ArrayList<>();
                 for (int i = 0; i<5; i++){
@@ -483,6 +492,44 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void handleSeeAllLastScansTap(){
+        TextView seeAllScansTextView = (TextView) findViewById(R.id.last_scans_container_card_view_last_scans_see_all_scans_text_view);
+        ImageView seeAllScansImageView = (ImageView) findViewById(R.id.last_scans_container_card_view_last_scans_see_all_scans_arrow_button);
+
+        seeAllScansTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSeeAllLastScansModal();
+            }
+        });
+        seeAllScansImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSeeAllLastScansModal();
+            }
+        });
+    }
+
+    private void openSeeAllLastScansModal(){
+        final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+        bottomSheet.setContentView(R.layout.modal_sheet_all_scans_listview);
+
+        ListView allScansListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_all_scans_scans_list_view);
+        allScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), this.allLastScans));
+
+        allScansListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent singleScanViewIntent = new Intent(getApplicationContext(), SingleScanViewActivity.class);
+                singleScanViewIntent.putExtra("scan_unique_id", String.valueOf(allLastScans.get(position).getScanID()));
+                startActivity(singleScanViewIntent);
+                finish();
+            }
+        });
+
+        bottomSheet.show();
     }
 
     private List<Scan> decodeLastScans(Set<String> allLastScans) {
