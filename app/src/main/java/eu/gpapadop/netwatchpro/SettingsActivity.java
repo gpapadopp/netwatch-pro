@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.handleBackIconTap();
+        this.handleStatusBarColor();
         //Recursive Future Scan Section
         this.handleRecursiveFutureScanText();
         this.handleRecursiveFutureScanRowTap();
@@ -49,6 +51,11 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void handleStatusBarColor(){
+        Window window = this.getWindow();
+        window.setStatusBarColor(this.getResources().getColor(R.color.super_light_gray));
     }
 
     private void handleRecursiveFutureScanText(){
