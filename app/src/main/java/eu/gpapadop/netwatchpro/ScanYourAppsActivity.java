@@ -7,21 +7,27 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.gpapadop.netwatchpro.adapters.SingleScannedAppDetailsPermissionListAdapter;
 import eu.gpapadop.netwatchpro.adapters.SingleScannedAppsAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.last_scans.App;
@@ -145,6 +152,16 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public Drawable stringToDrawable(String drawableString) {
+        if (drawableString == null) {
+            return null;
+        }
+
+        byte[] byteArray = Base64.decode(drawableString, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        return new BitmapDrawable(getResources(), bitmap);
     }
 
     private void handleBackButtonTap(){
@@ -308,6 +325,17 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         SingleScannedAppsAdapter singleScannedAppsAdapter = new SingleScannedAppsAdapter(getApplicationContext(), this.allAppNames, this.allAppIcons, this.isMalware, this.hasChecked);
         scanningAppsListView.setAdapter(singleScannedAppsAdapter);
 
+        scanningAppsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (hasChecked.get(position)){
+                    displayAppDetailsModalSheet(position);
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.wait_for_the_scan_to_be_completed), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         //Setup Full Height
         setListViewHeightBasedOnChildren(scanningAppsListView);
         ScrollView scrollView = (ScrollView) findViewById(R.id.activity_scan_your_apps_main_scroll_view);
@@ -318,6 +346,44 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void displayAppDetailsModalSheet(int position){
+        final BottomSheetDialog bottomSheet = new BottomSheetDialog(ScanYourAppsActivity.this);
+        bottomSheet.setContentView(R.layout.modal_sheet_scanned_app_details);
+
+        ImageView appIcon = (ImageView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_image_view_logo);
+        TextView appName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_text_view_app_name);
+        TextView packageName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_package_name_text_view);
+        ListView packagePermissions = (ListView) bottomSheet.findViewById(R.id.modal_sheet_scanned_apps_details_permissions_list_view);
+        ScrollView mainScrollView = (ScrollView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_main_scroll_view);
+
+        appIcon.setImageDrawable(this.stringToDrawable(this.allAppIcons.get(position)));
+        appName.setText(this.allAppNames.get(position));
+        packageName.setText(this.allPackageNames.get(position));
+
+        SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), this.allPermissions.get(position));
+        packagePermissions.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+        mainScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                packagePermissions.getParent().requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        int desiredHeight = screenHeight * 3 / 4;
+
+        View bottomSheetView = bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_main_linear_layout);
+        ViewGroup.LayoutParams layoutParams = bottomSheetView.getLayoutParams();
+        layoutParams.height = desiredHeight;
+        bottomSheetView.setLayoutParams(layoutParams);
+
+        bottomSheet.show();
     }
 
     private void setListViewHeightBasedOnChildren(ListView listView) {
