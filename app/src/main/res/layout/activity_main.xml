@@ -348,7 +348,7 @@
                         <View
                             android:id="@+id/vpn_container_card_view_main_divider"
                             android:layout_width="match_parent"
-                            android:layout_height="4dp"
+                            android:layout_height="1dp"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_below="@+id/vpn_container_card_view_vpn_subtext"
@@ -436,7 +436,7 @@
                         <View
                             android:id="@+id/last_scans_container_card_view_last_scans_divider"
                             android:layout_width="match_parent"
-                            android:layout_height="4dp"
+                            android:layout_height="1dp"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_below="@+id/last_scans_container_card_view_last_scans_list_view"
@@ -522,7 +522,7 @@
                         <View
                             android:id="@+id/installed_apps_container_card_view_installed_apps_divider"
                             android:layout_width="match_parent"
-                            android:layout_height="4dp"
+                            android:layout_height="1dp"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_below="@+id/installed_apps_container_card_view_installed_list_view"
