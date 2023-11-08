@@ -13,7 +13,6 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import java.time.ZoneId;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
