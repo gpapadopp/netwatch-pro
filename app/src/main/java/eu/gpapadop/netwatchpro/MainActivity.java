@@ -704,15 +704,88 @@ public class MainActivity extends AppCompatActivity {
         seeAllInstalledAppsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                displayAllInstalledAppsModalSheet();
             }
         });
 
         seeAllInstalledAppsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                displayAllInstalledAppsModalSheet();
             }
         });
+    }
+
+    private void displayAllInstalledAppsModalSheet(){
+        List<Drawable> allAppIcons = new ArrayList<>();
+        List<String> allAppNames = new ArrayList<>();
+        List<String> allPackageNames = new ArrayList<>();
+        List<List<String>> allPermissions = new ArrayList<>();
+
+        for (ApplicationInfo singleApplication : this.installedAppsManager.getAllInstalledApps()){
+            Drawable icon = this.installedAppsManager.getPackageManager().getApplicationIcon(singleApplication);
+            allAppIcons.add(icon);
+            allAppNames.add(singleApplication.loadLabel(this.installedAppsManager.getPackageManager()).toString());
+            allPackageNames.add(singleApplication.packageName);
+
+            List<String> applicationPermissions = new ArrayList<>();
+            try {
+                PackageInfo packageInfo = this.installedAppsManager.getPackageManager().getPackageInfo(singleApplication.packageName, PackageManager.GET_PERMISSIONS);
+                String[] requestedPermissions = packageInfo.requestedPermissions;
+                if (requestedPermissions != null){
+                    applicationPermissions.addAll(Arrays.asList(requestedPermissions));
+                }
+            } catch (PackageManager.NameNotFoundException ignored){}
+            allPermissions.add(applicationPermissions);
+        }
+
+        final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+        bottomSheet.setContentView(R.layout.modal_sheet_all_installed_apps_listview);
+
+        ListView allInstalledAppListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_all_installed_apps_scans_list_view);
+        allInstalledAppListView.setAdapter(new SingleInstalledAppAdapter(getApplicationContext(), allAppIcons, allAppNames));
+
+        allInstalledAppListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_installed_app_details);
+
+                ImageView appIcon = (ImageView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_image_view_logo);
+                TextView appName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_text_view_app_name);
+                TextView packageName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_package_name_text_view);
+                ListView packagePermissions = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_permissions_list_view);
+                ScrollView mainScrollView = (ScrollView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_main_scroll_view);
+
+                appIcon.setImageDrawable(allAppIcons.get(position));
+                appName.setText(allAppNames.get(position));
+                packageName.setText(allPackageNames.get(position));
+
+                SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), allPermissions.get(position));
+                packagePermissions.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                mainScrollView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        packagePermissions.getParent().requestDisallowInterceptTouchEvent(false);
+                        return false;
+                    }
+                });
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screenHeight = displayMetrics.heightPixels;
+                int desiredHeight = screenHeight * 3 / 4;
+
+                View bottomSheetView = bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_main_linear_layout);
+                ViewGroup.LayoutParams layoutParams = bottomSheetView.getLayoutParams();
+                layoutParams.height = desiredHeight;
+                bottomSheetView.setLayoutParams(layoutParams);
+
+                bottomSheet.show();
+            }
+        });
+
+        bottomSheet.show();
     }
 }
