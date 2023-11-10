@@ -489,6 +489,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //Has Last Scans
             List<Scan> allScans = this.decodeLastScans(lastScans);
+            allScans.sort(Comparator.comparing(Scan::getScanDateTime, Comparator.reverseOrder()));
             this.allLastScans = allScans;
             if (allScans.size() > 5){
                 List<Scan> scansToDisplay = new ArrayList<>();
