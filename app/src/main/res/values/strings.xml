@@ -67,6 +67,7 @@
     <string name="permissions"><u>Permissions</u></string>
     <string name="scan_details">Scan Details</string>
     <string name="all_scans">All Scans</string>
+    <string name="installed_app_details">Installed App Details</string>
     <!--  Strings used for Terms of Use Modal Sheet  -->
     <string name="modal_sheet_terms_of_use_first_main_text">These Terms of Use ("Terms") govern your use of the "NetWatch Pro" application ("App"), provided to you by the International Hellenic University ("University" or "we"). By installing, accessing, or using the App, you agree to comply with and be bound by these Terms. If you do not agree with these Terms, please do not use the App.</string>
     <string name="modal_sheet_terms_of_use_acceptance_of_terms">1. Acceptance of Terms</string>

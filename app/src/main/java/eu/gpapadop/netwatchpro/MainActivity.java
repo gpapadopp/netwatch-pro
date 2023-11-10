@@ -6,6 +6,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +18,7 @@ import android.util.DisplayMetrics;
 import java.time.ZoneId;
 
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -40,15 +46,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import eu.gpapadop.netwatchpro.adapters.SingleInstalledAppAdapter;
 import eu.gpapadop.netwatchpro.adapters.SingleLastScanAdapter;
 import eu.gpapadop.netwatchpro.adapters.SingleLastScanEmptyAdapter;
+import eu.gpapadop.netwatchpro.adapters.SingleScannedAppDetailsPermissionListAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
+import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
 import eu.gpapadop.netwatchpro.services.ArctourosVpnService;
 
@@ -61,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean serresVpnRunning = false;
     private Connectivity connectivity;
     private List<Scan> allLastScans;
+    private InstalledAppsManager installedAppsManager;
+    private List<Drawable> installedAppsIcons;
+    private List<String> installedAppsNames;
+    private List<String> installedAppsPackageNames;
+    private List<List<String>> installedAppsPermissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +85,13 @@ public class MainActivity extends AppCompatActivity {
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.connectivity = new Connectivity(getApplicationContext());
+        this.installedAppsManager = new InstalledAppsManager(getApplicationContext());
         this.connectivity.initialize();
+        this.installedAppsIcons = new ArrayList<>();
+        this.installedAppsNames = new ArrayList<>();
+        this.installedAppsPackageNames = new ArrayList<>();
+        this.installedAppsPermissions = new ArrayList<>();
+
         this.handleStatusBarColor();
         //Get Server Information
         this.handleGetNotifications();
@@ -89,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
         //Last Scans
         this.handleLastScansListView();
         this.handleSeeAllLastScansTap();
+        //Installed Apps
+        this.handleInstalledAppsListView();
+        this.handleInstalledAppsListViewItemClick();
+        this.handleInstalledAppsSeeAllTap();
     }
 
     @Override
@@ -554,4 +580,139 @@ public class MainActivity extends AppCompatActivity {
         return allDecodedLastScans;
     }
 
+    private void handleInstalledAppsListView(){
+        ListView installedAppsListView = (ListView) findViewById(R.id.installed_apps_container_card_view_installed_list_view);
+        List<Long> installedAppsInstallTime = new ArrayList<>();
+        List<ApplicationInfo> allInstalledApps = this.installedAppsManager.getAllInstalledApps();
+        List<Drawable> appIcons = new ArrayList<>();
+        List<String> appNames = new ArrayList<>();
+        List<String> packageNames = new ArrayList<>();
+        List<List<String>> appPermissions = new ArrayList<>();
+
+        for (ApplicationInfo singleApplication : allInstalledApps){
+            try {
+                PackageInfo packageInfo = this.installedAppsManager.getPackageManager().getPackageInfo(singleApplication.packageName, PackageManager.GET_META_DATA);
+                installedAppsInstallTime.add(packageInfo.firstInstallTime);
+            } catch (PackageManager.NameNotFoundException ignored) {}
+        }
+
+        //Sort Lists
+        allInstalledApps.sort(Comparator.comparingInt(installedAppsInstallTime::indexOf));
+
+        if (allInstalledApps.size() < 5){
+            for (int i = 0; i<allInstalledApps.size(); i++){
+                Drawable icon = this.installedAppsManager.getPackageManager().getApplicationIcon(allInstalledApps.get(i));
+                appIcons.add(icon);
+
+                appNames.add(allInstalledApps.get(i).loadLabel(this.installedAppsManager.getPackageManager()).toString());
+
+                packageNames.add(allInstalledApps.get(i).packageName);
+
+                List<String> applicationPermissions = new ArrayList<>();
+                try {
+                    PackageInfo packageInfo = this.installedAppsManager.getPackageManager().getPackageInfo(allInstalledApps.get(i).packageName, PackageManager.GET_PERMISSIONS);
+                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                    if (requestedPermissions != null){
+                        applicationPermissions.addAll(Arrays.asList(requestedPermissions));
+                    }
+                } catch (PackageManager.NameNotFoundException ignored){}
+                appPermissions.add(applicationPermissions);
+            }
+            SingleInstalledAppAdapter singleInstalledAppAdapter = new SingleInstalledAppAdapter(getApplicationContext(), appIcons, appNames);
+            installedAppsListView.setAdapter(singleInstalledAppAdapter);
+        } else {
+            List<Long> installedAppsInstallTimeToDisplay = new ArrayList<>();
+            List<ApplicationInfo> allInstalledAppsToDisplay = new ArrayList<>();
+            for (int i = 0; i<5; i++){
+                installedAppsInstallTimeToDisplay.add(installedAppsInstallTime.get(i));
+                allInstalledAppsToDisplay.add(allInstalledApps.get(i));
+
+                Drawable icon = this.installedAppsManager.getPackageManager().getApplicationIcon(allInstalledApps.get(i));
+                appIcons.add(icon);
+
+                appNames.add(allInstalledApps.get(i).loadLabel(this.installedAppsManager.getPackageManager()).toString());
+
+                packageNames.add(allInstalledApps.get(i).packageName);
+
+                List<String> applicationPermissions = new ArrayList<>();
+                try {
+                    PackageInfo packageInfo = this.installedAppsManager.getPackageManager().getPackageInfo(allInstalledApps.get(i).packageName, PackageManager.GET_PERMISSIONS);
+                    String[] requestedPermissions = packageInfo.requestedPermissions;
+                    if (requestedPermissions != null){
+                        applicationPermissions.addAll(Arrays.asList(requestedPermissions));
+                    }
+                } catch (PackageManager.NameNotFoundException ignored){}
+                appPermissions.add(applicationPermissions);
+            }
+            SingleInstalledAppAdapter singleInstalledAppAdapter = new SingleInstalledAppAdapter(getApplicationContext(), appIcons, appNames);
+            installedAppsListView.setAdapter(singleInstalledAppAdapter);
+        }
+        this.installedAppsIcons = appIcons;
+        this.installedAppsNames = appNames;
+        this.installedAppsPackageNames = packageNames;
+        this.installedAppsPermissions = appPermissions;
+    }
+
+    private void handleInstalledAppsListViewItemClick(){
+        ListView installedAppsListView = (ListView) findViewById(R.id.installed_apps_container_card_view_installed_list_view);
+        installedAppsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+                bottomSheet.setContentView(R.layout.modal_sheet_installed_app_details);
+
+                ImageView appIcon = (ImageView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_image_view_logo);
+                TextView appName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_text_view_app_name);
+                TextView packageName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_package_name_text_view);
+                ListView packagePermissions = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_permissions_list_view);
+                ScrollView mainScrollView = (ScrollView) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_main_scroll_view);
+
+                appIcon.setImageDrawable(installedAppsIcons.get(position));
+                appName.setText(installedAppsNames.get(position));
+                packageName.setText(installedAppsPackageNames.get(position));
+
+                SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), installedAppsPermissions.get(position));
+                packagePermissions.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                mainScrollView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        packagePermissions.getParent().requestDisallowInterceptTouchEvent(false);
+                        return false;
+                    }
+                });
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screenHeight = displayMetrics.heightPixels;
+                int desiredHeight = screenHeight * 3 / 4;
+
+                View bottomSheetView = bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_main_linear_layout);
+                ViewGroup.LayoutParams layoutParams = bottomSheetView.getLayoutParams();
+                layoutParams.height = desiredHeight;
+                bottomSheetView.setLayoutParams(layoutParams);
+
+                bottomSheet.show();
+            }
+        });
+    }
+
+    private void handleInstalledAppsSeeAllTap(){
+        TextView seeAllInstalledAppsTextView = (TextView) findViewById(R.id.installed_apps_container_card_view_last_scans_see_all_installed_apps_text_view);
+        ImageView seeAllInstalledAppsImageView = (ImageView) findViewById(R.id.installed_apps_container_card_view_last_scans_see_all_installed_apps_arrow_button);
+
+        seeAllInstalledAppsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        seeAllInstalledAppsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 }
