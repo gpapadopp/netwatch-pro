@@ -187,6 +187,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         //Setup Progress Bar
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         TextView progressBarTextView = (TextView) findViewById(R.id.progress_text);
+        TextView scanStatusTextView = (TextView) findViewById(R.id.activity_scan_scan_status_text_view);
         progressBarTextView.setText(String.valueOf(totalCheckedApps) + "/" + String.valueOf(this.installedAppsManager.getAllInstalledApps().size()));
 
         //Setup Notification
@@ -207,6 +208,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     progressBarTextView.setText(String.valueOf(totalCheckedApps) + "/" + String.valueOf(installedAppsManager.getAllInstalledApps().size()));
                     double percentage = ((double) totalCheckedApps / installedAppsManager.getAllInstalledApps().size()) * 100.0;
                     progressBar.setProgress((int) percentage);
+                    scanStatusTextView.setText(getString(R.string.scan_is_complete_you_can_view_the_results_below));
                     handler.removeCallbacks(this);
                     saveCompletedScan();
                     notificationsHandler.hideNotification();
