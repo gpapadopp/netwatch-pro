@@ -47,8 +47,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import eu.gpapadop.netwatchpro.adapters.SingleScannedAppDetailsPermissionListAdapter;
-import eu.gpapadop.netwatchpro.adapters.SingleScannedAppsAdapter;
+import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppDetailsPermissionListAdapter;
+import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppsAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.last_scans.App;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;

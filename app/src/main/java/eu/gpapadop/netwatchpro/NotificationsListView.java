@@ -5,14 +5,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.gpapadop.netwatchpro.adapters.SingleNotificationCustomAdapter;
+import eu.gpapadop.netwatchpro.adapters.listviews.SingleNotificationCustomAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 

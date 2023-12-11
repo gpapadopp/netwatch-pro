@@ -1,4 +1,4 @@
-package eu.gpapadop.netwatchpro.adapters;
+package eu.gpapadop.netwatchpro.adapters.listviews;
 
 import android.content.Context;
 import android.content.Intent;
