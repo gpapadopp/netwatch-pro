@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/modal_sheet_scanned_app_details_main_linear_layout"
+<LinearLayout android:id="@+id/modal_sheet_scanned_app_details_main_linear_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/modal_sheets_rounded_top_corners">
+    android:background="@drawable/modal_sheets_rounded_top_corners"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:layout_width="match_parent"
@@ -59,30 +59,131 @@
                 android:textAlignment="center"
                 android:text="com.example"
                 android:fontFamily="@font/poppins_medium"/>
-            <TextView
-                android:id="@+id/modal_sheet_scanned_app_details_permissions_text_view"
-                android:layout_width="match_parent"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/modal_sheet_installed_app_details_tab_layout"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:textSize="18dp"
-                android:text="@string/permissions"
-                android:fontFamily="@font/poppins_medium"
-                android:layout_below="@+id/modal_sheet_scanned_app_details_image_view_logo"
+                android:layout_width="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                />
+                android:layout_below="@+id/modal_sheet_scanned_app_details_package_name_text_view"
+                android:layout_marginTop="15dp"
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
+                >
+                <com.google.android.material.tabs.TabItem
+                    android:tag="all_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_permissions"
+                    />
+                <com.google.android.material.tabs.TabItem
+                    android:tag="minimal_risk_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minimal_risk_permissions"
+                    />
+                <com.google.android.material.tabs.TabItem
+                    android:tag="low_risk_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/low_risk_permissions"
+                    />
+                <com.google.android.material.tabs.TabItem
+                    android:tag="moderate_risk_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moderate_risk_permissions"
+                    />
+                <com.google.android.material.tabs.TabItem
+                    android:tag="high_risk_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/high_risk_permissions"
+                    />
+                <com.google.android.material.tabs.TabItem
+                    android:tag="most_dangerous_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/most_dangerous_permissions"
+                    />
+            </com.google.android.material.tabs.TabLayout>
             <ListView
-                android:id="@+id/modal_sheet_scanned_apps_details_permissions_list_view"
+                android:id="@+id/modal_sheet_installed_apps_details_permissions_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@+id/modal_sheet_scanned_app_details_permissions_text_view"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
                 android:layout_marginTop="25dp"
                 android:descendantFocusability="beforeDescendants"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
+            <ListView
+                android:id="@+id/modal_sheet_installed_apps_details_minimal_permissions_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
+                android:layout_marginTop="25dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="invisible" />
+            <ListView
+                android:id="@+id/modal_sheet_installed_apps_details_low_permissions_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
+                android:layout_marginTop="25dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="invisible" />
+            <ListView
+                android:id="@+id/modal_sheet_installed_apps_details_moderate_permissions_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
+                android:layout_marginTop="25dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="invisible" />
+            <ListView
+                android:id="@+id/modal_sheet_installed_apps_details_high_permissions_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
+                android:layout_marginTop="25dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="invisible" />
+            <ListView
+                android:id="@+id/modal_sheet_installed_apps_details_most_dangerous_permissions_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/modal_sheet_installed_app_details_tab_layout"
+                android:layout_marginTop="25dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="invisible" />
         </RelativeLayout>
     </ScrollView>
 

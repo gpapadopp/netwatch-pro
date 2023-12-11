@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +53,11 @@ import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppsAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.last_scans.App;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
+import eu.gpapadop.netwatchpro.enums.permissions_danger.HighRiskPermissions;
+import eu.gpapadop.netwatchpro.enums.permissions_danger.LowRiskPermissions;
+import eu.gpapadop.netwatchpro.enums.permissions_danger.MinimalRiskPermissions;
+import eu.gpapadop.netwatchpro.enums.permissions_danger.ModerateRiskPermissions;
+import eu.gpapadop.netwatchpro.enums.permissions_danger.MostDangerousPermissions;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
@@ -364,20 +370,107 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         ImageView appIcon = (ImageView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_image_view_logo);
         TextView appName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_text_view_app_name);
         TextView packageName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_package_name_text_view);
-        ListView packagePermissions = (ListView) bottomSheet.findViewById(R.id.modal_sheet_scanned_apps_details_permissions_list_view);
         ScrollView mainScrollView = (ScrollView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_main_scroll_view);
+        TabLayout mainTabLayout = (TabLayout) bottomSheet.findViewById(R.id.modal_sheet_installed_app_details_tab_layout);
+
+        ListView allPermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_permissions_list_view);
+        ListView minimalPermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_minimal_permissions_list_view);
+        ListView lowPermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_low_permissions_list_view);
+        ListView moderatePermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_moderate_permissions_list_view);
+        ListView highPermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_high_permissions_list_view);
+        ListView mostDangerousPermissionsListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_installed_apps_details_most_dangerous_permissions_list_view);
+
+        //Display ListView on the First TIme
+        SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), allPermissions.get(position));
+        allPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+        allPermissionsListView.setVisibility(View.VISIBLE);
+
+        mainTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0){
+                    //All Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), allPermissions.get(position));
+                    allPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.VISIBLE);
+                    minimalPermissionsListView.setVisibility(View.INVISIBLE);
+                    lowPermissionsListView.setVisibility(View.INVISIBLE);
+                    moderatePermissionsListView.setVisibility(View.INVISIBLE);
+                    highPermissionsListView.setVisibility(View.INVISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
+                } else if (tab.getPosition() == 1){
+                    //Minimal Risk Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getMinimalRiskPermissions(allPermissions.get(position)));
+                    minimalPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.INVISIBLE);
+                    minimalPermissionsListView.setVisibility(View.VISIBLE);
+                    lowPermissionsListView.setVisibility(View.INVISIBLE);
+                    moderatePermissionsListView.setVisibility(View.INVISIBLE);
+                    highPermissionsListView.setVisibility(View.INVISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
+                } else if (tab.getPosition() == 2){
+                    //Low Risk Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getLowRiskPermissions(allPermissions.get(position)));
+                    lowPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.INVISIBLE);
+                    minimalPermissionsListView.setVisibility(View.INVISIBLE);
+                    lowPermissionsListView.setVisibility(View.VISIBLE);
+                    moderatePermissionsListView.setVisibility(View.INVISIBLE);
+                    highPermissionsListView.setVisibility(View.INVISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
+                } else if (tab.getPosition() == 3){
+                    //Moderate Risk Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getModerateRiskPermissions(allPermissions.get(position)));
+                    moderatePermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.INVISIBLE);
+                    minimalPermissionsListView.setVisibility(View.INVISIBLE);
+                    lowPermissionsListView.setVisibility(View.INVISIBLE);
+                    moderatePermissionsListView.setVisibility(View.VISIBLE);
+                    highPermissionsListView.setVisibility(View.INVISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
+                } else if (tab.getPosition() == 4){
+                    //High Risk Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getHighRiskPermissions(allPermissions.get(position)));
+                    highPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.INVISIBLE);
+                    minimalPermissionsListView.setVisibility(View.INVISIBLE);
+                    lowPermissionsListView.setVisibility(View.INVISIBLE);
+                    moderatePermissionsListView.setVisibility(View.INVISIBLE);
+                    highPermissionsListView.setVisibility(View.VISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
+                } else if (tab.getPosition() == 5){
+                    //Most Dangerous Permissions
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getMostDangerousPermissions(allPermissions.get(position)));
+                    mostDangerousPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
+
+                    allPermissionsListView.setVisibility(View.INVISIBLE);
+                    minimalPermissionsListView.setVisibility(View.INVISIBLE);
+                    lowPermissionsListView.setVisibility(View.INVISIBLE);
+                    moderatePermissionsListView.setVisibility(View.INVISIBLE);
+                    highPermissionsListView.setVisibility(View.INVISIBLE);
+                    mostDangerousPermissionsListView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
         appIcon.setImageDrawable(this.stringToDrawable(this.allAppIcons.get(position)));
         appName.setText(this.allAppNames.get(position));
         packageName.setText(this.allPackageNames.get(position));
 
-        SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), this.allPermissions.get(position));
-        packagePermissions.setAdapter(singleScannedAppDetailsPermissionListAdapter);
-
         mainScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                packagePermissions.getParent().requestDisallowInterceptTouchEvent(false);
                 return false;
             }
         });
@@ -414,5 +507,55 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    private List<String> getMinimalRiskPermissions(List<String> allPermissions){
+        List<String> minimalPermissions = new ArrayList<>();
+        for (MinimalRiskPermissions minimalRiskPermissions : MinimalRiskPermissions.values()){
+            if (allPermissions.contains(minimalRiskPermissions.getPermissionName())){
+                minimalPermissions.add(minimalRiskPermissions.getPermissionName());
+            }
+        }
+        return minimalPermissions;
+    }
+
+    private List<String> getLowRiskPermissions(List<String> allPermissions){
+        List<String> lowPermissions = new ArrayList<>();
+        for (LowRiskPermissions lowRiskPermissions : LowRiskPermissions.values()){
+            if (allPermissions.contains(lowRiskPermissions.getPermissionName())){
+                lowPermissions.add(lowRiskPermissions.getPermissionName());
+            }
+        }
+        return lowPermissions;
+    }
+
+    private List<String> getModerateRiskPermissions(List<String> allPermissions){
+        List<String> moderatePermissions = new ArrayList<>();
+        for (ModerateRiskPermissions moderateRiskPermissions : ModerateRiskPermissions.values()){
+            if (allPermissions.contains(moderateRiskPermissions.getPermissionName())){
+                moderatePermissions.add(moderateRiskPermissions.getPermissionName());
+            }
+        }
+        return moderatePermissions;
+    }
+
+    private List<String> getHighRiskPermissions(List<String> allPermissions){
+        List<String> highPermissions = new ArrayList<>();
+        for (HighRiskPermissions highRiskPermissions : HighRiskPermissions.values()){
+            if (allPermissions.contains(highRiskPermissions.getPermissionName())){
+                highPermissions.add(highRiskPermissions.getPermissionName());
+            }
+        }
+        return highPermissions;
+    }
+
+    private List<String> getMostDangerousPermissions(List<String> allPermissions){
+        List<String> mostDangerousPermissions = new ArrayList<>();
+        for (MostDangerousPermissions mostDangerousPermission : MostDangerousPermissions.values()){
+            if (allPermissions.contains(mostDangerousPermission.getPermissionName())){
+                mostDangerousPermissions.add(mostDangerousPermission.getPermissionName());
+            }
+        }
+        return mostDangerousPermissions;
     }
 }
