@@ -105,7 +105,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
 
     private void initializeAppLists(){
         for (ApplicationInfo singleApplication : this.installedAppsManager.getAllInstalledApps()){
-            final String appPackageName = singleApplication.packageName.toString();
+            final String appPackageName = String.valueOf(singleApplication.packageName);
             this.allAppNames.add(singleApplication.loadLabel(this.installedAppsManager.getPackageManager()).toString());
             this.allPackageNames.add(appPackageName);
             this.hasChecked.add(false);

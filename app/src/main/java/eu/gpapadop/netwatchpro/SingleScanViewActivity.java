@@ -96,6 +96,7 @@ public class SingleScanViewActivity extends AppCompatActivity {
             return;
         }
         this.handleScannedDateTextView();
+        this.handleScannedAppsListView();
     }
 
     private List<Scan> decodeLastScans(Set<String> allLastScans) {

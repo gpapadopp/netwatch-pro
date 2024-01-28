@@ -229,10 +229,10 @@ public class MainActivity extends AppCompatActivity {
             notificationsBadgeTextView.setTextColor(getColor(R.color.white));
             notificationsBadgeTextView.setBackground(getDrawable(R.drawable.circle_background_white));
         } else {
-            LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(lastCheckTimestamp), ZoneOffset.UTC);
+            LocalDateTime lastCheckTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(lastCheckTimestamp), ZoneOffset.UTC);
             LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
             long daysDifference = ChronoUnit.DAYS.between(lastCheckTime, currentTime);
-            if (daysDifference > 7){
+            if (Math.abs(daysDifference) > 7){
                 checkIconImageView.setImageResource(R.drawable.shield_close);
                 //Start ImageView Animation
                 heartBeatAnimation();
@@ -504,13 +504,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), scansToDisplay));
 
-                int newHeightInDp = scansToDisplay.size() * 140;
+                int newHeightInDp = scansToDisplay.size() * 90;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             } else {
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), allScans));
 
-                int newHeightInDp = allScans.size() * 140;
+                int newHeightInDp = allScans.size() * 90;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             }
