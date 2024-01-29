@@ -76,6 +76,13 @@
     <string name="moderate_risk_permissions">Moderate Risk Permissions</string>
     <string name="high_risk_permissions">High Risk Permissions</string>
     <string name="most_dangerous_permissions">Most Dangerous Permissions</string>
+    <string name="scanned_date">Scanned Date</string>
+    <string name="issues_found">Issues Found</string>
+    <string name="overall_situation">Overall Situation</string>
+    <string name="excellent">Excellent</string>
+    <string name="good">Good</string>
+    <string name="average">Average</string>
+    <string name="danger">Danger</string>
     <!--  Strings used for Terms of Use Modal Sheet  -->
     <string name="modal_sheet_terms_of_use_first_main_text">These Terms of Use ("Terms") govern your use of the "NetWatch Pro" application ("App"), provided to you by the International Hellenic University ("University" or "we"). By installing, accessing, or using the App, you agree to comply with and be bound by these Terms. If you do not agree with these Terms, please do not use the App.</string>
     <string name="modal_sheet_terms_of_use_acceptance_of_terms">1. Acceptance of Terms</string>

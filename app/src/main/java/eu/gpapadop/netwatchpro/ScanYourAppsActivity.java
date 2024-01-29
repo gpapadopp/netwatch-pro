@@ -6,14 +6,9 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,34 +29,22 @@ import com.google.android.material.tabs.TabLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppDetailsPermissionListAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppsAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.last_scans.App;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
-import eu.gpapadop.netwatchpro.enums.permissions_danger.HighRiskPermissions;
-import eu.gpapadop.netwatchpro.enums.permissions_danger.LowRiskPermissions;
-import eu.gpapadop.netwatchpro.enums.permissions_danger.MinimalRiskPermissions;
-import eu.gpapadop.netwatchpro.enums.permissions_danger.ModerateRiskPermissions;
-import eu.gpapadop.netwatchpro.enums.permissions_danger.MostDangerousPermissions;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
+import eu.gpapadop.netwatchpro.utils.DrawableUtils;
+import eu.gpapadop.netwatchpro.utils.PermissionsDangerEnumUtils;
+import eu.gpapadop.netwatchpro.utils.ScanUtils;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -77,6 +60,9 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     private Connectivity connectivity;
     private NotificationsHandler notificationsHandler;
     private SharedPreferencesHandler sharedPreferencesHandler;
+    private DrawableUtils drawableUtils;
+    private ScanUtils scanUtils;
+    private PermissionsDangerEnumUtils permissionsDangerEnumUtils;
     private final String baseAPKPermissionsAPIURL = "https://arctouros.ict.ihu.gr/api/v1/package-permissions/predict";
     private final String apiKey = "df76204d-6b39-437b-bfcc-579c36271742";
     private final String secretKey = "75e43c07-7abf-4870-88ba-65547619bbed977cbfc4-646d-4ce5-ac73-59bac56c2ec54962f30a-4de9-40bc-8acd-ba77de8c36eb7a0d5e32-a766-4315-9c18-fe3bbda15992";
@@ -91,6 +77,9 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         this.connectivity.initialize();
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        this.drawableUtils = new DrawableUtils(getApplicationContext());
+        this.scanUtils = new ScanUtils(this.sharedPreferencesHandler);
+        this.permissionsDangerEnumUtils = new PermissionsDangerEnumUtils();
         this.allAppNames = new ArrayList<>();
         this.allPackageNames = new ArrayList<>();
         this.allPermissions = new ArrayList<>();
@@ -124,52 +113,11 @@ public class ScanYourAppsActivity extends AppCompatActivity {
             //Package Launch Icon
             try {
                 Drawable icon = this.installedAppsManager.getPackageManager().getApplicationIcon(appPackageName);
-                this.allAppIcons.add(this.drawableToString(icon));
+                this.allAppIcons.add(this.drawableUtils.drawableToString(icon));
             } catch (PackageManager.NameNotFoundException ignored){}
         }
         this.handleInstalledAppsListView();
         this.handleProgressBar();
-    }
-
-    private Bitmap drawableToBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-
-    private String drawableToString(Drawable drawable) {
-        if (drawable == null) {
-            return null;
-        }
-
-        // Convert the Drawable to a Bitmap
-        Bitmap bitmap = drawableToBitmap(drawable);
-
-        // Convert the Bitmap to a base64 string
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
-
-    private Drawable stringToDrawable(String drawableString) {
-        if (drawableString == null) {
-            return null;
-        }
-
-        byte[] byteArray = Base64.decode(drawableString, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        return new BitmapDrawable(getResources(), bitmap);
     }
 
     private void handleBackButtonTap(){
@@ -270,54 +218,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
             ));
         }
         newScan.setScannedApps(scannedApps);
-        this.appendScanToSharedPrefs(newScan);
-    }
-
-    private void appendScanToSharedPrefs(Scan newScan){
-        Set<String> lastScans = this.sharedPreferencesHandler.getLatestScans();
-        List<Scan> allScans = this.decodeLastScans(lastScans);
-
-        allScans.add(newScan);
-
-        Set<String> encodedScans = this.encodeLastScans(allScans);
-        this.sharedPreferencesHandler.setLatestScans(encodedScans);
-
-        LocalDateTime nowDate = LocalDateTime.now();
-        ZoneId zoneId = ZoneId.of("UTC");
-        ZonedDateTime utcDateTime = ZonedDateTime.of(nowDate, zoneId);
-        this.sharedPreferencesHandler.saveLastCheckDateTime(utcDateTime.toInstant().toEpochMilli());
-    }
-
-    private List<Scan> decodeLastScans(Set<String> allLastScans){
-        List<Scan> allDecodedLastScans = new ArrayList<>();
-        for (String lastScan : allLastScans){
-            if (lastScan != null){
-                byte[] serializedBytes = Base64.decode(lastScan, Base64.DEFAULT);
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(serializedBytes);
-                try {
-                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                    Scan singleJob = (Scan) objectInputStream.readObject();
-                    allDecodedLastScans.add(singleJob);
-                    objectInputStream.close();
-                } catch (IOException | ClassNotFoundException ignored) {}
-            }
-        }
-        return allDecodedLastScans;
-    }
-
-    private Set<String> encodeLastScans(List<Scan> allScans){
-        Set<String> scansToSave = new HashSet<>();
-        for (int i = 0; i<allScans.size(); i++){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            try {
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-                objectOutputStream.writeObject(allScans.get(i));
-                objectOutputStream.close();
-            } catch (IOException ignored) {}
-            String serializedObject = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-            scansToSave.add(serializedObject);
-        }
-        return scansToSave;
+        this.scanUtils.appendScanToSharedPrefs(newScan);
     }
 
     private String getPermissionsString(int position){
@@ -401,7 +302,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
                 } else if (tab.getPosition() == 1){
                     //Minimal Risk Permissions
-                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getMinimalRiskPermissions(allPermissions.get(position)));
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), permissionsDangerEnumUtils.getMinimalRiskPermissions(allPermissions.get(position)));
                     minimalPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
 
                     allPermissionsListView.setVisibility(View.INVISIBLE);
@@ -412,7 +313,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
                 } else if (tab.getPosition() == 2){
                     //Low Risk Permissions
-                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getLowRiskPermissions(allPermissions.get(position)));
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), permissionsDangerEnumUtils.getLowRiskPermissions(allPermissions.get(position)));
                     lowPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
 
                     allPermissionsListView.setVisibility(View.INVISIBLE);
@@ -423,7 +324,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
                 } else if (tab.getPosition() == 3){
                     //Moderate Risk Permissions
-                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getModerateRiskPermissions(allPermissions.get(position)));
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), permissionsDangerEnumUtils.getModerateRiskPermissions(allPermissions.get(position)));
                     moderatePermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
 
                     allPermissionsListView.setVisibility(View.INVISIBLE);
@@ -434,7 +335,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
                 } else if (tab.getPosition() == 4){
                     //High Risk Permissions
-                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getHighRiskPermissions(allPermissions.get(position)));
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), permissionsDangerEnumUtils.getHighRiskPermissions(allPermissions.get(position)));
                     highPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
 
                     allPermissionsListView.setVisibility(View.INVISIBLE);
@@ -445,7 +346,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
                     mostDangerousPermissionsListView.setVisibility(View.INVISIBLE);
                 } else if (tab.getPosition() == 5){
                     //Most Dangerous Permissions
-                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), getMostDangerousPermissions(allPermissions.get(position)));
+                    SingleScannedAppDetailsPermissionListAdapter singleScannedAppDetailsPermissionListAdapter = new SingleScannedAppDetailsPermissionListAdapter(getApplicationContext(), permissionsDangerEnumUtils.getMostDangerousPermissions(allPermissions.get(position)));
                     mostDangerousPermissionsListView.setAdapter(singleScannedAppDetailsPermissionListAdapter);
 
                     allPermissionsListView.setVisibility(View.INVISIBLE);
@@ -464,7 +365,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        appIcon.setImageDrawable(this.stringToDrawable(this.allAppIcons.get(position)));
+        appIcon.setImageDrawable(this.drawableUtils.stringToDrawable(this.allAppIcons.get(position)));
         appName.setText(this.allAppNames.get(position));
         packageName.setText(this.allPackageNames.get(position));
 
@@ -507,55 +408,5 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
-    }
-
-    private List<String> getMinimalRiskPermissions(List<String> allPermissions){
-        List<String> minimalPermissions = new ArrayList<>();
-        for (MinimalRiskPermissions minimalRiskPermissions : MinimalRiskPermissions.values()){
-            if (allPermissions.contains(minimalRiskPermissions.getPermissionName())){
-                minimalPermissions.add(minimalRiskPermissions.getPermissionName());
-            }
-        }
-        return minimalPermissions;
-    }
-
-    private List<String> getLowRiskPermissions(List<String> allPermissions){
-        List<String> lowPermissions = new ArrayList<>();
-        for (LowRiskPermissions lowRiskPermissions : LowRiskPermissions.values()){
-            if (allPermissions.contains(lowRiskPermissions.getPermissionName())){
-                lowPermissions.add(lowRiskPermissions.getPermissionName());
-            }
-        }
-        return lowPermissions;
-    }
-
-    private List<String> getModerateRiskPermissions(List<String> allPermissions){
-        List<String> moderatePermissions = new ArrayList<>();
-        for (ModerateRiskPermissions moderateRiskPermissions : ModerateRiskPermissions.values()){
-            if (allPermissions.contains(moderateRiskPermissions.getPermissionName())){
-                moderatePermissions.add(moderateRiskPermissions.getPermissionName());
-            }
-        }
-        return moderatePermissions;
-    }
-
-    private List<String> getHighRiskPermissions(List<String> allPermissions){
-        List<String> highPermissions = new ArrayList<>();
-        for (HighRiskPermissions highRiskPermissions : HighRiskPermissions.values()){
-            if (allPermissions.contains(highRiskPermissions.getPermissionName())){
-                highPermissions.add(highRiskPermissions.getPermissionName());
-            }
-        }
-        return highPermissions;
-    }
-
-    private List<String> getMostDangerousPermissions(List<String> allPermissions){
-        List<String> mostDangerousPermissions = new ArrayList<>();
-        for (MostDangerousPermissions mostDangerousPermission : MostDangerousPermissions.values()){
-            if (allPermissions.contains(mostDangerousPermission.getPermissionName())){
-                mostDangerousPermissions.add(mostDangerousPermission.getPermissionName());
-            }
-        }
-        return mostDangerousPermissions;
     }
 }

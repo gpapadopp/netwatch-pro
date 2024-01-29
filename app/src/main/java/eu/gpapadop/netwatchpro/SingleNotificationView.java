@@ -11,17 +11,18 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import eu.gpapadop.netwatchpro.utils.DateTimeUtils;
 
 public class SingleNotificationView extends AppCompatActivity {
     private final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    private DateTimeUtils dateTimeUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_notification_view);
+
+        this.dateTimeUtils = new DateTimeUtils(getApplicationContext());
 
         Intent intent = getIntent();
         String notificationID = intent.getStringExtra("id");
@@ -39,7 +40,7 @@ public class SingleNotificationView extends AppCompatActivity {
         notificationTitleTextView.setText(notificationTitle);
         Picasso.get().load(this.baseNotificationURL + "get-banner/" + notificationID).into(notificationImageView);
         notificationMainContext.setText(notificationContext);
-        notificationTimeAgo.setText(this.calculateTimeAgo(notificationCreatedDate));
+        notificationTimeAgo.setText(this.dateTimeUtils.calculateTimeAgo(notificationCreatedDate));
     }
 
     @Override
@@ -55,28 +56,5 @@ public class SingleNotificationView extends AppCompatActivity {
                 onBackPressed();
             }
         });
-    }
-
-    private String calculateTimeAgo(String dateTimeString){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
-
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        Duration duration = Duration.between(dateTime, currentDateTime);
-
-        long secondsAgo = duration.getSeconds();
-        long minutesAgo = duration.toMinutes();
-        long hoursAgo = duration.toHours();
-        long daysAgo = duration.toDays();
-
-        if (secondsAgo < 60) {
-            return secondsAgo + " " + getString(R.string.seconds_ago);
-        } else if (minutesAgo < 60) {
-            return minutesAgo + " " + getString(R.string.minutes_ago);
-        } else if (hoursAgo < 24) {
-            return hoursAgo + " " + getString(R.string.hours_ago);
-        } else {
-            return daysAgo + " " + getString(R.string.days_ago);
-        }
     }
 }
