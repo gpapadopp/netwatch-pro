@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import eu.gpapadop.netwatchpro.handlers.Init;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 
 @SuppressLint("CustomSplashScreen")
@@ -17,6 +18,9 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        Init initClass = new Init(getApplicationContext());
+
+        initClass.run();
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override

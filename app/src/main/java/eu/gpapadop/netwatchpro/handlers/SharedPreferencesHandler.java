@@ -79,4 +79,24 @@ public class SharedPreferencesHandler {
         sharedPrefsEditor.putStringSet("latest_scans_set", newLatestScans);
         sharedPrefsEditor.apply();
     }
+
+    public String getExportPath(){
+        return this.sharedPrefs.getString("export_data_folder_path", "//");
+    }
+
+    public void setExportPath(String newFolderPath){
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putString("export_data_folder_path", newFolderPath);
+        sharedPrefsEditor.apply();
+    }
+
+    public boolean getHasInit(){
+        return this.sharedPrefs.getBoolean("app_has_initialize", false);
+    }
+
+    public void setHasInit(boolean newHasInit){
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putBoolean("app_has_initialize", newHasInit);
+        sharedPrefsEditor.apply();
+    }
 }

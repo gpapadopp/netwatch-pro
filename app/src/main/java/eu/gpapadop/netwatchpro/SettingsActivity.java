@@ -1,11 +1,18 @@
 package eu.gpapadop.netwatchpro;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,9 +23,12 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+import eu.gpapadop.netwatchpro.utils.PathUtils;
 
 public class SettingsActivity extends AppCompatActivity {
     private SharedPreferencesHandler sharedPreferencesHandler;
+    private TextView exportPathTextView;
+    private ActivityResultLauncher<Intent> folderActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,11 @@ public class SettingsActivity extends AppCompatActivity {
         //Recursive Future Scan Section
         this.handleRecursiveFutureScanText();
         this.handleRecursiveFutureScanRowTap();
+
+        //Export Path Section
+        this.handleExportPathTextview();
+        this.initializeFolderActivityResult();
+        this.handleExportPathRowClick();
 
         //Terms of Use Section
         this.handleTermsOfUseRowTap();
@@ -114,6 +129,45 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    private void handleExportPathTextview(){
+        String path = this.sharedPreferencesHandler.getExportPath();
+        this.exportPathTextView = (TextView) findViewById(R.id.activity_settings_export_path_subtext);
+        this.exportPathTextView.setText(path);
+    }
+
+    private void handleExportPathRowClick(){
+        FrameLayout exportPathRowFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_export_path_container);
+        exportPathRowFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                intent.putExtra(Intent.EXTRA_TITLE, "Choose directory");
+                folderActivityResultLauncher.launch(intent);
+            }
+        });
+    }
+
+    private void initializeFolderActivityResult(){
+        this.folderActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            Uri selectedFolderUri = data.getData();
+                            DocumentFile selectedFolder = DocumentFile.fromTreeUri(getApplicationContext(), selectedFolderUri);
+                            String folderName = selectedFolder.getName();
+                            Uri folderUri = selectedFolder.getUri();
+                            String folderPath = PathUtils.getPathFromUri(getApplicationContext(), folderUri);
+                            sharedPreferencesHandler.setExportPath(folderPath);
+                            exportPathTextView.setText(folderPath);
+                        }
+                    }
+                });
     }
 
     private void handleTermsOfUseRowTap(){
