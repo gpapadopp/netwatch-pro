@@ -7,7 +7,10 @@ import android.graphics.RenderEffect;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,6 +188,13 @@ public class SingleScanViewActivity extends AppCompatActivity {
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
         backgroundImageView.startAnimation(animation);
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backgroundImageView.clearAnimation();
+            }
+        }, 4000);
     }
 
     private void handleScannedAppsListView(){
@@ -214,6 +224,8 @@ public class SingleScanViewActivity extends AppCompatActivity {
         final BottomSheetDialog bottomSheet = new BottomSheetDialog(SingleScanViewActivity.this);
         bottomSheet.setContentView(R.layout.modal_sheet_scanned_app_details);
 
+        TextView safeTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_is_save_text_view);
+        TextView warningTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_warning_text_view);
         ImageView appIcon = (ImageView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_image_view_logo);
         TextView appName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_text_view_app_name);
         TextView packageName = (TextView) bottomSheet.findViewById(R.id.modal_sheet_scanned_app_details_package_name_text_view);
@@ -314,6 +326,16 @@ public class SingleScanViewActivity extends AppCompatActivity {
         appIcon.setImageDrawable(this.drawableUtils.stringToDrawable(this.scanToView.getAllAppIcons().get(position)));
         appName.setText(this.scanToView.getAllAppNames().get(position));
         packageName.setText(this.scanToView.getAllPackageNames().get(position));
+
+        if (this.scanToView.getScannedApps().get(position).getIsMalware()){
+            Log.d("george", "warning");
+            warningTextView.setVisibility(View.VISIBLE);
+            safeTextView.setVisibility(View.GONE);
+        } else {
+            Log.d("george", "safe");
+            warningTextView.setVisibility(View.GONE);
+            safeTextView.setVisibility(View.VISIBLE);
+        }
 
         mainScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override

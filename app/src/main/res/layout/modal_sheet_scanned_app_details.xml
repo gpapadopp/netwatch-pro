@@ -16,6 +16,29 @@
         android:textSize="20dp"
         android:layout_marginTop="20dp" />
 
+    <TextView
+        android:id="@+id/modal_sheet_scanned_app_is_save_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/safe"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:textSize="16dp"
+        android:textColor="@color/primary_green"/>
+
+    <TextView
+        android:id="@+id/modal_sheet_scanned_app_warning_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="@string/warning"
+        android:fontFamily="@font/poppins_medium"
+        android:textAllCaps="true"
+        android:textSize="16dp"
+        android:textColor="@color/main_orange"/>
+
     <ScrollView
         android:id="@+id/modal_sheet_scanned_app_details_main_scroll_view"
         android:layout_width="match_parent"
@@ -69,11 +92,13 @@
                 android:layout_marginTop="15dp"
                 app:tabGravity="fill"
                 app:tabMode="scrollable"
+                app:tabInlineLabel="true"
                 >
                 <com.google.android.material.tabs.TabItem
                     android:tag="all_permissions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:icon="@drawable/info_icon_outlined"
                     android:text="@string/all_permissions"
                     />
                 <com.google.android.material.tabs.TabItem
