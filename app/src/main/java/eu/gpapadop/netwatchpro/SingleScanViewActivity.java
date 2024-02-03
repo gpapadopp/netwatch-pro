@@ -328,11 +328,9 @@ public class SingleScanViewActivity extends AppCompatActivity {
         packageName.setText(this.scanToView.getAllPackageNames().get(position));
 
         if (this.scanToView.getScannedApps().get(position).getIsMalware()){
-            Log.d("george", "warning");
             warningTextView.setVisibility(View.VISIBLE);
             safeTextView.setVisibility(View.GONE);
         } else {
-            Log.d("george", "safe");
             warningTextView.setVisibility(View.GONE);
             safeTextView.setVisibility(View.VISIBLE);
         }
