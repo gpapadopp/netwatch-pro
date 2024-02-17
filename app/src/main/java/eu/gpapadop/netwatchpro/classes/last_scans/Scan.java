@@ -10,17 +10,20 @@ public class Scan implements Serializable {
     private UUID scanID;
     private LocalDateTime scanDateTime;
     private List<App> scannedApps;
+    private Boolean isFullScan;
 
     public Scan(){
         this.scanID = UUID.randomUUID();
         this.scanDateTime = LocalDateTime.now();
         this.scannedApps = new ArrayList<>();
+        this.isFullScan = false;
     }
 
-    public Scan(UUID newScanID, LocalDateTime newScanDateTime, List<App> newScannedApps){
+    public Scan(UUID newScanID, LocalDateTime newScanDateTime, List<App> newScannedApps, Boolean newIsFullScan){
         this.scanID = newScanID;
         this.scanDateTime = newScanDateTime;
         this.scannedApps = newScannedApps;
+        this.isFullScan = newIsFullScan;
     }
 
     public UUID getScanID(){
@@ -43,6 +46,14 @@ public class Scan implements Serializable {
 
     public void setScannedApps(List<App> newScannedApps){
         this.scannedApps = newScannedApps;
+    }
+
+    public void setIsFullScan(Boolean newIsFullScan){
+        this.isFullScan = newIsFullScan;
+    }
+
+    public Boolean getIsFullScan(){
+        return this.isFullScan;
     }
 
     public List<String> getAllAppNames(){

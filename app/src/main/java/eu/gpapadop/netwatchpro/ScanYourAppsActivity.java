@@ -240,6 +240,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
 
     private void saveCompletedScan(){
         Scan newScan = new Scan();
+        newScan.setIsFullScan(false);
         List<App> scannedApps = new ArrayList<>();
         for (int i = 0; i<this.allPackageNames.size(); i++){
             scannedApps.add(new App(

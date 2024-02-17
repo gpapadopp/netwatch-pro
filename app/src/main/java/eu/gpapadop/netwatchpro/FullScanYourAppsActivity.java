@@ -33,9 +33,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppDetailsPermissionListAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppsAdapter;
@@ -388,41 +391,44 @@ public class FullScanYourAppsActivity extends AppCompatActivity {
     }
 
     private void checkMalware(int position){
-//        RequestsHandler apkPermissionsAPI = new RequestsHandler();
-//        RequestBody requestBody = new FormBody.Builder()
-//                .add("device_token", this.connectivity.getDeviceID())
-//                .add("package_name", this.allPackageNames.get(position))
-//                .add("app_name", this.allAppNames.get(position))
-//                .add("permissions", this.getPermissionsString(position))
-//                .add("api_key", this.apiKey)
-//                .add("secret_key", this.secretKey)
-//                .build();
-//        apkPermissionsAPI.makeOkHttpPostRequest(this.baseAPKPermissionsAPIURL, requestBody, new OkHttpRequestCallback() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                // Handle the successful response
-//                hasChecked.set(position, true);
-//                try {
-//                    Boolean predictionResult = jsonObject.getBoolean("is_malware");
-//                    isMalware.set(position, predictionResult);
-//                } catch (JSONException ignored) {}
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        handleInstalledAppsListView();
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//                // Handle the error
-//            }
-//        });
+        RequestsHandler apkPermissionsAPI = new RequestsHandler();
+
+        File apkFile = new File(this.allAppApkLocations.get(position));
+
+        Map<String, String> params = new HashMap<>();
+        params.put("device_token", this.connectivity.getDeviceID());
+        params.put("package_name", this.allPackageNames.get(position));
+        params.put("app_name", this.allAppNames.get(position));
+        params.put("api_key", this.apiKey);
+        params.put("secret_key", this.secretKey);
+
+        apkPermissionsAPI.makeOkHttpPostRequest(this.baseAPKPermissionsAPIURL, params, apkFile, new OkHttpRequestCallback() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                // Handle the successful response
+                hasChecked.set(position, true);
+                try {
+                    Boolean predictionResult = jsonObject.getBoolean("is_malware");
+                    isMalware.set(position, predictionResult);
+                } catch (JSONException ignored) {}
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleInstalledAppsListView();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                // Handle the error
+            }
+        });
     }
 
     private void saveCompletedScan(){
         Scan newScan = new Scan();
+        newScan.setIsFullScan(true);
         List<App> scannedApps = new ArrayList<>();
         for (int i = 0; i<this.allPackageNames.size(); i++){
             scannedApps.add(new App(
