@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +26,16 @@ import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 
 public class NotificationsListView extends AppCompatActivity {
-    final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    private String baseNotificationURL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications_list_view);
+
+        //Get Server Config
+        this.getServerConfig();
+
         this.handleGetNotifications();
         this.handleSwipeToRefreshLayout();
         this.handleToolbarBackButton();
@@ -38,6 +45,26 @@ public class NotificationsListView extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(0, R.anim.intent_transitions_slide_left_to_right);
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseNotificationURL = xmlResourceParser.getText() + "/v1/notifications";
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     private void handleGetNotifications(){

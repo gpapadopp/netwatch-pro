@@ -3,6 +3,8 @@ package eu.gpapadop.netwatchpro;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -11,16 +13,21 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import eu.gpapadop.netwatchpro.utils.DateTimeUtils;
 
 public class SingleNotificationView extends AppCompatActivity {
-    private final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    private String baseNotificationURL = "";
     private DateTimeUtils dateTimeUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_notification_view);
+
+        //Get Server Config
+        this.getServerConfig();
 
         this.dateTimeUtils = new DateTimeUtils(getApplicationContext());
 
@@ -46,6 +53,26 @@ public class SingleNotificationView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseNotificationURL = xmlResourceParser.getText() + "/v1/notifications/";
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     private void handleToolBarBackButton(){

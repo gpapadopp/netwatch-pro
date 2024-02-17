@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_host">http://192.168.1.84:8000</string>
+    <string name="api_key">df76204d-6b39-437b-bfcc-579c36271742</string>
+    <string name="secret_key">75e43c07-7abf-4870-88ba-65547619bbed977cbfc4-646d-4ce5-ac73-59bac56c2ec54962f30a-4de9-40bc-8acd-ba77de8c36eb7a0d5e32-a766-4315-9c18-fe3bbda15992</string>
+</resources>

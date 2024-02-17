@@ -18,8 +18,8 @@ public class ArctourosVpnService extends VpnService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             this.vpnInterface = this.establishVpnTunnel(); // Implement this method to create the VPN interface
-//            this.vpnThread = new Thread(this::runVpnConnection);
-//            this.vpnThread.start();
+            this.vpnThread = new Thread(this::runVpnConnection);
+            this.vpnThread.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,12 +27,30 @@ public class ArctourosVpnService extends VpnService {
         return START_STICKY;
     }
 
-    private ParcelFileDescriptor establishVpnTunnel() {
-        VpnService.Builder builder = new VpnService.Builder();
-        builder.addAddress("83.212.59.30", 24); // Set your VPN server IP
-        builder.addRoute("0.0.0.0", 0); // Route all traffic through the VPN
-        return builder.setSession("NetWatchProVPN").establish();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Stop the VPN thread when the service is destroyed
+        if (vpnThread != null) {
+            vpnThread.interrupt();
+        }
     }
+
+    private ParcelFileDescriptor establishVpnTunnel() throws Exception {
+        VpnService.Builder builder = new VpnService.Builder();
+        builder.addAddress("83.212.59.30", 24);
+        builder.addRoute("0.0.0.0", 0);
+
+        ParcelFileDescriptor pfd = builder.setSession("NetWatchProVPN").establish();
+
+        if (pfd == null) {
+            throw new Exception("VPN connection could not be established");
+        }
+
+        return pfd;
+    }
+
 
     private void runVpnConnection() {
         try {

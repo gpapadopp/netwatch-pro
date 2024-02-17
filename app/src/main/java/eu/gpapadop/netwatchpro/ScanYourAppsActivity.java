@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +30,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,15 +66,19 @@ public class ScanYourAppsActivity extends AppCompatActivity {
     private DrawableUtils drawableUtils;
     private ScanUtils scanUtils;
     private PermissionsDangerEnumUtils permissionsDangerEnumUtils;
-    private final String baseAPKPermissionsAPIURL = "https://arctouros.ict.ihu.gr/api/v1/package-permissions/predict";
-    private final String apiKey = "df76204d-6b39-437b-bfcc-579c36271742";
-    private final String secretKey = "75e43c07-7abf-4870-88ba-65547619bbed977cbfc4-646d-4ce5-ac73-59bac56c2ec54962f30a-4de9-40bc-8acd-ba77de8c36eb7a0d5e32-a766-4315-9c18-fe3bbda15992";
+    private String baseAPKPermissionsAPIURL = "";
+    private String apiKey = "";
+    private String secretKey = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_your_apps);
+
+        //Get Server Config
+        this.getServerConfig();
+
         this.installedAppsManager = new InstalledAppsManager(getApplicationContext());
         this.connectivity = new Connectivity(getApplicationContext());
         this.connectivity.initialize();
@@ -90,6 +97,32 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         this.handleStatusBarColor();
 
         this.handleBackButtonTap();
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseAPKPermissionsAPIURL = xmlResourceParser.getText() + "/v1/package-permissions/predict";
+                    } else if ("api_key".equals(name)) {
+                        xmlResourceParser.next();
+                        this.apiKey = xmlResourceParser.getText();
+                    } else if ("secret_key".equals(name)) {
+                        xmlResourceParser.next();
+                        this.secretKey = xmlResourceParser.getText();
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     private void initializeAppLists(){

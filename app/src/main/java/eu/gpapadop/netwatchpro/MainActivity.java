@@ -9,6 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.VpnService;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -64,8 +67,8 @@ import eu.gpapadop.netwatchpro.utils.PermissionsDangerEnumUtils;
 import eu.gpapadop.netwatchpro.utils.ScanUtils;
 
 public class MainActivity extends AppCompatActivity {
-    final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
-    final String baseServiceStatusURL = "https://arctouros.ict.ihu.gr/api/v1/service-status/vpn-service";
+    private String baseNotificationURL = "";
+    private String baseServiceStatusURL = "";
     private SharedPreferencesHandler sharedPreferencesHandler;
     private DateTimeUtils dateTimeUtils;
     private ScanUtils scanUtils;
@@ -84,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Get Server Config
+        this.getServerConfig();
+
         setContentView(R.layout.activity_main);
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.dateTimeUtils = new DateTimeUtils(getApplicationContext());
@@ -127,6 +134,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
         this.notificationsHandler.hideNotification();
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseNotificationURL = xmlResourceParser.getText() + "/v1/notifications";
+                        this.baseServiceStatusURL = xmlResourceParser.getText() + "/v1/service-status/vpn-service";
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     private void handleStatusBarColor(){

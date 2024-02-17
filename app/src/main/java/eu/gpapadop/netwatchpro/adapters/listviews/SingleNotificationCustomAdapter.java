@@ -2,6 +2,8 @@ package eu.gpapadop.netwatchpro.adapters.listviews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import androidx.cardview.widget.CardView;
 
 import com.squareup.picasso.Picasso;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +26,7 @@ import java.util.List;
 import eu.gpapadop.netwatchpro.R;
 
 public class SingleNotificationCustomAdapter extends BaseAdapter {
-    private final String baseNotificationURL = "https://arctouros.ict.ihu.gr/api/v1/notifications/";
+    private String baseNotificationURL = "";
     private Context context;
     private List<String> ids;
     private List<String> titles;
@@ -35,6 +39,27 @@ public class SingleNotificationCustomAdapter extends BaseAdapter {
         this.titles = newTitles;
         this.contexts = newContexts;
         this.createdDates = newCreatedDates;
+        this.getServerConfig();
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.context.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseNotificationURL = xmlResourceParser.getText() + "/v1/notifications/";
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
