@@ -2,6 +2,7 @@ package eu.gpapadop.netwatchpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -384,6 +386,7 @@ public class FullScanYourAppsActivity extends AppCompatActivity {
                     scanStatusTextView.setText(getString(R.string.scan_is_complete_you_can_view_the_results_below));
                     handler.removeCallbacks(this);
                     saveCompletedScan();
+                    openScanCompletedNotification();
                     notificationsHandler.hideNotification();
                 }
             }
@@ -441,5 +444,43 @@ public class FullScanYourAppsActivity extends AppCompatActivity {
         }
         newScan.setScannedApps(scannedApps);
         this.scanUtils.appendScanToSharedPrefs(newScan);
+    }
+
+    private void openScanCompletedNotification(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_scan_completed_successfully);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        TextView titleTextView = (TextView) dialog.findViewById(R.id.dialog_scan_completed_successfully_title);
+        titleTextView.setText(getString(R.string.full_scan_your_apps));
+
+        TextView mainTextView = (TextView) dialog.findViewById(R.id.dialog_scan_completed_successfully_job_hint_textview);
+        if (this.getMalwareAppsCounter() == 0){
+            mainTextView.setText(getString(R.string.scan_completed_successfully) + ".\n" + getString(R.string.your_device_is_safe) + ".");
+        } else {
+            mainTextView.setText(getString(R.string.scan_completed_successfully) + ".\n" + getString(R.string.your_device_needs_attention) + ".");
+        }
+
+        Button okDialogButton = (Button) dialog.findViewById(R.id.dialog_scan_completed_successfully_job_save_button);
+        okDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private int getMalwareAppsCounter(){
+        int cnt = 0;
+        for (Boolean singleIsMalware : this.isMalware){
+            if (singleIsMalware){
+                cnt++;
+            }
+        }
+        return cnt;
     }
 }
