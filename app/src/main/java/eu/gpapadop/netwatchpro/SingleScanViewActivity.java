@@ -106,6 +106,7 @@ public class SingleScanViewActivity extends AppCompatActivity {
             return;
         }
         this.handleScannedDateTextView();
+        this.handleScanTypeTextView();
         this.handleScannedAppsFullNumberTextView();
         this.handleIssuesFoundNumberTextView();
         this.handleOverallSituationTextView();
@@ -116,6 +117,15 @@ public class SingleScanViewActivity extends AppCompatActivity {
     private void handleScannedDateTextView(){
         TextView scannedDateTextView = (TextView) findViewById(R.id.activity_single_scan_view_scanned_date_full_date_text_view);
         scannedDateTextView.setText(this.dateTimeUtils.formatDateTime(this.scanToView.getScanDateTime()));
+    }
+
+    private void handleScanTypeTextView(){
+        TextView scanTypeTextView = (TextView) findViewById(R.id.activity_single_scan_view_scanned_type_text_view);
+        if (this.scanToView.getIsFullScan()){
+            scanTypeTextView.setText(getString(R.string.full_scan));
+        } else {
+            scanTypeTextView.setText(getString(R.string.quick_scan));
+        }
     }
 
     private void handleScannedAppsFullNumberTextView(){

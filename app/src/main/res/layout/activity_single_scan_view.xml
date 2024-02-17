@@ -87,6 +87,35 @@
                 android:fontFamily="@font/poppins_bold"/>
         </LinearLayout>
 
+        <!-- Scanned Type Container -->
+        <LinearLayout
+            android:id="@+id/activity_single_scan_view_scanned_type_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/activity_single_scan_view_scanned_date_linear_layout"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/activity_single_scan_view_type_date_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scan_type"
+                android:textSize="16dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_black"/>
+
+            <TextView
+                android:id="@+id/activity_single_scan_view_scanned_type_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quick_scan"
+                android:textSize="14dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_bold"/>
+        </LinearLayout>
+
         <!-- Scanned Apps/Issues Found Container -->
         <LinearLayout
             android:id="@+id/activity_single_scan_view_scanned_apps_issues_found_linear_layout"
@@ -95,7 +124,7 @@
             android:layout_marginTop="25dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/activity_single_scan_view_scanned_date_linear_layout"
+            android:layout_below="@+id/activity_single_scan_view_scanned_type_linear_layout"
             android:orientation="horizontal">
 
             <!-- Scanned Apps Section -->

@@ -87,6 +87,9 @@
     <string name="your_device_is_safe">Your device is safe</string>
     <string name="scan_completed_successfully">Scan completed successfully</string>
     <string name="your_device_needs_attention">Your device needs attention</string>
+    <string name="scan_type">Scan Type</string>
+    <string name="full_scan">Full Scan</string>
+    <string name="quick_scan">Quick Scan</string>
     <!--  Strings used for Terms of Use Modal Sheet  -->
     <string name="modal_sheet_terms_of_use_first_main_text">These Terms of Use ("Terms") govern your use of the "NetWatch Pro" application ("App"), provided to you by the International Hellenic University ("University" or "we"). By installing, accessing, or using the App, you agree to comply with and be bound by these Terms. If you do not agree with these Terms, please do not use the App.</string>
     <string name="modal_sheet_terms_of_use_acceptance_of_terms">1. Acceptance of Terms</string>
