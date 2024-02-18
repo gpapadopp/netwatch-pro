@@ -80,6 +80,16 @@ public class SharedPreferencesHandler {
         sharedPrefsEditor.apply();
     }
 
+    public Set<String> getFileScans(){
+        return this.sharedPrefs.getStringSet("latest_file_scans_set", new HashSet<>());
+    }
+
+    public void setFileScans(Set<String> newFileScans){
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putStringSet("latest_file_scans_set", newFileScans);
+        sharedPrefsEditor.apply();
+    }
+
     public String getExportPath(){
         return this.sharedPrefs.getString("export_data_folder_path", "//");
     }
