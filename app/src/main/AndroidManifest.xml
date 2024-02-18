@@ -45,6 +45,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetWatchPro">
         <activity
+            android:name=".ScanYourFiles"
+            android:exported="false" />
+        <activity
             android:name=".SingleScanViewActivity"
             android:exported="false" />
         <activity

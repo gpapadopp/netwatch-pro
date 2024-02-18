@@ -281,9 +281,9 @@
             </LinearLayout>
         </FrameLayout>
 
-        <!-- VPN Row -->
+        <!-- Scan your Files Row -->
         <FrameLayout
-            android:id="@+id/vpn_container_row"
+            android:id="@+id/scan_your_files_container_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -291,13 +291,14 @@
             android:layout_below="@+id/scan_device_frame_layout"
             android:layout_marginTop="20dp">
             <RelativeLayout
+                android:id="@+id/scan_your_files_container"
                 android:layout_width="wrap_content"
-                android:layout_height="175dp"
+                android:layout_height="100dp"
                 android:layout_weight="5"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/vpn_container_card_view"
+                    android:id="@+id/scan_your_files_container_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="#FFFFFF"
@@ -310,73 +311,42 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/vpn_container_card_view_vpn_textview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:gravity="start"
-                            android:paddingTop="10dp"
-                            android:paddingStart="15dp"
-                            android:text="@string/vpn"
-                            android:fontFamily="@font/poppins_bold"
-                            android:textSize="18dp"/>
-                        <Switch
-                            android:id="@+id/vpn_container_card_view_vpn_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_toEndOf="@+id/vpn_container_card_view_vpn_textview"
-                            android:paddingTop="10dp"
-                            android:paddingEnd="15dp"
-                            android:textSize="18dp"/>
-                        <TextView
-                            android:id="@+id/vpn_container_card_view_vpn_subtext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/vpn_container_card_view_vpn_textview"
-                            android:layout_alignParentEnd="true"
-                            android:text="@string/vpn_subtext"
-                            android:textSize="14dp"
-                            android:fontFamily="@font/poppins"
-                            android:paddingStart="15dp"
-                            android:paddingEnd="15dp"
-                            android:paddingTop="10dp" />
-                        <View
-                            android:id="@+id/vpn_container_card_view_main_divider"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_below="@+id/vpn_container_card_view_vpn_subtext"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:background="@color/light_gray" />
-                        <TextView
-                            android:id="@+id/vpn_container_card_view_server_status_text_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/vpn_container_card_view_main_divider"
-                            android:text="@string/our_server_status"
-                            android:fontFamily="@font/poppins_medium"
-                            android:paddingStart="15dp"
-                            android:paddingTop="10dp"/>
                         <ImageView
-                            android:id="@+id/vpn_container_card_view_server_status_arrow_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:src="@drawable/next_arrow"
+                            android:id="@+id/search_files_container_search_icon"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_gravity="start"
+                            android:foregroundGravity="left"
+                            android:scaleType="fitCenter"
+                            android:paddingTop="7dp"
+                            android:paddingLeft="20dp"
+                            android:src="@drawable/search_file_icon"/>
+                        <TextView
+                            android:id="@+id/search_files_container_search_title_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_below="@+id/vpn_container_card_view_main_divider"
-                            android:layout_toEndOf="@+id/vpn_container_card_view_server_status_text_view"
-                            android:paddingEnd="15dp"
-                            android:paddingTop="10dp"
-                            android:scaleType="fitEnd"/>
+                            android:gravity="left"
+                            android:layout_toEndOf="@+id/search_files_container_search_icon"
+                            android:paddingTop="25dp"
+                            android:paddingStart="30dp"
+                            android:textSize="16dp"
+                            android:text="@string/scan_your_files"
+                            android:fontFamily="@font/poppins_bold"/>
+                        <TextView
+                            android:id="@+id/search_files_container_search_description_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="left"
+                            android:layout_toEndOf="@+id/search_files_container_search_icon"
+                            android:layout_below="@+id/search_files_container_search_title_textview"
+                            android:layout_alignParentBottom="true"
+                            android:paddingStart="30dp"
+                            android:text="@string/do_a_full_scan_of_your_files_on_this_device"
+                            android:textSize="12dp"
+                            android:fontFamily="@font/poppins"/>
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
@@ -389,7 +359,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/vpn_container_row"
+            android:layout_below="@+id/scan_your_files_container_row"
             android:layout_marginTop="20dp">
             <RelativeLayout
                 android:id="@+id/last_scans_container_relative_layout"

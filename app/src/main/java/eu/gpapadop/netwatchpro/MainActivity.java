@@ -61,7 +61,6 @@ import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
-import eu.gpapadop.netwatchpro.services.ArctourosVpnService;
 import eu.gpapadop.netwatchpro.utils.DateTimeUtils;
 import eu.gpapadop.netwatchpro.utils.PermissionsDangerEnumUtils;
 import eu.gpapadop.netwatchpro.utils.ScanUtils;
@@ -118,9 +117,8 @@ public class MainActivity extends AppCompatActivity {
         this.scanYourAppsRowTap();
         //Full Scan Apps
         this.fullScanYourAppsRowTap();
-        //VPN
-        this.handleVpnSwitchTap();
-        this.handleOurServerStatusRowClick();
+        //Scan Files
+        this.scanYourFilesRowTap();
         //Last Scans
         this.handleLastScansListView();
         this.handleSeeAllLastScansTap();
@@ -361,27 +359,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void handleVpnSwitchTap(){
-        Switch vpnToggleSwitch = (Switch) findViewById(R.id.vpn_container_card_view_vpn_switch);
-        vpnToggleSwitch.setOnClickListener(new View.OnClickListener() {
+    private void scanYourFilesRowTap(){
+        RelativeLayout scanYourFilesRelativeLayout = (RelativeLayout) findViewById(R.id.scan_your_files_container);
+        scanYourFilesRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (connectivity.getConnectionType() == 0){
                     displayNoInternetDialog();
                     return;
                 }
-                if (vpnToggleSwitch.isChecked()){
-                    //Connect to VPN
-                    Intent intent = VpnService.prepare(getApplicationContext());
-                    if (intent != null) {
-                        startActivityForResult(intent, 2002);
-                    } else {
-                        startVpnService();
-                    }
-                } else {
-                    //Disconnect to VPN
-                    stopVpnService();
-                }
+                Intent scanYourFilesIntent = new Intent(getApplicationContext(), ScanYourFiles.class);
+                startActivity(scanYourFilesIntent);
+                finish();
             }
         });
     }
@@ -405,69 +394,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2002 && resultCode == RESULT_OK) {
-            startVpnService();
-        }
-    }
-
-    private void startVpnService() {
-        Intent vpnIntent = new Intent(this, ArctourosVpnService.class);
-        startService(vpnIntent);
-        this.notificationsHandler.showStickyNotification(getString(R.string.netwatch_pro_vpn), getString(R.string.you_are_connected_to_netwatch_pro_vpn));
-    }
-
-    private void stopVpnService() {
-        Intent vpnIntent = new Intent(this, ArctourosVpnService.class);
-        stopService(vpnIntent);
-        this.notificationsHandler.hideNotification();
-    }
-
-    private void handleOurServerStatusRowClick(){
-        TextView ourServerStatusTextView = (TextView) findViewById(R.id.vpn_container_card_view_server_status_text_view);
-        ImageView ourServerStatusArrow = (ImageView) findViewById(R.id.vpn_container_card_view_server_status_arrow_button);
-
-        ourServerStatusTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
-                bottomSheet.setContentView(R.layout.modal_sheet_our_server_status);
-                TextView serresServerStatusTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_our_server_status_running_stop_text_view);
-
-                if (serresVpnRunning){
-                    serresServerStatusTextView.setText(getString(R.string.running));
-                    serresServerStatusTextView.setTextColor(getColor(R.color.primary_green));
-                } else {
-                    serresServerStatusTextView.setText(getString(R.string.down));
-                    serresServerStatusTextView.setTextColor(getColor(R.color.red));
-                }
-
-                bottomSheet.show();
-            }
-        });
-
-        ourServerStatusArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
-                bottomSheet.setContentView(R.layout.modal_sheet_our_server_status);
-                TextView serresServerStatusTextView = (TextView) bottomSheet.findViewById(R.id.modal_sheet_our_server_status_running_stop_text_view);
-
-                if (serresVpnRunning){
-                    serresServerStatusTextView.setText(getString(R.string.running));
-                    serresServerStatusTextView.setTextColor(getColor(R.color.primary_green));
-                } else {
-                    serresServerStatusTextView.setText(getString(R.string.down));
-                    serresServerStatusTextView.setTextColor(getColor(R.color.red));
-                }
-
-                bottomSheet.show();
-            }
-        });
     }
 
     private void handleLastScansListView(){
