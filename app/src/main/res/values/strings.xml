@@ -97,6 +97,10 @@
     <string name="scanned_files">Scanned Files</string>
     <string name="loading_files">Loading Files</string>
     <string name="there_is_no_malicious_files">There is no malicious files</string>
+    <string name="last_file_scans">Last File Scans</string>
+    <string name="there_is_no_recent_file_scans">There is no recent file scans</string>
+    <string name="file_scan_details">File Scan Details</string>
+    <string name="malicious_files_found">Malicious Files Found</string>
     <!--  Strings used for Terms of Use Modal Sheet  -->
     <string name="modal_sheet_terms_of_use_first_main_text">These Terms of Use ("Terms") govern your use of the "NetWatch Pro" application ("App"), provided to you by the International Hellenic University ("University" or "we"). By installing, accessing, or using the App, you agree to comply with and be bound by these Terms. If you do not agree with these Terms, please do not use the App.</string>
     <string name="modal_sheet_terms_of_use_acceptance_of_terms">1. Acceptance of Terms</string>

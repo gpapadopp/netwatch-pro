@@ -31,6 +31,12 @@ public class FilesScan implements Serializable {
         return this.scanID;
     }
 
+    public long getLongScanID(){
+        long mostSigBits = this.scanID.getMostSignificantBits();
+        long leastSigBits = this.scanID.getLeastSignificantBits();
+        return (mostSigBits << 32) | (leastSigBits & 0xFFFFFFFFL);
+    }
+
     public void setScanDateTime(LocalDateTime newScanDateTime){
         this.scanDateTime = newScanDateTime;
     }

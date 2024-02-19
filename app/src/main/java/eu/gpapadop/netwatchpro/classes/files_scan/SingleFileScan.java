@@ -1,6 +1,8 @@
 package eu.gpapadop.netwatchpro.classes.files_scan;
 
-public class SingleFileScan {
+import java.io.Serializable;
+
+public class SingleFileScan implements Serializable {
     private String name;
     private String absoluteFilePath;
     private String md5Checksum;

@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import java.time.ZoneId;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,11 +52,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import eu.gpapadop.netwatchpro.adapters.listviews.LastMaliciousFilesEmptyAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleInstalledAppAdapter;
+import eu.gpapadop.netwatchpro.adapters.listviews.SingleLastFileScanAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleLastScanAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleLastScanEmptyAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.SingleScannedAppDetailsPermissionListAdapter;
 import eu.gpapadop.netwatchpro.api.RequestsHandler;
+import eu.gpapadop.netwatchpro.classes.files_scan.FilesScan;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
@@ -63,6 +67,7 @@ import eu.gpapadop.netwatchpro.managers.InstalledAppsManager;
 import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
 import eu.gpapadop.netwatchpro.utils.DateTimeUtils;
 import eu.gpapadop.netwatchpro.utils.PermissionsDangerEnumUtils;
+import eu.gpapadop.netwatchpro.utils.ScanFilesUtils;
 import eu.gpapadop.netwatchpro.utils.ScanUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -71,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferencesHandler sharedPreferencesHandler;
     private DateTimeUtils dateTimeUtils;
     private ScanUtils scanUtils;
+    private ScanFilesUtils scanFilesUtils;
     private PermissionsDangerEnumUtils permissionsDangerEnumUtils;
     private boolean isHeartbeat = false;
     private NotificationsHandler notificationsHandler;
-    private boolean serresVpnRunning = false;
     private Connectivity connectivity;
     private List<Scan> allLastScans;
+    private List<FilesScan> allFileScans;
     private InstalledAppsManager installedAppsManager;
     private List<Drawable> installedAppsIcons;
     private List<String> installedAppsNames;
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         this.dateTimeUtils = new DateTimeUtils(getApplicationContext());
         this.scanUtils = new ScanUtils(this.sharedPreferencesHandler);
+        this.scanFilesUtils = new ScanFilesUtils(this.sharedPreferencesHandler);
         this.permissionsDangerEnumUtils = new PermissionsDangerEnumUtils();
         this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.connectivity = new Connectivity(getApplicationContext());
@@ -107,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         this.handleStatusBarColor();
         //Get Server Information
         this.handleGetNotifications();
-        this.checkVpnServerRunning();
 
         this.handleNotificationsClick();
         this.handleLastCheckTextView();
@@ -122,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         //Last Scans
         this.handleLastScansListView();
         this.handleSeeAllLastScansTap();
+        //Last File Scans
+        this.handleLastFileScansListView();
         //Installed Apps
         this.handleInstalledAppsListView();
         this.handleInstalledAppsListViewItemClick();
@@ -179,23 +187,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (JSONException ignored){
                 }
-            }
-
-            @Override
-            public void onError(Exception e) {
-            }
-        });
-    }
-
-    private void checkVpnServerRunning(){
-        RequestsHandler serviceStatusAPI = new RequestsHandler();
-        serviceStatusAPI.makeOkHttpRequest(baseServiceStatusURL, new OkHttpRequestCallback() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                try {
-                    String vpnServerStatus = jsonObject.getString("status");
-                    serresVpnRunning = vpnServerStatus.toLowerCase().contains("running");
-                } catch (JSONException ignored){}
             }
 
             @Override
@@ -441,6 +432,59 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent singleScanViewIntent = new Intent(getApplicationContext(), SingleScanViewActivity.class);
+                    singleScanViewIntent.putExtra("scan_unique_id", String.valueOf(allScans.get(position).getScanID()));
+                    startActivity(singleScanViewIntent);
+                    finish();
+                }
+            });
+        }
+    }
+
+    private void handleLastFileScansListView(){
+        ListView lastFileScansListView = (ListView) findViewById(R.id.last_file_scans_container_card_view_last_scans_list_view);
+
+        RelativeLayout lastFileScansContainer = (RelativeLayout) findViewById(R.id.last_file_scans_container_relative_layout);
+        ViewGroup.LayoutParams layoutParams = lastFileScansContainer.getLayoutParams();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
+        TextView seeAllScansTextView = (TextView) findViewById(R.id.last_file_scans_container_card_view_last_scans_see_all_scans_text_view);
+        ImageView seeAllScansImageView = (ImageView) findViewById(R.id.last_file_scans_container_card_view_last_scans_see_all_scans_arrow_button);
+
+        Set<String> lastScans = this.sharedPreferencesHandler.getFileScans();
+        if (lastScans.isEmpty()){
+            lastFileScansListView.setAdapter(new LastMaliciousFilesEmptyAdapter(getApplicationContext()));
+            int newHeightInDp = 130;
+            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+            lastFileScansContainer.setLayoutParams(layoutParams);
+
+            seeAllScansTextView.setVisibility(View.GONE);
+            seeAllScansImageView.setVisibility(View.GONE);
+        } else {
+            //Has Last Scans
+            List<FilesScan> allScans = this.scanFilesUtils.decodeLastScans(lastScans);
+            allScans.sort(Comparator.comparing(FilesScan::getScanDateTime, Comparator.reverseOrder()));
+            this.allFileScans = allScans;
+            if (allScans.size() > 5){
+                List<FilesScan> scansToDisplay = new ArrayList<>();
+                for (int i = 0; i<5; i++){
+                    scansToDisplay.add(allScans.get(i));
+                }
+                lastFileScansListView.setAdapter(new SingleLastFileScanAdapter(getApplicationContext(), scansToDisplay));
+
+                int newHeightInDp = scansToDisplay.size() * 90;
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+                lastFileScansContainer.setLayoutParams(layoutParams);
+            } else {
+                lastFileScansListView.setAdapter(new SingleLastFileScanAdapter(getApplicationContext(), allScans));
+
+                int newHeightInDp = allScans.size() * 90;
+                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
+                lastFileScansContainer.setLayoutParams(layoutParams);
+            }
+            lastFileScansListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent singleScanViewIntent = new Intent(getApplicationContext(), SingleFileScanViewActivity.class);
                     singleScanViewIntent.putExtra("scan_unique_id", String.valueOf(allScans.get(position).getScanID()));
                     startActivity(singleScanViewIntent);
                     finish();

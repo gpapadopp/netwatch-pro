@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:id="@+id/activity_single_file_scan_view_main_scroll_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/super_light_gray"
+    tools:context=".SingleFileScanViewActivity"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/single_file_scan_view_activity_toolbar"
+            android:minHeight="?android:attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            app:titleTextColor="@android:color/white"
+            android:background="@color/super_light_gray">
+
+            <ImageButton
+                android:id="@+id/single_file_scan_view_activity_toolbar_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_arrow"
+                android:contentDescription="Back"
+                android:background="@color/super_light_gray"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_gravity="start" />
+
+            <TextView
+                android:id="@+id/single_file_scan_view_activity_title_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/file_scan_details"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="18sp"
+                android:textColor="@android:color/black" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ImageView
+            android:id="@+id/single_file_scan_view_activity_background_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="0dp"
+            android:layout_below="@+id/single_file_scan_view_activity_toolbar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/activity_single_file_scan_view_scanned_apps_linear_layout"/>
+
+        <!-- Scanned Date Container -->
+        <LinearLayout
+            android:id="@+id/activity_single_file_scan_view_scanned_date_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/single_file_scan_view_activity_toolbar"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/activity_single_file_scan_view_scanned_date_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scanned_date"
+                android:textSize="16dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_black"/>
+
+            <TextView
+                android:id="@+id/activity_single_file_scan_view_scanned_date_full_date_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="23/10/2022 14:44:00"
+                android:textSize="14dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_bold"/>
+        </LinearLayout>
+
+        <!-- Scanned Apps/Issues Found Container -->
+        <LinearLayout
+            android:id="@+id/activity_single_file_scan_view_scanned_apps_issues_found_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/activity_single_file_scan_view_scanned_date_linear_layout"
+            android:orientation="horizontal">
+
+            <!-- Scanned Apps Section -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5">
+                <TextView
+                    android:id="@+id/activity_single_file_scan_view_scanned_apps_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/scanned_files"
+                    android:textSize="16dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_black"/>
+                <TextView
+                    android:id="@+id/activity_single_file_scan_view_scanned_apps_full_number_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/activity_single_file_scan_view_scanned_apps_text_view"
+                    android:text="15"
+                    android:textSize="14dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_bold"/>
+            </RelativeLayout>
+
+            <!-- Issues Found Section -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5">
+                <TextView
+                    android:id="@+id/activity_single_file_scan_view_issues_found_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/malicious_files_found"
+                    android:textSize="16dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_black"/>
+                <TextView
+                    android:id="@+id/activity_single_file_scan_view_issues_found_full_number_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/activity_single_file_scan_view_issues_found_text_view"
+                    android:text="15"
+                    android:textSize="14dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_bold"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Overall Situation Container -->
+        <LinearLayout
+            android:id="@+id/activity_single_file_scan_view_overall_situation_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/activity_single_file_scan_view_scanned_apps_issues_found_linear_layout"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/activity_single_file_scan_view_overall_situation_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/overall_situation"
+                android:textSize="16dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_black"/>
+
+            <TextView
+                android:id="@+id/activity_single_file_scan_view_overall_situation_content_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Good"
+                android:textSize="14dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_bold"/>
+        </LinearLayout>
+
+        <!-- Scanned Apps ListView -->
+        <LinearLayout
+            android:id="@+id/activity_single_file_scan_view_scanned_apps_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/activity_single_file_scan_view_overall_situation_linear_layout"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/activity_single_file_scan_view_scanned_apps_title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scanned_files"
+                android:fontFamily="@font/poppins_bold"
+                android:textAlignment="textStart"
+                android:textSize="16dp"/>
+            <ListView
+                android:id="@+id/activity_single_file_scan_view_scanned_apps_list_view"
+                android:clickable="true"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="40dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

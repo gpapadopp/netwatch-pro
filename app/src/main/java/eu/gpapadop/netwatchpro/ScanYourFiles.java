@@ -349,7 +349,7 @@ public class ScanYourFiles extends AppCompatActivity {
         }
 
         filesScan.setAllScanFiles(allScannedFiles);
-        scanFilesUtils.appendScanToSharedPrefs(filesScan);
+        this.scanFilesUtils.appendScanToSharedPrefs(filesScan);
     }
 
     private void runMaliciousFilesCheck(){

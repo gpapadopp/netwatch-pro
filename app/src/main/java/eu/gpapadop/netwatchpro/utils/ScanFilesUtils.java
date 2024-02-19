@@ -39,8 +39,7 @@ public class ScanFilesUtils {
 
                     objectInputStream.close();
                     byteArrayInputStream.close();
-                } catch (ClassNotFoundException | IOException ignored) {
-                }
+                } catch (ClassNotFoundException | IOException ignored) {}
             }
         }
 
