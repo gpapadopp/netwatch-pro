@@ -9,18 +9,23 @@ import androidx.documentfile.provider.DocumentFile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.HashSet;
 
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
 import eu.gpapadop.netwatchpro.utils.PathUtils;
@@ -45,6 +50,9 @@ public class SettingsActivity extends AppCompatActivity {
         this.handleExportPathTextview();
         this.initializeFolderActivityResult();
         this.handleExportPathRowClick();
+
+        //Delete All Data Section
+        this.handleDeleteAllDataRowClick();
 
         //Terms of Use Section
         this.handleTermsOfUseRowTap();
@@ -148,6 +156,49 @@ public class SettingsActivity extends AppCompatActivity {
                 folderActivityResultLauncher.launch(intent);
             }
         });
+    }
+
+    private void handleDeleteAllDataRowClick(){
+        FrameLayout deleteAllDataFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_delete_all_data_container);
+        deleteAllDataFrameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayDeleteAllDataDialog();
+            }
+        });
+    }
+
+    private void displayDeleteAllDataDialog(){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_delete_all_data);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.dialog_delete_all_data_job_cancel_button);
+        Button proceedButton = (Button) dialog.findViewById(R.id.dialog_delete_all_data_job_save_button);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllApplicationDataFunctionality();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void deleteAllApplicationDataFunctionality(){
+        this.sharedPreferencesHandler.setFileScans(new HashSet<>());
+        this.sharedPreferencesHandler.setLatestScans(new HashSet<>());
     }
 
     private void initializeFolderActivityResult(){
