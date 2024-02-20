@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/recursive_scans_dialog_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/choose_recursive_future_scans_frequency"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="18dp" />
+
+    <RadioGroup
+        android:id="@+id/recursive_scans_dialog_frequency_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_gravity="start"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/recursive_scans_dialog_title_text_view"
+        android:layout_marginTop="15dp"
+        android:gravity="start">
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_frequency_disable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/disable"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_frequency_every_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/every_week"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_frequency_two_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/every_two_weeks"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_frequency_four_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/every_four_weeks"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+    </RadioGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/recursive_scans_dialog_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/recursive_scans_dialog_frequency_radio_group"/>
+
+    <TextView
+        android:id="@+id/recursive_scans_dialog_type_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/recursive_scans_dialog_divider"
+        android:text="@string/scan_type"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="18dp" />
+
+    <RadioGroup
+        android:id="@+id/recursive_scans_dialog_type_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_gravity="start"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/recursive_scans_dialog_type_text_view"
+        android:layout_marginTop="15dp"
+        android:gravity="start">
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_type_quick_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/quick_scan"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_type_full_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/full_scan"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+        <RadioButton
+            android:id="@+id/recursive_scans_dialog_type_file_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:padding="4dp"
+            android:text="@string/file_scan"
+            android:textSize="17dp"
+            android:fontFamily="@font/poppins"/>
+
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/recursive_scans_dialog_job_buttons_row"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/recursive_scans_dialog_type_radio_group">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/recursive_scans_dialog_job_ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/ok_txt"
+                android:fontFamily="@font/poppins_bold"
+                android:backgroundTint="@color/main_blue"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+</RelativeLayout>

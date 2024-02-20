@@ -8,23 +8,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.documentfile.provider.DocumentFile;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.divider.MaterialDivider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,54 +111,178 @@ public class SettingsActivity extends AppCompatActivity {
             return;
         }
         int recursiveFrequency = this.sharedPreferencesHandler.getRecursiveFrequency();
+        int recursiveType = this.sharedPreferencesHandler.getRecursiveScanType();
         if (recursiveFrequency == 1){
+            if (recursiveType == 1){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_week) + "/" + getString(R.string.quick_scan));
+                return;
+            } else if (recursiveType == 2){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_week) + "/" + getString(R.string.full_scan));
+                return;
+            } else if (recursiveType == 3){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_week) + "/" + getString(R.string.file_scan));
+                return;
+            }
             recursiveFutureScanSubtext.setText(getString(R.string.every_week));
             return;
         }
         if (recursiveFrequency == 2){
+            if (recursiveType == 1){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_two_weeks) + "/" + getString(R.string.quick_scan));
+                return;
+            } else if (recursiveType == 2){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_two_weeks) + "/" + getString(R.string.full_scan));
+                return;
+            } else if (recursiveType == 3){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_two_weeks) + "/" + getString(R.string.file_scan));
+                return;
+            }
             recursiveFutureScanSubtext.setText(getString(R.string.every_two_weeks));
             return;
         }
         if (recursiveFrequency == 4){
+            if (recursiveType == 1){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_four_weeks) + "/" + getString(R.string.quick_scan));
+                return;
+            } else if (recursiveType == 2){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_four_weeks) + "/" + getString(R.string.full_scan));
+                return;
+            } else if (recursiveType == 3){
+                recursiveFutureScanSubtext.setText(getString(R.string.every_four_weeks) + "/" + getString(R.string.file_scan));
+                return;
+            }
             recursiveFutureScanSubtext.setText(getString(R.string.every_four_weeks));
         }
     }
 
     private void handleRecursiveFutureScanRowTap(){
         FrameLayout recursiveFutureScanFrameLayout = (FrameLayout) findViewById(R.id.activity_settings_recursive_scans_container);
-        int[] selectedFrequency = {this.sharedPreferencesHandler.getRecursiveFrequency()};
         recursiveFutureScanFrameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] recursiveChoices = {
-                        getString(R.string.disable),
-                        getString(R.string.every_week),
-                        getString(R.string.every_two_weeks),
-                        getString(R.string.every_four_weeks)
-                };
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                builder.setTitle(getString(R.string.choose_recursive_future_scans_frequency))
-                        .setPositiveButton(getString(R.string.save), (dialog, which) -> {
-                            if (selectedFrequency[0] == 0){
-                                sharedPreferencesHandler.setRecursiveEnabled(false);
-                                sharedPreferencesHandler.setRecursiveFrequency(0);
-                            } else {
-                                sharedPreferencesHandler.setRecursiveEnabled(true);
-                                sharedPreferencesHandler.setRecursiveFrequency(selectedFrequency[0]);
-                            }
-                            handleRecursiveFutureScanText();
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .setSingleChoiceItems(recursiveChoices, selectedFrequency[0], (dialog, which) -> {
-                            selectedFrequency[0] = which;
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                showRecursiveFutureScansDialog();
             }
         });
+    }
+
+    private void showRecursiveFutureScansDialog(){
+        int selectedFrequency = this.sharedPreferencesHandler.getRecursiveFrequency();
+        int selectedType = this.sharedPreferencesHandler.getRecursiveScanType();
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.recursive_scans_dialog_layout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        RadioGroup recursiveFrequencyRadioGroup = (RadioGroup) dialog.findViewById(R.id.recursive_scans_dialog_frequency_radio_group);
+        RadioGroup recursiveTypeRadioGroup = (RadioGroup) dialog.findViewById(R.id.recursive_scans_dialog_type_radio_group);
+        Button okButton = (Button) dialog.findViewById(R.id.recursive_scans_dialog_job_ok_button);
+        TextView recursiveTypeTextView = (TextView) dialog.findViewById(R.id.recursive_scans_dialog_type_text_view);
+        MaterialDivider recursiveTypeDivider = (MaterialDivider) dialog.findViewById(R.id.recursive_scans_dialog_divider);
+
+        //Initial Values
+        if (selectedFrequency == 0){
+            recursiveTypeRadioGroup.setVisibility(View.GONE);
+            recursiveTypeTextView.setVisibility(View.GONE);
+            recursiveTypeDivider.setVisibility(View.GONE);
+
+            RadioButton disabledRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_frequency_disable);
+            disabledRadioButton.setChecked(true);
+        } else if (selectedFrequency == 1){
+            recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+            recursiveTypeTextView.setVisibility(View.VISIBLE);
+            recursiveTypeDivider.setVisibility(View.VISIBLE);
+
+            RadioButton everyWeekRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_frequency_every_week);
+            everyWeekRadioButton.setChecked(true);
+        } else if (selectedFrequency == 2){
+            recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+            recursiveTypeTextView.setVisibility(View.VISIBLE);
+            recursiveTypeDivider.setVisibility(View.VISIBLE);
+
+            RadioButton everyTwoWeeksRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_frequency_two_week);
+            everyTwoWeeksRadioButton.setChecked(true);
+        } else if (selectedFrequency == 4){
+            recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+            recursiveTypeTextView.setVisibility(View.VISIBLE);
+            recursiveTypeDivider.setVisibility(View.VISIBLE);
+
+            RadioButton everyFourWeeksRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_frequency_four_week);
+            everyFourWeeksRadioButton.setChecked(true);
+        }
+
+        if (selectedType == 1){
+            RadioButton quickScanRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_type_quick_scan);
+            quickScanRadioButton.setChecked(true);
+        } else if (selectedFrequency == 2){
+            RadioButton fullScanRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_type_full_scan);
+            fullScanRadioButton.setChecked(true);
+        } else if (selectedFrequency == 3){
+            RadioButton fileScanRadioButton = (RadioButton) dialog.findViewById(R.id.recursive_scans_dialog_type_file_scan);
+            fileScanRadioButton.setChecked(true);
+        }
+
+        recursiveFrequencyRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton selectedRadioButton = (RadioButton) dialog.findViewById(checkedId);
+                if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.disable))){
+                    sharedPreferencesHandler.setRecursiveFrequency(0);
+                    sharedPreferencesHandler.setRecursiveScanType(0);
+                    sharedPreferencesHandler.setRecursiveEnabled(false);
+
+                    recursiveTypeRadioGroup.setVisibility(View.GONE);
+                    recursiveTypeTextView.setVisibility(View.GONE);
+                    recursiveTypeDivider.setVisibility(View.GONE);
+                } else if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.every_week))){
+                    sharedPreferencesHandler.setRecursiveFrequency(1);
+                    sharedPreferencesHandler.setRecursiveEnabled(true);
+
+                    recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+                    recursiveTypeTextView.setVisibility(View.VISIBLE);
+                    recursiveTypeDivider.setVisibility(View.VISIBLE);
+                } else if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.every_two_weeks))){
+                    sharedPreferencesHandler.setRecursiveFrequency(2);
+                    sharedPreferencesHandler.setRecursiveEnabled(true);
+
+                    recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+                    recursiveTypeTextView.setVisibility(View.VISIBLE);
+                    recursiveTypeDivider.setVisibility(View.VISIBLE);
+                } else if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.every_four_weeks))){
+                    sharedPreferencesHandler.setRecursiveFrequency(4);
+                    sharedPreferencesHandler.setRecursiveEnabled(true);
+
+                    recursiveTypeRadioGroup.setVisibility(View.VISIBLE);
+                    recursiveTypeTextView.setVisibility(View.VISIBLE);
+                    recursiveTypeDivider.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        recursiveTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton selectedRadioButton = (RadioButton) dialog.findViewById(checkedId);
+                if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.quick_scan))){
+                    sharedPreferencesHandler.setRecursiveScanType(1);
+                } else if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.full_scan))){
+                    sharedPreferencesHandler.setRecursiveScanType(2);
+                } else if (String.valueOf(selectedRadioButton.getText()).equals(getString(R.string.file_scan))){
+                    sharedPreferencesHandler.setRecursiveScanType(3);
+                }
+            }
+        });
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                handleRecursiveFutureScanText();
+            }
+        });
+
+        dialog.show();
     }
 
     private void handleExportPathTextview(){

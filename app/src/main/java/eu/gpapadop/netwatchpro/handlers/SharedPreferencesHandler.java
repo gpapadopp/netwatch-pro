@@ -70,6 +70,20 @@ public class SharedPreferencesHandler {
         sharedPrefsEditor.apply();
     }
 
+    public int getRecursiveScanType(){
+        return this.sharedPrefs.getInt("recursive_scan_type", 0);
+    }
+
+    public void setRecursiveScanType(int newRecursiveScanType){
+        //0 = Disabled
+        //1 = Quick Scan
+        //2 = Full Scan
+        //3 = File Scan
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putInt("recursive_scan_type", newRecursiveScanType);
+        sharedPrefsEditor.apply();
+    }
+
     public Set<String> getLatestScans(){
         return this.sharedPrefs.getStringSet("latest_scans_set", new HashSet<>());
     }
