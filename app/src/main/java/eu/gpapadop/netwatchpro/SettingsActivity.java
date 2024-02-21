@@ -9,10 +9,15 @@ import androidx.documentfile.provider.DocumentFile;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +44,15 @@ import eu.gpapadop.netwatchpro.classes.files_scan.FilesScan;
 import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
 import eu.gpapadop.netwatchpro.handlers.FileGenerate;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
+import eu.gpapadop.netwatchpro.services.JobSchedulerService;
 import eu.gpapadop.netwatchpro.utils.PathUtils;
 import eu.gpapadop.netwatchpro.utils.ScanFilesUtils;
 import eu.gpapadop.netwatchpro.utils.ScanUtils;
 
 public class SettingsActivity extends AppCompatActivity {
     private SharedPreferencesHandler sharedPreferencesHandler;
+    private NotificationsHandler notificationsHandler;
     private TextView exportPathTextView;
     private ActivityResultLauncher<Intent> folderActivityResultLauncher;
     private ScanUtils scanUtils;
@@ -56,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         this.sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+        this.notificationsHandler = new NotificationsHandler(getApplicationContext());
         this.scanUtils = new ScanUtils(this.sharedPreferencesHandler);
         this.scanFilesUtils = new ScanFilesUtils(this.sharedPreferencesHandler);
 
@@ -279,10 +288,37 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.dismiss();
                 handleRecursiveFutureScanText();
+                handleJobSchedulerAfterRecursiveChoose();
             }
         });
 
         dialog.show();
+    }
+
+    private void handleJobSchedulerAfterRecursiveChoose(){
+        final JobScheduler jobScheduler =
+                (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.cancelAll();
+
+        boolean isRecursiveEnabled = this.sharedPreferencesHandler.getRecursiveEnabled();
+        if (isRecursiveEnabled){
+            int recursiveFrequency = this.sharedPreferencesHandler.getRecursiveFrequency();
+            int recursiveType = this.sharedPreferencesHandler.getRecursiveScanType();
+            int jobID = recursiveFrequency + recursiveType;
+            int millisecondsInterval = 0;
+            if (recursiveFrequency == 1){
+                millisecondsInterval = 604800000;
+            } else if (recursiveFrequency == 2){
+                millisecondsInterval = 2 * 604800000;
+            } else if (recursiveFrequency == 4){
+                millisecondsInterval = 4 * 604800000;
+            }
+
+            JobInfo jobInfo = new JobInfo.Builder(jobID, new ComponentName(this, JobSchedulerService.class))
+                    .setPeriodic(millisecondsInterval, (millisecondsInterval / 2))
+                    .build();
+            jobScheduler.schedule(jobInfo);
+        }
     }
 
     private void handleExportPathTextview(){

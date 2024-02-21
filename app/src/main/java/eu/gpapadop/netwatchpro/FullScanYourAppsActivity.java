@@ -118,7 +118,7 @@ public class FullScanYourAppsActivity extends AppCompatActivity {
 
                     if ("server_host".equals(name)) {
                         xmlResourceParser.next();
-                        this.baseAPKPermissionsAPIURL = xmlResourceParser.getText() + "/v1/package-permissions/predict";
+                        this.baseAPKPermissionsAPIURL = xmlResourceParser.getText() + "/v1/package-apks/predict";
                     } else if ("api_key".equals(name)) {
                         xmlResourceParser.next();
                         this.apiKey = xmlResourceParser.getText();
