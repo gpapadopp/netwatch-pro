@@ -12,7 +12,6 @@ import java.util.List;
 
 import eu.gpapadop.netwatchpro.R;
 import eu.gpapadop.netwatchpro.classes.files_scan.FilesScan;
-import eu.gpapadop.netwatchpro.classes.last_scans.Scan;
 
 public class SingleLastFileScanAdapter extends BaseAdapter {
     private Context context;

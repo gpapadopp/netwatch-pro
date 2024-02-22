@@ -1,8 +1,5 @@
 package eu.gpapadop.netwatchpro.classes.last_scans;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +53,6 @@ import eu.gpapadop.netwatchpro.notifications.NotificationsHandler;
 import eu.gpapadop.netwatchpro.utils.DrawableUtils;
 import eu.gpapadop.netwatchpro.utils.PermissionsDangerEnumUtils;
 import eu.gpapadop.netwatchpro.utils.ScanUtils;
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 public class FullScanYourAppsActivity extends AppCompatActivity {
     int totalCheckedApps = 0;
