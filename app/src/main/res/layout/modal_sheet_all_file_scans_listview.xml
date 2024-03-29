@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/modal_sheet_scanned_app_details_main_linear_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/modal_sheets_rounded_top_corners"
+    android:fillViewport="true">
+
+    <TextView
+        android:id="@+id/modal_sheet_all_scans_list_view_all_file_scans_text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/all_file_scans"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp" />
+
+    <ListView
+        android:id="@+id/modal_sheet_all_file_scans_scans_list_view"
+        android:clickable="true"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="40dp"
+        android:layout_below="@+id/modal_sheet_all_scans_list_view_all_file_scans_text_view_title" />
+
+</RelativeLayout>

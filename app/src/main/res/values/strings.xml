@@ -106,6 +106,7 @@
     <string name="are_you_sure_you_want_to_export_all_app_data">Are you sure you want to export all application data?</string>
     <string name="all_data_exported_successfully">All data exported successfully</string>
     <string name="file_scan">File Scan</string>
+    <string name="all_file_scans">All File Scans</string>
     <!--  Strings used for Terms of Use Modal Sheet  -->
     <string name="modal_sheet_terms_of_use_first_main_text">These Terms of Use ("Terms") govern your use of the "NetWatch Pro" application ("App"), provided to you by the International Hellenic University ("University" or "we"). By installing, accessing, or using the App, you agree to comply with and be bound by these Terms. If you do not agree with these Terms, please do not use the App.</string>
     <string name="modal_sheet_terms_of_use_acceptance_of_terms">1. Acceptance of Terms</string>

@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         this.handleSeeAllLastScansTap();
         //Last File Scans
         this.handleLastFileScansListView();
+        this.handleSeeAllFileScansTap();
         //Installed Apps
         this.handleInstalledAppsListView();
         this.handleInstalledAppsListViewItemClick();
@@ -411,20 +412,20 @@ public class MainActivity extends AppCompatActivity {
             List<Scan> allScans = this.scanUtils.decodeLastScans(lastScans);
             allScans.sort(Comparator.comparing(Scan::getScanDateTime, Comparator.reverseOrder()));
             this.allLastScans = allScans;
-            if (allScans.size() > 5){
+            if (allScans.size() >= 5){
                 List<Scan> scansToDisplay = new ArrayList<>();
                 for (int i = 0; i<5; i++){
                     scansToDisplay.add(allScans.get(i));
                 }
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), scansToDisplay));
 
-                int newHeightInDp = scansToDisplay.size() * 90;
+                int newHeightInDp = scansToDisplay.size() * 65;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             } else {
                 lastScansListView.setAdapter(new SingleLastScanAdapter(getApplicationContext(), allScans));
 
-                int newHeightInDp = allScans.size() * 90;
+                int newHeightInDp = allScans.size() * 65;
                 layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, newHeightInDp, displayMetrics);
                 lastScansContainer.setLayoutParams(layoutParams);
             }
@@ -490,7 +491,51 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
+            seeAllScansTextView.setVisibility(View.VISIBLE);
+            seeAllScansImageView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void handleSeeAllFileScansTap(){
+        TextView seeAllFileScansTextView = (TextView) findViewById(R.id.last_file_scans_container_card_view_last_scans_see_all_scans_text_view);
+        ImageView seeAllFileScansImageView = (ImageView) findViewById(R.id.last_file_scans_container_card_view_last_scans_see_all_scans_arrow_button);
+
+        seeAllFileScansTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSeeAllFileScansModal();
+            }
+        });
+
+        seeAllFileScansImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSeeAllFileScansModal();
+            }
+        });
+    }
+
+    private void openSeeAllFileScansModal(){
+        final BottomSheetDialog bottomSheet = new BottomSheetDialog(MainActivity.this);
+        bottomSheet.setContentView(R.layout.modal_sheet_all_file_scans_listview);
+
+        Set<String> lastScans = this.sharedPreferencesHandler.getFileScans();
+        List<FilesScan> allScans = this.scanFilesUtils.decodeLastScans(lastScans);
+
+        ListView allFileScansListView = (ListView) bottomSheet.findViewById(R.id.modal_sheet_all_file_scans_scans_list_view);
+        allFileScansListView.setAdapter(new SingleLastFileScanAdapter(getApplicationContext(), allScans));
+
+        allFileScansListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent singleScanViewIntent = new Intent(getApplicationContext(), SingleFileScanViewActivity.class);
+                singleScanViewIntent.putExtra("scan_unique_id", String.valueOf(allScans.get(position).getScanID()));
+                startActivity(singleScanViewIntent);
+                finish();
+            }
+        });
+        bottomSheet.show();
     }
 
     private void handleSeeAllLastScansTap(){
