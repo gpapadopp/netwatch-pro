@@ -47,7 +47,7 @@ public class DateTimeUtils {
     }
 
     public String calculateTimeAgo(String dateTimeString){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
 
         LocalDateTime currentDateTime = LocalDateTime.now();
