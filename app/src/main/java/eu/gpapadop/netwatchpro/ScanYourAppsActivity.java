@@ -266,7 +266,7 @@ public class ScanYourAppsActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
 
         TextView titleTextView = (TextView) dialog.findViewById(R.id.dialog_scan_completed_successfully_title);
-        titleTextView.setText(getString(R.string.full_scan_your_apps));
+        titleTextView.setText(getString(R.string.scan_your_apps));
 
         TextView mainTextView = (TextView) dialog.findViewById(R.id.dialog_scan_completed_successfully_job_hint_textview);
         if (this.getMalwareAppsCounter() == 0){
