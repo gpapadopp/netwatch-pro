@@ -72,7 +72,6 @@ import eu.gpapadop.netwatchpro.utils.ScanUtils;
 
 public class MainActivity extends AppCompatActivity {
     private String baseNotificationURL = "";
-    private String baseServiceStatusURL = "";
     private SharedPreferencesHandler sharedPreferencesHandler;
     private DateTimeUtils dateTimeUtils;
     private ScanUtils scanUtils;
@@ -155,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                     if ("server_host".equals(name)) {
                         xmlResourceParser.next();
                         this.baseNotificationURL = xmlResourceParser.getText() + "/v1/notifications";
-                        this.baseServiceStatusURL = xmlResourceParser.getText() + "/v1/service-status/vpn-service";
                     }
                 }
 

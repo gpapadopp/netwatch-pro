@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -32,12 +34,14 @@ import com.airbnb.lottie.LottieProperty;
 import com.airbnb.lottie.model.KeyPath;
 import com.airbnb.lottie.value.LottieFrameInfo;
 import com.airbnb.lottie.value.SimpleLottieValueCallback;
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +50,18 @@ import java.util.concurrent.TimeUnit;
 
 import eu.gpapadop.netwatchpro.adapters.listviews.MaliciousFilesAdapter;
 import eu.gpapadop.netwatchpro.adapters.listviews.MaliciousFilesEmptyAdapter;
+import eu.gpapadop.netwatchpro.api.RequestsHandler;
 import eu.gpapadop.netwatchpro.classes.files_scan.FilesScan;
 import eu.gpapadop.netwatchpro.classes.files_scan.KnownChecksumValues;
 import eu.gpapadop.netwatchpro.classes.files_scan.SingleFileScan;
 import eu.gpapadop.netwatchpro.enums.file_checksum.ChecksumClassification;
 import eu.gpapadop.netwatchpro.handlers.SharedPreferencesHandler;
+import eu.gpapadop.netwatchpro.interfaces.OkHttpRequestCallback;
 import eu.gpapadop.netwatchpro.utils.FileChecksum;
 import eu.gpapadop.netwatchpro.utils.ScanFilesUtils;
 
 public class ScanYourFiles extends AppCompatActivity {
+    private String baseMaliciousFilesURL = "";
     private List<KnownChecksumValues> knownFilesChecksums;
     private List<File> allUserFiles;
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 123;
@@ -77,6 +84,11 @@ public class ScanYourFiles extends AppCompatActivity {
 
         this.handleStatusBarColor();
         this.handleBackButtonTap();
+
+        this.getServerConfig();
+
+        this.initializeFileChecksums();
+
         //Lottie Animation
         this.changeLottieColor();
 
@@ -97,10 +109,6 @@ public class ScanYourFiles extends AppCompatActivity {
 
         //Initialize Clock
         this.initializeTimeElapsedTimer();
-
-        this.initializeFileChecksums();
-
-        this.initializeGetAllUserFiles();
     }
 
     @Override
@@ -114,6 +122,26 @@ public class ScanYourFiles extends AppCompatActivity {
                 Toast.makeText(this, "Permission denied. Cannot list files.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void getServerConfig(){
+        Resources resources = this.getResources();
+        try (XmlResourceParser xmlResourceParser = resources.getXml(R.xml.server_config)) {
+            int eventType = xmlResourceParser.getEventType();
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG && "string".equals(xmlResourceParser.getName())) {
+                    String name = xmlResourceParser.getAttributeValue(null, "name");
+
+                    if ("server_host".equals(name)) {
+                        xmlResourceParser.next();
+                        this.baseMaliciousFilesURL = xmlResourceParser.getText() + "/v1/malicious-files-signatures";
+                    }
+                }
+
+                eventType = xmlResourceParser.next();
+            }
+        } catch (Exception ignored) {}
     }
 
     private void listFiles(File directoryToSearch) {
@@ -180,25 +208,52 @@ public class ScanYourFiles extends AppCompatActivity {
     }
 
     private void initializeFileChecksums(){
-        List<KnownChecksumValues> allChecksums = new ArrayList<>();
-        int resourceId = this.getResources().getIdentifier("files_checksum", "raw", this.getPackageName());
-        try (CSVReader reader = new CSVReader(new InputStreamReader(this.getResources().openRawResource(resourceId)))) {
-            List<String[]> lines = reader.readAll();
+        RequestsHandler maliciousFilesSignaturesAPI = new RequestsHandler();
+        String filesEndpoint = this.baseMaliciousFilesURL + "/with-pagination?limit=-1&page=1";
+        maliciousFilesSignaturesAPI.makeOkHttpRequest(filesEndpoint, new OkHttpRequestCallback() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    List<KnownChecksumValues> maliciousFilesList = new ArrayList<>();
+                    JSONArray jsonArray = jsonObject.getJSONArray("malicious_file_signatures");
+                    for (int i = 0; i<jsonArray.length(); i++){
+                        KnownChecksumValues fileVal = new KnownChecksumValues();
 
-            for (String[] line : lines) {
-                String md5 = line[0];
-                String category = line[1];
+                        JSONObject maliciousFileObject = jsonArray.getJSONObject(i);
+                        String fileCategory = maliciousFileObject.getString("file_category");
+                        String fileSignature = maliciousFileObject.getString("file_signature");
 
-                for (ChecksumClassification singleChecksum : ChecksumClassification.values()){
-                    if (singleChecksum.getCategoryName().equals(category)){
-                        KnownChecksumValues newKnownValue = new KnownChecksumValues(md5, singleChecksum);
-                        allChecksums.add(newKnownValue);
+                        fileVal.setMd5Checksum(fileSignature);
+                        if (fileCategory.equals("Riskware.Android.MobWin")){
+                            fileVal.setMd5Classification(ChecksumClassification.MobWin);
+                        } else if (fileCategory.equals("Trojan.Android.Agent")){
+                            fileVal.setMd5Classification(ChecksumClassification.Agent);
+                        } else if (fileCategory.equals("Trojan.Android.Airpush")){
+                            fileVal.setMd5Classification(ChecksumClassification.Airpush);
+                        } else if (fileCategory.equals("Trojan.Android.Domob")){
+                            fileVal.setMd5Classification(ChecksumClassification.Domob);
+                        } else if (fileCategory.equals("Trojan.Android.Dowgin")){
+                            fileVal.setMd5Classification(ChecksumClassification.Dowgin);
+                        } else if (fileCategory.equals("Trojan.Android.FakeInst")){
+                            fileVal.setMd5Classification(ChecksumClassification.FakeInst);
+                        } else if (fileCategory.equals("Trojan.Android.Opfake")){
+                            fileVal.setMd5Classification(ChecksumClassification.Opfake);
+                        } else if (fileCategory.equals("Trojan.Android.WqMobile")){
+                            fileVal.setMd5Classification(ChecksumClassification.WqMobile);
+                        }
+
+                        maliciousFilesList.add(fileVal);
                     }
+                    knownFilesChecksums = maliciousFilesList;
+                    initializeGetAllUserFiles();
+                } catch (JSONException ignored){
                 }
             }
 
-            this.knownFilesChecksums = allChecksums;
-        } catch (IOException | CsvException ignored) {}
+            @Override
+            public void onError(Exception e) {
+            }
+        });
     }
 
     private void initializeGetAllUserFiles(){
