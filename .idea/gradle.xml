@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/ics-openvpn-0.7.51" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

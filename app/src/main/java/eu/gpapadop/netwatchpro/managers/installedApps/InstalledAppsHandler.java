@@ -26,7 +26,6 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     private List<List<String>> allCertificateIssuers;
     private List<List<String>> allCertificateSerialNumbers;
     private List<List<String>> allCertificateVersions;
-//    private final PackagePermissionsAPI packagePermissionsAPI = new PackagePermissionsAPI();
 
     public InstalledAppsHandler(Context newAppContext, String newDeviceToken){
         super(newAppContext);
@@ -45,19 +44,6 @@ public class InstalledAppsHandler extends InstalledAppsManager {
     public void initializeInstalledApps(){
         this.listAllBasicInfo();
         this.listAllPermissions();
-        for (int i = 0; i<this.allPackageNames.size(); i++){
-//            this.packagePermissionsAPI.addPackagePermission(
-//                    this.deviceToken,
-//                    this.allPackageNames.get(i),
-//                    this.allRealNames.get(i),
-//                    this.allPermissions.get(i),
-//                    this.allCertificateSubjects.get(i),
-//                    this.allCertificateIssuers.get(i),
-//                    this.allCertificateSerialNumbers.get(i),
-//                    this.allCertificateVersions.get(i),
-//                    this.appContext
-//            );
-        }
     }
 
     private void listAllBasicInfo(){
